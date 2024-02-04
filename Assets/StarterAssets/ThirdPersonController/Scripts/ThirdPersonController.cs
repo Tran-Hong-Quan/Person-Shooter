@@ -143,7 +143,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -221,7 +221,10 @@ namespace StarterAssets
             // Cinemachine will follow this target
             CinemachineCameraTarget.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
-            headAim.position = CinemachineCameraTarget.position + CinemachineCameraTarget.forward*aimDistance;
+
+            headAim.position = CinemachineCameraTarget.position + CinemachineCameraTarget.forward * aimDistance;
+            if (isFPC)
+                transform.rotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
         }
 
         private void Move()
@@ -268,13 +271,25 @@ namespace StarterAssets
             // if there is a move input rotate player when the player is moving
             if (_input.move != Vector2.zero)
             {
+                if (isFPC)
+                {
+                    _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizontal Movement"), _input.move.x / 2, Time.deltaTime * SpeedChangeRate));
+                    _animator.SetFloat("Vertical Movement", Mathf.Lerp(_animator.GetFloat("Vertical Movement"), _input.move.y / 2, Time.deltaTime * SpeedChangeRate));
+                }
+                else
+                {
+_animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizontal Movement"), 0, Time.deltaTime * SpeedChangeRate));
+                    _animator.SetFloat("Vertical Movement", Mathf.Lerp(_animator.GetFloat("Vertical Movement"), 1, Time.deltaTime * SpeedChangeRate));
+                }
+
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCameraTransform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (!isFPC)
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
 
@@ -405,24 +420,25 @@ namespace StarterAssets
         private void InitCameraView()
         {
             tpCam.Priority = 10;
+            isFPC = true;
             ChangeView();
             _input.onChangeView.AddListener(ChangeView);
         }
 
-        bool isFPCam;
+        bool isFPC;
         private void ChangeView()
         {
-            if (isFPCam)
+            if (!isFPC)
             {
-                fpCam.Priority = 11;
-                _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
-                isFPCam = false;
+                //fpCam.Priority = 11;
+                //_mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
+                isFPC = true;
             }
             else
             {
                 fpCam.Priority = 9;
                 _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
-                isFPCam = true;
+                isFPC = false;
             }
         }
     }
