@@ -1,6 +1,8 @@
 ﻿using Cinemachine;
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
+using UnityEngine.Animations.Rigging;
+
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 #endif
@@ -80,6 +82,9 @@ namespace StarterAssets
 
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
+
+        [Header("Rig")]
+        [SerializeField] private MultiAimConstraint spineRig;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -433,12 +438,14 @@ _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizon
                 //fpCam.Priority = 11;
                 //_mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
                 isFPC = true;
+                spineRig.weight = 1.0f;
             }
             else
             {
                 fpCam.Priority = 9;
                 _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
                 isFPC = false;
+                spineRig.weight = 0;
             }
         }
     }
