@@ -435,8 +435,8 @@ _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizon
         {
             if (!isFPC)
             {
-                //fpCam.Priority = 11;
-                //_mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
+                fpCam.Priority = 11;
+                _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
                 isFPC = true;
                 spineRig.weight = 1.0f;
             }
