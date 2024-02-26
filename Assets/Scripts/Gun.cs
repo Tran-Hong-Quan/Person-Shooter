@@ -21,6 +21,7 @@ public class Gun : MonoBehaviour
         inputs = playerController.Input;
         tpCam = playerController.tpCam;
         fpCam = playerController.fpCam;
+        inputs.onAim.AddListener(Aim);
     }
 
     private void Update()
@@ -34,11 +35,14 @@ public class Gun : MonoBehaviour
         if (isAiming)
         {
             isAiming = false;
-            
+            playerController.ChangeView();
+            animator.SetLayerWeight(animator.GetLayerIndex("Aim"), 0);
         }
         else
         {
             isAiming = true;
+            playerController.ChangeView();
+            animator.SetLayerWeight(animator.GetLayerIndex("Aim"),1);
         }
     }
 }

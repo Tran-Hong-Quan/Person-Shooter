@@ -59,12 +59,12 @@ public class PlayerInputs : MonoBehaviour
 
     public void OnFire(InputValue value)
     {
-
+        Fire(value.isPressed);
     }
 
     public void OnAim(InputValue value)
     {
-
+        Aim(value.isPressed);
     }
 
 #endif

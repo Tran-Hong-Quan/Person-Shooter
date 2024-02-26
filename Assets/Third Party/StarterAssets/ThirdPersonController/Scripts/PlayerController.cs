@@ -144,15 +144,16 @@ public class PlayerController : MonoBehaviour
             _mainCamera = Camera.main;
             _mainCameraTransform = _mainCamera.transform;
         }
+        _controller = GetComponent<CharacterController>();
+        _input = GetComponent<PlayerInputs>();
+        _hasAnimator = TryGetComponent(out _animator);
     }
 
     private void Start()
     {
         _cinemachineTargetYaw = CinemachineCameraTarget.rotation.eulerAngles.y;
 
-        _hasAnimator = TryGetComponent(out _animator);
-        _controller = GetComponent<CharacterController>();
-        _input = GetComponent<PlayerInputs>();
+
 
         InitCameraView();
 
@@ -432,7 +433,7 @@ public class PlayerController : MonoBehaviour
     }
 
     bool isFPC;
-    private void ChangeView()
+    public void ChangeView()
     {
         if (!isFPC)
         {
