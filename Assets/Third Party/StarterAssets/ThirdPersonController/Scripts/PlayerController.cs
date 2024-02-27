@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -68,6 +69,7 @@ public class PlayerController : MonoBehaviour
     public float aimDistance = 10f;
     public CinemachineVirtualCamera fpCam;
     public CinemachineVirtualCamera tpCam;
+    public CinemachineVirtualCamera tpAimCam;
 
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
@@ -82,7 +84,8 @@ public class PlayerController : MonoBehaviour
     public bool LockCameraPosition = false;
 
     [Header("Rig")]
-    [SerializeField] private MultiAimConstraint spineRig;
+    public Rig aimRig;
+    public Rig aimRifleRig;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -132,7 +135,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public PlayerInputs Input { get { return _input; } }
+    public PlayerInputs Inputs { get { return _input; } }
     public Animator Animator { get { return _animator; } }
 
 
@@ -230,7 +233,7 @@ public class PlayerController : MonoBehaviour
             _cinemachineTargetYaw, 0.0f);
 
         headAim.position = CinemachineCameraTarget.position + CinemachineCameraTarget.forward * aimDistance;
-        if (isFPC)
+        if (isAim)
             transform.rotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
     }
 
@@ -278,7 +281,7 @@ public class PlayerController : MonoBehaviour
         // if there is a move input rotate player when the player is moving
         if (_input.move != Vector2.zero)
         {
-            if (isFPC)
+            if (isAim)
             {
                 _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizontal Movement"), _input.move.x / 2, Time.deltaTime * SpeedChangeRate));
                 _animator.SetFloat("Vertical Movement", Mathf.Lerp(_animator.GetFloat("Vertical Movement"), _input.move.y / 2, Time.deltaTime * SpeedChangeRate));
@@ -295,7 +298,7 @@ public class PlayerController : MonoBehaviour
                 RotationSmoothTime);
 
             // rotate to face input direction relative to camera position
-            if (!isFPC)
+            if (!isAim)
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
@@ -427,27 +430,34 @@ public class PlayerController : MonoBehaviour
     private void InitCameraView()
     {
         tpCam.Priority = 10;
-        isFPC = true;
+        isFpcam = true;
         ChangeView();
         _input.onChangeView.AddListener(ChangeView);
     }
 
-    bool isFPC;
+    [HideInInspector] public bool isAim;
+    [HideInInspector] public bool isFpcam;
     public void ChangeView()
     {
-        if (!isFPC)
+        if (!isFpcam)
         {
             fpCam.Priority = 11;
-            //_mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
-            isFPC = true;
-            spineRig.weight = 1.0f;
+            _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
+            isAim = true;
+            DOVirtual.Float(aimRig.weight, 1f, 0.5f, value =>
+            {
+                aimRig.weight = value;
+            });
         }
         else
         {
             fpCam.Priority = 9;
-            //_mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
-            isFPC = false;
-            spineRig.weight = 0;
+            _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
+            isAim = false;
+            DOVirtual.Float(aimRig.weight, 0f, 0.5f, value =>
+            {
+                aimRig.weight = value;
+            });
         }
     }
 }
