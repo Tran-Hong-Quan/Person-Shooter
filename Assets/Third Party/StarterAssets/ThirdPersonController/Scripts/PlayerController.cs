@@ -438,14 +438,14 @@ public class PlayerController : MonoBehaviour
         if (!isFPC)
         {
             fpCam.Priority = 11;
-            _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
+            //_mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
             isFPC = true;
             spineRig.weight = 1.0f;
         }
         else
         {
             fpCam.Priority = 9;
-            _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
+            //_mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
             isFPC = false;
             spineRig.weight = 0;
         }
