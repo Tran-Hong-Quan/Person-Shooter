@@ -26,7 +26,8 @@ public class PlayerInputs : MonoBehaviour
     [Header("Events")]
     public UnityEvent onChangeView;
     public UnityEvent onAim;
-    public UnityEvent onFire;
+    public UnityEvent<bool> onFire;
+    public UnityEvent onStopFire;
 
 #if ENABLE_INPUT_SYSTEM
     public void OnMove(InputValue value)
@@ -115,6 +116,6 @@ public class PlayerInputs : MonoBehaviour
     private void Fire(bool newState)
     {
         isFire = newState;
-        onFire?.Invoke();
+        onFire?.Invoke(newState);
     }
 }

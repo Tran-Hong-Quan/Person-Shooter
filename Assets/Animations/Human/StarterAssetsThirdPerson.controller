@@ -86,7 +86,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Idle Walk Run Blend
-  m_Speed: 1
+  m_Speed: 1.1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1862602496021641333}
@@ -506,7 +506,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 3afb9b40306224e429c7dd2a515f353f, type: 2}
     m_Threshold: 0.2857143
     m_Position: {x: 0, y: 0.5}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
@@ -1506,7 +1506,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 71dcb5d854381b547b3174fa1ab48ce9, type: 2}
     m_Threshold: 0.32142857
     m_Position: {x: 0, y: 0.5}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
@@ -1514,7 +1514,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: d7fbac23602b09c419152e4c8e1a171d, type: 2}
     m_Threshold: 0.42857146
     m_Position: {x: 0.5, y: 0.5}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
@@ -1522,7 +1522,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 912c15203e394b148b7cfe79f0e78747, type: 2}
     m_Threshold: 0.53571427
     m_Position: {x: 0.5, y: -0.5}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
@@ -1530,7 +1530,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 45059fc7fd4d70e4c94e2f71c63f5613, type: 2}
     m_Threshold: 0.64285713
     m_Position: {x: -0.5, y: 0.5}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
@@ -1538,7 +1538,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 64c62fb8423f96d42a4fa5cd83c41707, type: 2}
     m_Threshold: 0.75
     m_Position: {x: -0.5, y: -0.5}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0

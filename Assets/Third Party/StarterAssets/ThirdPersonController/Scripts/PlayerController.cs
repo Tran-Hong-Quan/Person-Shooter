@@ -444,6 +444,7 @@ public class PlayerController : MonoBehaviour
             fpCam.Priority = 11;
             _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
             isAim = true;
+            isFpcam = true;
             DOVirtual.Float(aimRig.weight, 1f, 0.5f, value =>
             {
                 aimRig.weight = value;
@@ -454,6 +455,7 @@ public class PlayerController : MonoBehaviour
             fpCam.Priority = 9;
             _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
             isAim = false;
+            isFpcam = false;
             DOVirtual.Float(aimRig.weight, 0f, 0.5f, value =>
             {
                 aimRig.weight = value;
