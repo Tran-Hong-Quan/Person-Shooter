@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +29,36 @@ public class PlayerInputs : MonoBehaviour
     public UnityEvent onAim;
     public UnityEvent<bool> onFire;
     public UnityEvent onStopFire;
+
+    public PlayerInputActions inputs;
+    public InputAction moveAction;
+
+    private void Awake()
+    {
+        inputs = new PlayerInputActions();
+    }
+
+    private void Start()
+    {
+        inputs.Enable();
+
+        moveAction = inputs.Player.Move;
+        moveAction.Enable();
+        moveAction.performed += OnMove;
+        moveAction.canceled += OnEndMove;
+    }
+
+    private void OnEndMove(InputAction.CallbackContext context)
+    {
+        move = Vector2.zero;
+    }
+
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        print("fjuoaj");
+        move = context.ReadValue<Vector2>();
+    }
+
 
 #if ENABLE_INPUT_SYSTEM
     public void OnMove(InputValue value)

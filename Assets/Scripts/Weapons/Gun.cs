@@ -10,7 +10,6 @@ public class Gun : MonoBehaviour
     public PlayerController playerController;
 
     [SerializeField] protected Transform firePoint;
-    [SerializeField] protected Bullet bullet;
     [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
     [SerializeField] protected float muzzleVelocity = 0.1f;
     [SerializeField] protected ParticleSystem fireEffect;
@@ -37,7 +36,6 @@ public class Gun : MonoBehaviour
         tpAimCam = playerController.tpAimCam;
         aimRifleRig = playerController.aimRifleRig;
         inputs.onAim.AddListener(Aim);
-        inputs.onFire.AddListener(Fire);
     }
 
     float clk = 0;
@@ -45,15 +43,26 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         if (clk > 0) clk -= Time.fixedDeltaTime;
+        Fire();
     }
 
-    private void Fire(bool isFire)
+    private void Fire()
     {
-        if (isFire) Aim(); else StopAim();
+        bool isFire = inputs.isFire;
+
+        if (isFire)
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Firing"), 1);
+            playerController.isAim = true;
+        }
+        else
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Firing"), 0);
+            playerController.isAim = false;
+        }
 
         if (!(isFire && clk <= 0)) return;
 
-        var b = SimplePool.Spawn(bullet);
         Vector3 dir = Vector3.zero;
 
         Ray ray = mainCam.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
@@ -65,7 +74,6 @@ public class Gun : MonoBehaviour
         else
             dir = firePoint.forward;
 
-        b.Init(muzzleVelocity, firePoint.position, dir);
         fireEffect.Play();
         clk = fireRate;
     }
@@ -77,12 +85,10 @@ public class Gun : MonoBehaviour
         if (isAiming)
         {
             StopAim();
-            StopAimCam();
         }
         else
         {
             StartAim();
-            StartAimCam();
         }
     }
 
@@ -96,19 +102,8 @@ public class Gun : MonoBehaviour
         {
             aimRifleRig.weight = value;
         });
-
-    }
-
-    private void StopAimCam()
-    {
         if (!playerController.isFpcam)
             tpAimCam.Priority = 8;
-    }
-
-    private void StartAimCam()
-    {
-        if (!playerController.isFpcam)
-            tpAimCam.Priority = 12;
     }
 
     private void StopAim()
@@ -121,5 +116,7 @@ public class Gun : MonoBehaviour
         {
             aimRifleRig.weight = value;
         });
+        if (!playerController.isFpcam)
+            tpAimCam.Priority = 12;
     }
 }

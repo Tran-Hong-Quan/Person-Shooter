@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
         StartCoroutine(AutoDestroy());
         transform.position = pos;
         transform.rotation = Quaternion.LookRotation(dir, transform.up);
-        rb.velocity = dir * speed;
+        rb.velocity = dir.normalized * speed;
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
