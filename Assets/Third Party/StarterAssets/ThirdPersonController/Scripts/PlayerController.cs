@@ -156,8 +156,6 @@ public class PlayerController : MonoBehaviour
     {
         _cinemachineTargetYaw = CinemachineCameraTarget.rotation.eulerAngles.y;
 
-
-
         InitCameraView();
 
 #if ENABLE_INPUT_SYSTEM
@@ -435,7 +433,7 @@ public class PlayerController : MonoBehaviour
         _input.onChangeView.AddListener(ChangeView);
     }
 
-    [HideInInspector] public bool isAim;
+    public bool isAim;
     [HideInInspector] public bool isFpcam;
     public void ChangeView()
     {

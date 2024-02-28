@@ -387,7 +387,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Firing
+  m_Name: Rifle Fire
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8915574133096438723}
@@ -790,7 +790,7 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
-    m_Name: Rifle
+    m_Name: Rifle Hold
     m_StateMachine: {fileID: 387859431603219873}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -802,7 +802,7 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
-    m_Name: Aim
+    m_Name: Rifle Aim
     m_StateMachine: {fileID: 8653214868496331004}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -814,7 +814,7 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
-    m_Name: Firing
+    m_Name: Rifle Fire
     m_StateMachine: {fileID: -2441726926446359375}
     m_Mask: {fileID: 31900000, guid: 67359a1f43463e74aa86a7e2423094bc, type: 2}
     m_Motions: []
@@ -854,7 +854,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rifle
+  m_Name: Rifle Hold
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -6291370934903850495}
@@ -1816,7 +1816,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Aim
+  m_Name: Rifle Aim
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -5598927256063460726}

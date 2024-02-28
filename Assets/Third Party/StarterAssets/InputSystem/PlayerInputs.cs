@@ -26,41 +26,38 @@ public class PlayerInputs : MonoBehaviour
 
     [Header("Events")]
     public UnityEvent onChangeView;
+
     public UnityEvent onAim;
-    public UnityEvent<bool> onFire;
+
+    public UnityEvent onStartFire;
+    public UnityEvent onFire;
     public UnityEvent onStopFire;
 
-    public PlayerInputActions inputs;
-    public InputAction moveAction;
+    public UnityEvent<Vector2> onStartMove;
+    public UnityEvent<Vector2> onMove;
+    public UnityEvent<Vector2> onStopMove;
+
+
+
+#if ENABLE_INPUT_SYSTEM
+    public PlayerInput inputs;
 
     private void Awake()
     {
-        inputs = new PlayerInputActions();
+        inputs = GetComponent<PlayerInput>();
     }
 
     private void Start()
     {
-        inputs.Enable();
-
-        moveAction = inputs.Player.Move;
-        moveAction.Enable();
-        moveAction.performed += OnMove;
+        var moveAction = inputs.actions.FindAction("Move");
+        moveAction.performed += OnStartMove;
         moveAction.canceled += OnEndMove;
+
+        var fireAction = inputs.actions.FindAction("Fire");
+        fireAction.performed += OnStartFire;
+        fireAction.canceled += OnStopFire;
     }
 
-    private void OnEndMove(InputAction.CallbackContext context)
-    {
-        move = Vector2.zero;
-    }
-
-    private void OnMove(InputAction.CallbackContext context)
-    {
-        print("fjuoaj");
-        move = context.ReadValue<Vector2>();
-    }
-
-
-#if ENABLE_INPUT_SYSTEM
     public void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
@@ -91,20 +88,51 @@ public class PlayerInputs : MonoBehaviour
 
     public void OnFire(InputValue value)
     {
-        Fire(value.isPressed);
+        FireInput(value.isPressed);
     }
 
     public void OnAim(InputValue value)
     {
-        Aim(value.isPressed);
+        AimInput(value.isPressed);
+    }
+
+    private void OnStopFire(InputAction.CallbackContext context)
+    {
+        StopFireInput();
+    }
+
+    private void OnStartFire(InputAction.CallbackContext context)
+    {
+        StartFireInput();
+    }
+
+    private void OnEndMove(InputAction.CallbackContext context)
+    {
+        StopMoveInput(context.ReadValue<Vector2>());
+    }
+
+    private void OnStartMove(InputAction.CallbackContext context)
+    {
+        StartMoveInput(context.ReadValue<Vector2>());
     }
 
 #endif
 
 
+    public void StartMoveInput(Vector2 dir)
+    {
+        onStartMove?.Invoke(dir);
+    }
+
+    public void StopMoveInput(Vector2 dir)
+    {
+        onStopMove?.Invoke(dir);
+    }
+
     public void MoveInput(Vector2 newMoveDirection)
     {
         move = newMoveDirection;
+        onMove?.Invoke(move);
     }
 
     public void LookInput(Vector2 newLookDirection)
@@ -132,21 +160,32 @@ public class PlayerInputs : MonoBehaviour
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
-    private void ChangeView(bool newState)
+    public void ChangeView(bool newState)
     {
         changeView = newState;
         onChangeView?.Invoke();
     }
 
-    private void Aim(bool newState)
+    public void AimInput(bool newState)
     {
         isAim = newState;
         onAim?.Invoke();
     }
 
-    private void Fire(bool newState)
+    public void StartFireInput()
+    {
+        onStartFire?.Invoke();
+    }
+
+    public void StopFireInput()
+    {
+        isFire = false;
+        onStopFire?.Invoke();
+    }
+
+    public void FireInput(bool newState)
     {
         isFire = newState;
-        onFire?.Invoke(newState);
+        onFire?.Invoke();
     }
 }

@@ -1,7 +1,9 @@
 using DG.Tweening;
 using StarterAssets;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -35,50 +37,13 @@ public class Gun : MonoBehaviour
         fpCam = playerController.fpCam;
         tpAimCam = playerController.tpAimCam;
         aimRifleRig = playerController.aimRifleRig;
+
         inputs.onAim.AddListener(Aim);
+
+        inputs.onFire.AddListener(Fire);
+        inputs.onStartFire.AddListener(StartFire);
+        inputs.onStopFire.AddListener(StopFire);
     }
-
-    float clk = 0;
-
-    private void Update()
-    {
-        if (clk > 0) clk -= Time.fixedDeltaTime;
-        Fire();
-    }
-
-    private void Fire()
-    {
-        bool isFire = inputs.isFire;
-
-        if (isFire)
-        {
-            animator.SetLayerWeight(animator.GetLayerIndex("Firing"), 1);
-            playerController.isAim = true;
-        }
-        else
-        {
-            animator.SetLayerWeight(animator.GetLayerIndex("Firing"), 0);
-            playerController.isAim = false;
-        }
-
-        if (!(isFire && clk <= 0)) return;
-
-        Vector3 dir = Vector3.zero;
-
-        Ray ray = mainCam.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            dir = hit.point - firePoint.position;
-        }
-        else
-            dir = firePoint.forward;
-
-        fireEffect.Play();
-        clk = fireRate;
-    }
-
-    bool isAiming;
 
     private void Aim()
     {
@@ -90,33 +55,126 @@ public class Gun : MonoBehaviour
         {
             StartAim();
         }
+        inputs.isAim = isAiming;
     }
 
-    private void StartAim()
+    float clk = 0;
+
+    private void Update()
     {
-        if (isAiming) return;
-        isAiming = true;
+        if (clk > 0) clk -= Time.fixedDeltaTime;
+    }
+
+    private void StartFire()
+    {
         playerController.isAim = true;
-        animator.SetLayerWeight(animator.GetLayerIndex("Aim"), 1);
+        isFiring = true;
+
+        DOVirtual.Float(animator.GetLayerWeight(animator.GetLayerIndex("Rifle Fire")), 1f, 0.5f, value =>
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Rifle Fire"), value);
+        });
+
+        if (!isAiming)
+            DOVirtual.Float(animator.GetLayerWeight(animator.GetLayerIndex("Rifle Aim")), 1f, 0.5f, value =>
+            {
+                animator.SetLayerWeight(animator.GetLayerIndex("Rifle Aim"), value);
+            });
+
         DOVirtual.Float(aimRifleRig.weight, 1f, 0.5f, value =>
         {
             aimRifleRig.weight = value;
         });
+
+        Debug.Log("Start Fire");
+    }
+
+    private void StopFire()
+    {
+        DOVirtual.Float(animator.GetLayerWeight(animator.GetLayerIndex("Rifle Fire")), 0f, 0.5f, value =>
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Rifle Fire"), value);
+        });
+
+        if (!isAiming)
+        {
+            isFiring = false;
+            DOVirtual.Float(animator.GetLayerWeight(animator.GetLayerIndex("Rifle Aim")), 0f, 0.5f, value =>
+            {
+                animator.SetLayerWeight(animator.GetLayerIndex("Rifle Aim"), value);
+            });
+
+            DOVirtual.Float(aimRifleRig.weight, 0f, 0.5f, value =>
+            {
+                aimRifleRig.weight = value;
+            }).OnComplete(() => playerController.isAim = false);
+        }
+
+        Debug.Log("Stop Fire");
+    }
+
+    bool isFiring;
+
+    private void Fire()
+    {
+        if (clk > 0f) return;
+
+        Ray ray = mainCam.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Vector3 dir = hit.point - firePoint.position;
+        }
+
+
+        fireEffect.Play();
+        clk = fireRate;
+    }
+
+    bool isAiming;
+
+    private void StartAim()
+    {
+        isAiming = true;
+        playerController.isAim = true;
+
+        DOVirtual.Float(animator.GetLayerWeight(animator.GetLayerIndex("Rifle Aim")), 1f, 0.5f, value =>
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Rifle Aim"), value);
+        });
+
+        if (!isFiring)
+            DOVirtual.Float(aimRifleRig.weight, 1f, 0.5f, value =>
+            {
+                aimRifleRig.weight = value;
+            });
         if (!playerController.isFpcam)
-            tpAimCam.Priority = 8;
+            tpAimCam.Priority = 12;
     }
 
     private void StopAim()
     {
-        if (!isAiming) return;
         isAiming = false;
-        playerController.isAim = false;
-        animator.SetLayerWeight(animator.GetLayerIndex("Aim"), 0);
-        DOVirtual.Float(aimRifleRig.weight, 0f, 0.5f, value =>
+
+        DOVirtual.Float(animator.GetLayerWeight(animator.GetLayerIndex("Rifle Aim")), 0f, 0.5f, value =>
         {
-            aimRifleRig.weight = value;
+            animator.SetLayerWeight(animator.GetLayerIndex("Rifle Aim"), value);
         });
+
+        if (!isFiring)
+        {
+            DOVirtual.Float(aimRifleRig.weight, 0f, 0.5f, value =>
+            {
+                aimRifleRig.weight = value;
+            }).OnComplete(() => playerController.isAim = false);
+        }
+
         if (!playerController.isFpcam)
-            tpAimCam.Priority = 12;
+            tpAimCam.Priority = 8;
+    }
+
+    private void OnDestroy()
+    {
+
     }
 }
