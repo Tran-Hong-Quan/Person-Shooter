@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -174,11 +175,28 @@ public class PlayerInputs : MonoBehaviour
 
     public void StartFireInput()
     {
+        isFire = true;
         onStartFire?.Invoke();
+
+        loopFireCorotine = LoopFireCorotine();
+        StartCoroutine(loopFireCorotine);
+    }
+
+    IEnumerator loopFireCorotine;
+
+    private IEnumerator LoopFireCorotine()
+    {
+        while(true)
+        {
+            yield return null;
+            onFire?.Invoke();
+        }
     }
 
     public void StopFireInput()
     {
+        StopCoroutine(loopFireCorotine);
+
         isFire = false;
         onStopFire?.Invoke();
     }

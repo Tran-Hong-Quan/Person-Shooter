@@ -123,6 +123,11 @@ public class PlayerController : MonoBehaviour
 
     private bool _hasAnimator;
 
+    [SerializeField] public bool isRotatePlayerWithCam;
+    [SerializeField] public bool isFpcam;
+    [SerializeField] public bool isRifleAiming;
+    [SerializeField] public bool isRifleFiring;
+
     private bool IsCurrentDeviceMouse
     {
         get
@@ -227,12 +232,19 @@ public class PlayerController : MonoBehaviour
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
         // Cinemachine will follow this target
-        CinemachineCameraTarget.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-            _cinemachineTargetYaw, 0.0f);
+        Vector3 targetRotation = new Vector3(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+        CinemachineCameraTarget.rotation = Quaternion.Euler(targetRotation);
 
         headAim.position = CinemachineCameraTarget.position + CinemachineCameraTarget.forward * aimDistance;
-        if (isAim)
+        if (isRotatePlayerWithCam)
             transform.rotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
+    }
+
+    Vector3 recoil = Vector3.zero;
+    public void AddCinemachineCamRotatation(float addPitch,float addYaw)
+    {
+        _cinemachineTargetPitch += addPitch;
+        _cinemachineTargetYaw += addYaw;
     }
 
     private void Move()
@@ -279,7 +291,7 @@ public class PlayerController : MonoBehaviour
         // if there is a move input rotate player when the player is moving
         if (_input.move != Vector2.zero)
         {
-            if (isAim)
+            if (isRotatePlayerWithCam)
             {
                 _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizontal Movement"), _input.move.x / 2, Time.deltaTime * SpeedChangeRate));
                 _animator.SetFloat("Vertical Movement", Mathf.Lerp(_animator.GetFloat("Vertical Movement"), _input.move.y / 2, Time.deltaTime * SpeedChangeRate));
@@ -296,7 +308,7 @@ public class PlayerController : MonoBehaviour
                 RotationSmoothTime);
 
             // rotate to face input direction relative to camera position
-            if (!isAim)
+            if (!isRotatePlayerWithCam)
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
@@ -433,15 +445,13 @@ public class PlayerController : MonoBehaviour
         _input.onChangeView.AddListener(ChangeView);
     }
 
-    public bool isAim;
-    [HideInInspector] public bool isFpcam;
     public void ChangeView()
     {
         if (!isFpcam)
         {
             fpCam.Priority = 11;
             _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
-            isAim = true;
+            isRotatePlayerWithCam = true;
             isFpcam = true;
             DOVirtual.Float(aimRig.weight, 1f, 0.5f, value =>
             {
@@ -452,12 +462,98 @@ public class PlayerController : MonoBehaviour
         {
             fpCam.Priority = 9;
             _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
-            isAim = false;
+            isRotatePlayerWithCam = false;
             isFpcam = false;
             DOVirtual.Float(aimRig.weight, 0f, 0.5f, value =>
             {
                 aimRig.weight = value;
             });
+        }
+    }
+
+    public void StartRifleAimAnimation()
+    {
+        isRifleAiming = true;
+        isRotatePlayerWithCam = true;
+
+        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 1f, .1f, value =>
+        {
+            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
+        });
+
+        DOVirtual.Float(aimRifleRig.weight, 1f, .1f, value =>
+        {
+            aimRifleRig.weight = value;
+        });
+
+        if (!isFpcam)
+            tpAimCam.Priority = 12;
+    }
+
+    public void StopRifleAimAnimation()
+    {
+        isRifleAiming = false;
+
+        if (!isRifleFiring)
+        {
+            DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 0f, .1f, value =>
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
+            });
+
+            DOVirtual.Float(aimRifleRig.weight, 0f, 0.5f, value =>
+            {
+                aimRifleRig.weight = value;
+            }).OnComplete(() => isRotatePlayerWithCam = false);
+        }
+
+        if (!isFpcam)
+            tpAimCam.Priority = 8;
+    }
+
+    public void StartRifleFireAnimation()
+    {
+        isRotatePlayerWithCam = true;
+        isRifleFiring = true;
+
+        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Fire")), 1f, .1f, value =>
+        {
+            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), value);
+        });
+
+        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 1f, .1f, value =>
+        {
+            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
+        });
+
+        DOVirtual.Float(aimRifleRig.weight, 1f, .1f, value =>
+        {
+            aimRifleRig.weight = value;
+        });
+
+        Debug.Log("Start Fire");
+    }
+
+    public void StopRifleFireAnimation()
+    {
+        isRifleFiring = false;
+
+        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Fire")), 0f, .1f, value =>
+        {
+            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), value);
+        });
+
+        if (!isRifleAiming)
+        {
+            DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 0f, .1f, value =>
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
+            });
+
+            DOVirtual.Float(aimRifleRig.weight, 0f, .1f, value =>
+            {
+                aimRifleRig.weight = value;
+            }).OnComplete(() => isRotatePlayerWithCam = false);
         }
     }
 }
