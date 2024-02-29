@@ -186,6 +186,5 @@ public class PlayerInputs : MonoBehaviour
     public void FireInput(bool newState)
     {
         isFire = newState;
-        onFire?.Invoke();
     }
 }

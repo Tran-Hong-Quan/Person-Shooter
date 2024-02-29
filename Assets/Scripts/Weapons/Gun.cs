@@ -16,6 +16,11 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float muzzleVelocity = 0.1f;
     [SerializeField] protected ParticleSystem fireEffect;
 
+    [SerializeField] protected ParticleSystem bulletHitEff;
+
+    [SerializeField] protected AudioSource audioSource;
+    [SerializeField] protected AudioClip fireAudioClip;
+
     protected PlayerInputs inputs;
     protected Animator animator;
     protected Cinemachine.CinemachineVirtualCamera tpCam;
@@ -124,10 +129,22 @@ public class Gun : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Vector3 dir = hit.point - firePoint.position;
+
+            var hitEff = SimplePool.Spawn(bulletHitEff);
+            hitEff.transform.SetParent(null, true);
+            hitEff.transform.position = hit.point;
+            hitEff.transform.rotation = Quaternion.LookRotation(hit.normal);
+            hitEff.Play();
+            DOVirtual.DelayedCall(hitEff.main.duration, () => SimplePool.Despawn(hitEff.gameObject));
         }
 
+        var eff = SimplePool.Spawn(fireEffect, fireEffect.transform.position, fireEffect.transform.rotation);
+        eff.transform.SetParent(fireEffect.transform.parent, true);
+        eff.Play();
+        DOVirtual.DelayedCall(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
 
-        fireEffect.Play();
+        audioSource.PlayOneShot(fireAudioClip);
+
         clk = fireRate;
     }
 
