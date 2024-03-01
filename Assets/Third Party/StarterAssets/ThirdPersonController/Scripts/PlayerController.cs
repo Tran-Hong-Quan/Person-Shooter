@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
         CinemachineCameraTarget.rotation = Quaternion.Euler(targetRotation);
         foreach (var c in camTargets) c.rotation = Quaternion.Euler(targetRotation);
 
-        headAim.position = CinemachineCameraTarget.GetChild(0).position + CinemachineCameraTarget.forward * aimDistance;
+        headAim.position = CinemachineCameraTarget.GetChild(0).position + CinemachineCameraTarget.GetChild(0).forward * aimDistance;
         if (isRotatePlayerWithCam || isFpcam)
             transform.rotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
     }

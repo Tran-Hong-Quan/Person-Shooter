@@ -3394,7 +3394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29861a8d9d7a07429c3ff4528c6afab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoilForce: {x: 9, y: 1, z: 9}
+  recoilForce: {x: -9, y: 1, z: 9}
   recoverySpeed: 2
   snappiness: 2
   targets: []
