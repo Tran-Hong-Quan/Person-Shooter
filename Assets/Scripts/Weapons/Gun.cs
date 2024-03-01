@@ -1,3 +1,4 @@
+using Cinemachine;
 using HongQuan;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Transform firePoint;
     [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
     [SerializeField] protected float muzzleVelocity = 0.1f;
+    [SerializeField] protected float shakeCamAmplitude = 2;
+    [SerializeField] protected int bulletsCount = 120;
+    [SerializeField] protected int magazineBullet = 30;
 
     [SerializeField] protected ParticleSystem fireEffect;
     [SerializeField] protected ParticleSystem bulletHitEff;
@@ -20,6 +24,8 @@ public class Gun : MonoBehaviour
     protected Camera mainCam;
     protected Animator animator;
     protected ProceduralRecoil recoil;
+
+    protected int currentBullet;
 
     protected virtual void Awake()
     {
@@ -45,6 +51,8 @@ public class Gun : MonoBehaviour
             if (recoilTarget.childCount > 0)
                 recoilTargets.Add(recoilTarget.GetChild(0));
         recoil.Init(recoilTargets);
+
+        currentBullet = magazineBullet;
     }
 
     private void Aim()
@@ -63,12 +71,14 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        if (clk > 0) clk -= Time.fixedDeltaTime;
+        if (clk > 0) clk -= Time.deltaTime;
     }
 
     private void StartFire()
     {
+        if (isReloading) return;
         playerController.StartRifleFireAnimation();
+        if (currentBullet <= 0) Reload();
     }
 
     private void StopFire()
@@ -79,6 +89,8 @@ public class Gun : MonoBehaviour
     private void Fire()
     {
         if (clk > 0f) return;
+
+        if (currentBullet <= 0) return;
 
         Ray ray = mainCam.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
 
@@ -106,6 +118,21 @@ public class Gun : MonoBehaviour
         animator.Play("Rifle Fire", animator.GetLayerIndex("Rifle Fire"));
 
         clk = fireRate;
+
+        currentBullet--;
+    }
+
+    bool isReloading;
+    private void Reload()
+    {
+        if(isReloading) return;
+        isReloading = true;
+
+        playerController.PlayReloadAnimation(() =>
+        {
+            currentBullet = magazineBullet;
+            isReloading = false;
+        });
     }
 
     Vector2 recoilValue = Vector2.zero;
@@ -114,12 +141,16 @@ public class Gun : MonoBehaviour
 
     private void StartAim()
     {
+        if (isReloading) return;
+
         isAiming = true;
         playerController.StartRifleAimAnimation();
     }
 
     private void StopAim()
     {
+        if (isReloading) return;
+
         isAiming = false;
         playerController.StopRifleAimAnimation();
     }

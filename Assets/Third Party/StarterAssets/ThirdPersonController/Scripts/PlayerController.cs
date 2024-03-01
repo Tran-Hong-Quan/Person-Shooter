@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using DG.Tweening;
+using HongQuan;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -86,6 +87,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Rig")]
     public Rig aimRig;
+    public Rig holdRifleRig;
     public Rig aimRifleRig;
 
     // cinemachine
@@ -126,8 +128,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] public bool isRotatePlayerWithCam;
     [SerializeField] public bool isFpcam;
+    [SerializeField] public bool equipRifle = true;
     [SerializeField] public bool isRifleAiming;
     [SerializeField] public bool isRifleFiring;
+    [SerializeField] public bool isRifleReloading;
 
     private bool IsCurrentDeviceMouse
     {
@@ -238,7 +242,7 @@ public class PlayerController : MonoBehaviour
         foreach (var c in camTargets) c.rotation = Quaternion.Euler(targetRotation);
 
         headAim.position = CinemachineCameraTarget.GetChild(0).position + CinemachineCameraTarget.GetChild(0).forward * aimDistance;
-        if (isRotatePlayerWithCam || isFpcam)
+        if (IsFollowCameraRotation())
             transform.rotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
     }
 
@@ -286,7 +290,7 @@ public class PlayerController : MonoBehaviour
         // if there is a move input rotate player when the player is moving
         if (_input.move != Vector2.zero)
         {
-            if (isRotatePlayerWithCam || isFpcam)
+            if (IsFollowCameraRotation())
             {
                 _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizontal Movement"), _input.move.x / 2, Time.deltaTime * SpeedChangeRate));
                 _animator.SetFloat("Vertical Movement", Mathf.Lerp(_animator.GetFloat("Vertical Movement"), _input.move.y / 2, Time.deltaTime * SpeedChangeRate));
@@ -303,7 +307,7 @@ public class PlayerController : MonoBehaviour
                 RotationSmoothTime);
 
             // rotate to face input direction relative to camera position
-            if (!isRotatePlayerWithCam)
+            if (!IsFollowCameraRotation())
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
@@ -432,6 +436,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private bool IsFollowCameraRotation()
+    {
+        if (isFpcam) return true;
+        if(isRifleReloading) return false;
+        if(isRotatePlayerWithCam) return true;
+
+        return false;
+    }
+
     private void InitCameraView()
     {
         tpCam.Priority = 10;
@@ -448,10 +461,7 @@ public class PlayerController : MonoBehaviour
             _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
             isRotatePlayerWithCam = true;
             isFpcam = true;
-            DOVirtual.Float(aimRig.weight, 1f, 0.5f, value =>
-            {
-                aimRig.weight = value;
-            });
+            aimRig.weight = 1;
         }
         else
         {
@@ -459,46 +469,33 @@ public class PlayerController : MonoBehaviour
             _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
             isRotatePlayerWithCam = false;
             isFpcam = false;
-            DOVirtual.Float(aimRig.weight, 0f, 0.5f, value =>
-            {
-                aimRig.weight = value;
-            });
+            aimRig.weight = 0;
         }
     }
 
     public void StartRifleAimAnimation()
     {
+        if (!equipRifle) return;
+
         isRifleAiming = true;
         isRotatePlayerWithCam = true;
-
-        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 1f, .1f, value =>
-        {
-            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
-        });
-
-        DOVirtual.Float(aimRifleRig.weight, 1f, .1f, value =>
-        {
-            aimRifleRig.weight = value;
-        });
-
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), 1);
+        aimRifleRig.weight = 1;
         tpAimCam.Priority = 11;
     }
 
     public void StopRifleAimAnimation()
     {
+        if (!equipRifle) return;
+
         isRifleAiming = false;
 
         if (!isRifleFiring)
         {
-            DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 0f, .1f, value =>
-            {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
-            });
+            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), 0);
 
-            DOVirtual.Float(aimRifleRig.weight, 0f, 0.5f, value =>
-            {
-                aimRifleRig.weight = value;
-            }).OnComplete(() => isRotatePlayerWithCam = false);
+            aimRifleRig.weight = 0;
+            isRotatePlayerWithCam = false;
         }
 
         tpAimCam.Priority = 9;
@@ -506,47 +503,76 @@ public class PlayerController : MonoBehaviour
 
     public void StartRifleFireAnimation()
     {
+        if (!equipRifle) return;
+
         isRotatePlayerWithCam = true;
         isRifleFiring = true;
 
-        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Fire")), 1f, .1f, value =>
-        {
-            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), value);
-        });
-
-        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 1f, .1f, value =>
-        {
-            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
-        });
-
-        DOVirtual.Float(aimRifleRig.weight, 1f, .1f, value =>
-        {
-            aimRifleRig.weight = value;
-        });
-
-        Debug.Log("Start Fire");
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), 1);
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), 1);
+        aimRifleRig.weight = 1;
     }
 
     public void StopRifleFireAnimation()
     {
+        if (!equipRifle) return;
+
         isRifleFiring = false;
 
-        DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Fire")), 0f, .1f, value =>
-        {
-            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), value);
-        });
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), 0);
 
         if (!isRifleAiming)
         {
-            DOVirtual.Float(_animator.GetLayerWeight(_animator.GetLayerIndex("Rifle Aim")), 0f, .1f, value =>
-            {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), value);
-            });
-
-            DOVirtual.Float(aimRifleRig.weight, 0f, .1f, value =>
-            {
-                aimRifleRig.weight = value;
-            }).OnComplete(() => isRotatePlayerWithCam = false);
+            _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), 0);
+            aimRifleRig.weight = 0;
+            isRotatePlayerWithCam = false;
         }
+    }
+
+    public void PlayEquipRifleAnimation()
+    {
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Hold"), 1);
+        holdRifleRig.weight = 1;
+        equipRifle = true;
+    }
+
+    public void PlayReloadAnimation(System.Action onDone = null)
+    {
+        if(isRifleReloading) return;
+        isRifleReloading = true;
+
+        int layerMaskId = _animator.GetLayerIndex("Rifle Reload");
+        _animator.SetLayerWeight(layerMaskId, 1);
+        _animator.Play("Rifle Reload", layerMaskId);
+
+        var animState = _animator.GetCurrentAnimatorStateInfo(layerMaskId);
+        float duration = animState.length / animState.speed;
+
+        float aimRigWeight = aimRifleRig.weight;
+        float holdRigWeight = holdRifleRig.weight;
+
+        aimRifleRig.weight = 0;
+        holdRifleRig.weight = 0;
+
+        this.DelayFuction(duration, () =>
+        {
+            _animator.SetLayerWeight(layerMaskId, 0);
+            isRifleReloading = false;
+            aimRifleRig.weight = aimRigWeight;
+            holdRifleRig.weight = holdRigWeight;
+
+            onDone?.Invoke();
+        });
+    }
+
+    public void StoEquipRifleAnimation()
+    {
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Hold"), 0);
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Fire"), 0);
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Aim"), 0);
+        _animator.SetLayerWeight(_animator.GetLayerIndex("Rifle Reload"), 0);
+        holdRifleRig.weight = 0;
+        aimRifleRig.weight = 0;
+        equipRifle = false;
     }
 }
