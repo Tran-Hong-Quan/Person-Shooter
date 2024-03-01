@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
     public Transform CinemachineCameraTarget;
+    public Transform[] camTargets;
     public Transform headAim;
     public float aimDistance = 10f;
     public CinemachineVirtualCamera fpCam;
@@ -234,17 +235,11 @@ public class PlayerController : MonoBehaviour
         // Cinemachine will follow this target
         Vector3 targetRotation = new Vector3(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         CinemachineCameraTarget.rotation = Quaternion.Euler(targetRotation);
+        foreach (var c in camTargets) c.rotation = Quaternion.Euler(targetRotation);
 
-        headAim.position = CinemachineCameraTarget.position + CinemachineCameraTarget.forward * aimDistance;
-        if (isRotatePlayerWithCam)
+        headAim.position = CinemachineCameraTarget.GetChild(0).position + CinemachineCameraTarget.forward * aimDistance;
+        if (isRotatePlayerWithCam || isFpcam)
             transform.rotation = Quaternion.Euler(0, _cinemachineTargetYaw, 0);
-    }
-
-    Vector3 recoil = Vector3.zero;
-    public void AddCinemachineCamRotatation(float addPitch,float addYaw)
-    {
-        _cinemachineTargetPitch += addPitch;
-        _cinemachineTargetYaw += addYaw;
     }
 
     private void Move()
@@ -291,7 +286,7 @@ public class PlayerController : MonoBehaviour
         // if there is a move input rotate player when the player is moving
         if (_input.move != Vector2.zero)
         {
-            if (isRotatePlayerWithCam)
+            if (isRotatePlayerWithCam || isFpcam)
             {
                 _animator.SetFloat("Horizontal Movement", Mathf.Lerp(_animator.GetFloat("Horizontal Movement"), _input.move.x / 2, Time.deltaTime * SpeedChangeRate));
                 _animator.SetFloat("Vertical Movement", Mathf.Lerp(_animator.GetFloat("Vertical Movement"), _input.move.y / 2, Time.deltaTime * SpeedChangeRate));
@@ -449,7 +444,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!isFpcam)
         {
-            fpCam.Priority = 11;
+            fpCam.Priority = 13;
             _mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Body"));
             isRotatePlayerWithCam = true;
             isFpcam = true;
@@ -460,7 +455,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            fpCam.Priority = 9;
+            fpCam.Priority = 8;
             _mainCamera.cullingMask |= 1 << LayerMask.NameToLayer("Body");
             isRotatePlayerWithCam = false;
             isFpcam = false;
@@ -486,8 +481,7 @@ public class PlayerController : MonoBehaviour
             aimRifleRig.weight = value;
         });
 
-        if (!isFpcam)
-            tpAimCam.Priority = 12;
+        tpAimCam.Priority = 11;
     }
 
     public void StopRifleAimAnimation()
@@ -507,8 +501,7 @@ public class PlayerController : MonoBehaviour
             }).OnComplete(() => isRotatePlayerWithCam = false);
         }
 
-        if (!isFpcam)
-            tpAimCam.Priority = 8;
+        tpAimCam.Priority = 9;
     }
 
     public void StartRifleFireAnimation()

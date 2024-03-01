@@ -1,4 +1,5 @@
 using HongQuan;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -8,8 +9,6 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Transform firePoint;
     [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
     [SerializeField] protected float muzzleVelocity = 0.1f;
-    [SerializeField] protected Vector2 recoilForce;
-    [SerializeField] protected float recoilRecovery;
 
     [SerializeField] protected ParticleSystem fireEffect;
     [SerializeField] protected ParticleSystem bulletHitEff;
@@ -25,6 +24,7 @@ public class Gun : MonoBehaviour
     protected virtual void Awake()
     {
         mainCam = Camera.main;
+        recoil = GetComponent<ProceduralRecoil>();
     }
 
     private void Start()
@@ -38,6 +38,13 @@ public class Gun : MonoBehaviour
         inputs.onStopFire.AddListener(StopFire);
 
         animator = playerController.Animator;
+
+        var recoilTargets = new List<Transform>();
+        recoilTargets.Add(playerController.CinemachineCameraTarget.GetChild(0));
+        foreach (var recoilTarget in playerController.camTargets)
+            if (recoilTarget.childCount > 0)
+                recoilTargets.Add(recoilTarget.GetChild(0));
+        recoil.Init(recoilTargets);
     }
 
     private void Aim()
@@ -57,8 +64,6 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         if (clk > 0) clk -= Time.fixedDeltaTime;
-
-        recoilValue = Vector3.Slerp(recoilForce, Vector3.zero, Time.deltaTime * recoilRecovery);
     }
 
     private void StartFire()
@@ -94,14 +99,9 @@ public class Gun : MonoBehaviour
         eff.Play();
         this.DelayFuction(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
 
-        float recoilMulti = 1f;
-        if (inputs.sprint) recoilMulti *= 2f;
-        if (inputs.move != Vector2.zero) recoilMulti *= 1.5f;
-        if (!isAiming) recoilMulti *= 1.2f;
-        recoilValue += new Vector2(Random.Range(0, recoilForce.x), Random.Range(-recoilForce.y, recoilForce.y)) * recoilMulti;
-        playerController.AddCinemachineCamRotatation(-recoilValue.x, recoilValue.y);
-
         audioSource.PlayOneShot(fireAudioClip);
+
+        recoil.Aim();
 
         animator.Play("Rifle Fire", animator.GetLayerIndex("Rifle Fire"));
 

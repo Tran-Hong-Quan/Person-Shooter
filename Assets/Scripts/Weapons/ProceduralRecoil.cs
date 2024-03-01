@@ -4,30 +4,29 @@ using UnityEngine;
 
 public class ProceduralRecoil : MonoBehaviour
 {
-    public Vector2 recoilForce = Vector2.one;
-    public float recoilRecoverySpeed = 2f;
+    public Vector3 recoilForce = Vector3.one;
+    public float recoverySpeed = 2f;
+    public float snappiness = 2f;
 
-    private Transform _transform;
+    public List<Transform> targets;
+
     private Vector3 targetRotation;
     private Vector3 currentRotation;
 
-    void Start()
+    public void Init(List<Transform> targets)
     {
-        _transform = transform;
+        this.targets = targets;
     }
-
-    public void Init(Vector3 recoilForce,float recoilRecoverySpeed)
-    {
-        this.recoilForce = recoilForce;
-        this.recoilRecoverySpeed = recoilRecoverySpeed;
-    }
-
 
     void Update()
     {
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, recoilRecoverySpeed * Time.deltaTime);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, recoilRecoverySpeed * Time.deltaTime);
-        _transform.localRotation = Quaternion.Euler(currentRotation);
+        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, recoverySpeed * Time.deltaTime);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, recoverySpeed * Time.deltaTime);
+
+        foreach (Transform t in targets)
+        {
+            t.localRotation = Quaternion.Euler(currentRotation);
+        }
     }
 
     public void Aim()
