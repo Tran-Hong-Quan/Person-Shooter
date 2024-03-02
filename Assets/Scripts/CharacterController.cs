@@ -113,7 +113,7 @@ namespace Game
             aimRifleRig.SmoothRig(0);
             holdRifleRig.SmoothRig(0);
 
-            this.DelayFuction(duration, () =>
+            this.DelayFuction(duration - 0.6f, () =>
             {
                 _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
                 {
