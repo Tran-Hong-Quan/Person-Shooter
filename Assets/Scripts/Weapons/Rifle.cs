@@ -3,14 +3,13 @@ using HongQuan;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class Rifle : MonoBehaviour
 {
-    public PlayerController playerController;
+    public Game.CharacterController playerController;
 
     [SerializeField] protected Transform firePoint;
     [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
     [SerializeField] protected float muzzleVelocity = 0.1f;
-    [SerializeField] protected float shakeCamAmplitude = 2;
     [SerializeField] protected int bulletsCount = 120;
     [SerializeField] protected int magazineBullet = 30;
 
@@ -38,7 +37,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-        inputs = playerController.Inputs;
+        inputs = ((PlayerController)playerController).Inputs;
 
         inputs.onAim.AddListener(Aim);
 
@@ -49,13 +48,30 @@ public class Gun : MonoBehaviour
         animator = playerController.Animator;
 
         var recoilTargets = new List<Transform>();
-        recoilTargets.Add(playerController.CinemachineCameraTarget.GetChild(0));
-        foreach (var recoilTarget in playerController.camTargets)
+        recoilTargets.Add(((PlayerController)playerController).cameraRoot.GetChild(0));
+        foreach (var recoilTarget in ((PlayerController)playerController).camerasRootFollow)
             if (recoilTarget.childCount > 0)
                 recoilTargets.Add(recoilTarget.GetChild(0));
         recoil.Init(recoilTargets);
 
         currentBullet = magazineBullet;
+
+        firePoint.forward = playerController.RightHand.transform.up;
+    }
+
+    public virtual void Equip(Game.CharacterController character)
+    {
+        var charRightHand = character.RightHand;
+        transform.SetParent(charRightHand, true);
+
+        transform.localScale = Vector3.one;
+        transform.localRotation = Quaternion.identity;
+        transform.localPosition = Vector3.zero;
+    }
+
+    public void Unequiq()
+    {
+
     }
 
     private void Aim()
@@ -103,12 +119,10 @@ public class Gun : MonoBehaviour
 
         if (currentBullet <= 0) return;
 
-        Ray ray = mainCam.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
+        Ray ray = new Ray(firePoint.position, firePoint.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 dir = hit.point - firePoint.position;
-
             var hitEff = SimplePool.Spawn(bulletHitEff);
             hitEff.transform.SetParent(null, true);
             hitEff.transform.position = hit.point;
@@ -131,6 +145,12 @@ public class Gun : MonoBehaviour
         clk = fireRate;
 
         currentBullet--;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(firePoint.position, firePoint.position + firePoint.forward * 50);
     }
 
     bool isReloading;

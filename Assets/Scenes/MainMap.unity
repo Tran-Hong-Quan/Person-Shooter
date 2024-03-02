@@ -1540,7 +1540,7 @@ GameObject:
   - component: {fileID: 1109040585}
   - component: {fileID: 1109040587}
   - component: {fileID: 1109040586}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Aim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1569,7 +1569,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109040584}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2431,11 +2431,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5372056943023685468, guid: 07ec5f7ad17ebc34fba253d7398630cd, type: 3}
   m_PrefabInstance: {fileID: 350958297}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2100099990 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3859546278950880626, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-  m_PrefabInstance: {fileID: 2257068536186520925}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2110001813 stripped
 Transform:
@@ -3321,73 +3316,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2257068537149139110, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 4416926083347132232}
     - target: {fileID: 3859546278950880626, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
       propertyPath: m_Name
       value: AKM
       objectReference: {fileID: 0}
     - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: fireRate
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: recoilForce.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: recoilForce.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: recoilForce.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: muzzleVelocity
-      value: 650
-      objectReference: {fileID: 0}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: reloadAudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: ee3ca23f4db539742b7b952571fe841d, type: 3}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 4416926083347132232}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: attachMagAudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 28cc864a7b5ec3442ab2c0c545f204f9, type: 3}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: removeMagAudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 4f54749511931974ab6c19ed4de90e1d, type: 3}
-    - target: {fileID: 7634162607279894768, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
-      propertyPath: recoilRecoverySpeed
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
---- !u!114 &2257068536186520928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100099990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a29861a8d9d7a07429c3ff4528c6afab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recoilForce: {x: 500, y: 500, z: 0}
-  recoverySpeed: 2
-  snappiness: 2
-  maxRecoil: {x: 20, y: 10, z: 10}
-  targets: []
 --- !u!4 &3893294199639930361
 Transform:
   m_ObjectHideFlags: 0
@@ -3440,6 +3378,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aimRig: {fileID: 790735133}
+  holdRifleRig: {fileID: 346054628}
+  aimRifleRig: {fileID: 769384388}
+  isRotatePlayerWithCam: 0
+  isFpcam: 0
+  equipRifle: 1
+  isRifleAiming: 0
+  isRifleFiring: 0
+  isRifleReloading: 0
+  rightHand: {fileID: 1554204740}
   MoveSpeed: 2
   SprintSpeed: 5.335
   RotateSpeed: 10
@@ -3468,10 +3416,10 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 513
-  CinemachineCameraTarget: {fileID: 8338988565591873055}
-  camTargets:
+  cameraRoot: {fileID: 8338988565591873055}
+  camerasRootFollow:
   - {fileID: 1271964853}
-  headAim: {fileID: 1109040585}
+  aimObj: {fileID: 1109040585}
   aimDistance: 10
   fpCam: {fileID: 2070925442925897141}
   tpCam: {fileID: 2070925443028286826}
@@ -3480,15 +3428,6 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  aimRig: {fileID: 790735133}
-  holdRifleRig: {fileID: 346054628}
-  aimRifleRig: {fileID: 769384388}
-  isRotatePlayerWithCam: 0
-  isFpcam: 0
-  equipRifle: 1
-  isRifleAiming: 0
-  isRifleFiring: 0
-  isRifleReloading: 0
 --- !u!143 &4416926083347132233
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3809,6 +3748,14 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
   - m_Transform: {fileID: 1023960545}
+    m_Style:
+      shape: {fileID: 4300000, guid: c6793350c150f456688e39a81f97364a, type: 2}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
+  - m_Transform: {fileID: 1109040585}
     m_Style:
       shape: {fileID: 4300000, guid: c6793350c150f456688e39a81f97364a, type: 2}
       color: {r: 1, g: 0, b: 0, a: 0.5}

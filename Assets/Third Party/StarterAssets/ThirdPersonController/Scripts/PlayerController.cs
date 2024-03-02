@@ -16,7 +16,7 @@ using UnityEngine.Rendering.Universal;
 #if ENABLE_INPUT_SYSTEM
 [RequireComponent(typeof(PlayerInput))]
 #endif
-public class PlayerController : MonoBehaviour
+public class PlayerController : Game.CharacterController
 {
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
@@ -67,9 +67,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-    public Transform CinemachineCameraTarget;
-    public Transform[] camTargets;
-    public Transform headAim;
+    public Transform cameraRoot;
+    public Transform[] camerasRootFollow;
+    public Transform aimObj;
     public float aimDistance = 10f;
     public CinemachineVirtualCamera fpCam;
     public CinemachineVirtualCamera tpCam;
@@ -86,11 +86,6 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
-
-    [Header("Rig")]
-    public Rig aimRig;
-    public Rig holdRifleRig;
-    public Rig aimRifleRig;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -118,22 +113,15 @@ public class PlayerController : MonoBehaviour
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput _playerInput;
 #endif
-    private Animator _animator;
     private CharacterController _controller;
     private PlayerInputs _input;
     private Transform _mainCameraTransform;
     private Camera _mainCamera;
+    private Transform cineCamTarget;
 
     private const float _threshold = 0.01f;
 
     private bool _hasAnimator;
-
-    [SerializeField] public bool isRotatePlayerWithCam;
-    [SerializeField] public bool isFpcam;
-    [SerializeField] public bool equipRifle = true;
-    [SerializeField] public bool isRifleAiming;
-    [SerializeField] public bool isRifleFiring;
-    [SerializeField] public bool isRifleReloading;
 
     private bool IsCurrentDeviceMouse
     {
@@ -148,11 +136,12 @@ public class PlayerController : MonoBehaviour
     }
 
     public PlayerInputs Inputs { get { return _input; } }
-    public Animator Animator { get { return _animator; } }
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         // get a reference to our main camera
         if (_mainCameraTransform == null)
         {
@@ -162,11 +151,12 @@ public class PlayerController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputs>();
         _hasAnimator = TryGetComponent(out _animator);
+        cineCamTarget = cameraRoot.GetChild(0);
     }
 
     private void Start()
     {
-        _cinemachineTargetYaw = CinemachineCameraTarget.rotation.eulerAngles.y;
+        _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y;
 
         InitCameraView();
 
@@ -240,10 +230,20 @@ public class PlayerController : MonoBehaviour
 
         // Cinemachine will follow this target
         Vector3 targetRotation = new Vector3(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-        CinemachineCameraTarget.rotation = Quaternion.Euler(targetRotation);
-        foreach (var c in camTargets) c.rotation = Quaternion.Euler(targetRotation);
+        cameraRoot.rotation = Quaternion.Euler(targetRotation);
+        foreach (var c in camerasRootFollow) c.rotation = Quaternion.Euler(targetRotation);
 
-        headAim.position = CinemachineCameraTarget.GetChild(0).position + CinemachineCameraTarget.GetChild(0).forward * aimDistance;
+        //Aiming Point
+        Ray ray = _mainCamera.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            aimObj.position = hit.point;
+        }
+        else
+        {
+            aimObj.position = cineCamTarget.position + cineCamTarget.forward * aimDistance;
+        }
     }
 
     private void Move()
@@ -483,124 +483,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void StartRifleAimAnimation()
+    public override void StartRifleAimAnimation()
     {
-        if (!equipRifle) return;
-
-        isRifleAiming = true;
-        isRotatePlayerWithCam = true;
-        _animator.SmoothLayerMask("Rifle Aim", 1);
-        aimRifleRig.SmoothRig(1);
+        base.StartRifleAimAnimation();
         tpAimCam.Priority = 11;
     }
 
-    public void StopRifleAimAnimation()
+    public override void StopRifleAimAnimation()
     {
-        if (!equipRifle) return;
-
-        isRifleAiming = false;
-
-        if (!isRifleFiring)
-        {
-            _animator.SmoothLayerMask("Rifle Aim", 0, onDone: () => isRotatePlayerWithCam = false);
-
-            aimRifleRig.SmoothRig(0);
-        }
-
+        base.StopRifleAimAnimation();
         tpAimCam.Priority = 9;
-    }
-
-    public void StartRifleFireAnimation()
-    {
-        if (!equipRifle) return;
-
-        isRotatePlayerWithCam = true;
-        isRifleFiring = true;
-
-        _animator.SmoothLayerMask("Rifle Fire", 1);
-        _animator.SmoothLayerMask("Rifle Aim", 1);
-        aimRifleRig.SmoothRig(1);
-    }
-
-    public void StopRifleFireAnimation()
-    {
-        if (!equipRifle) return;
-
-        isRifleFiring = false;
-
-        _animator.SmoothLayerMask("Rifle Fire", 0);
-
-        if (!isRifleAiming)
-        {
-            _animator.SmoothLayerMask("Rifle Aim", 0, onDone: () => { isRotatePlayerWithCam = false; });
-            aimRifleRig.SmoothRig(0);
-        }
-    }
-
-    public void PlayEquipRifleAnimation()
-    {
-        _animator.SmoothLayerMask("Rifle Hold", 1);
-        holdRifleRig.SmoothRig(1);
-        equipRifle = true;
-    }
-
-    public void PlayReloadAnimation(System.Action onComplete = null, System.Action onRemoveMag = null,
-        System.Action onReload = null, System.Action onAttachMag = null)
-    {
-        if (isRifleReloading) return;
-        isRifleReloading = true;
-
-        onGrabRifleMagazine = onRemoveMag;
-        onReloadRifle = onReload;
-        onAttachNewRiffleMagazine = onAttachMag;
-
-        int layerMaskId = _animator.GetLayerIndex("Rifle Reload");
-        _animator.SmoothLayerMask(layerMaskId, 1);
-        _animator.Play("Rifle Reload", layerMaskId, 0);
-
-        var animState = _animator.GetCurrentAnimatorStateInfo(layerMaskId);
-        float duration = animState.length / animState.speed;
-
-        aimRifleRig.SmoothRig(0);
-        holdRifleRig.SmoothRig(0);
-
-        this.DelayFuction(duration, () =>
-        {
-            _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
-            {
-                if (isRifleAiming) aimRifleRig.SmoothRig(1);
-                isRifleReloading = false;
-                onComplete?.Invoke();
-            });
-        });
-    }
-
-    System.Action onGrabRifleMagazine;
-    System.Action onReloadRifle;
-    System.Action onAttachNewRiffleMagazine;
-    private void OnGrabRifleMagazine()
-    {
-        onGrabRifleMagazine?.Invoke();
-    }
-
-    private void OnReloadRifle()
-    {
-        onReloadRifle?.Invoke();
-    }
-
-    private void OnAttachNewRiffleMagazine()
-    {
-        onAttachNewRiffleMagazine.Invoke();
-    }
-
-    public void StoEquipRifleAnimation()
-    {
-        _animator.SmoothLayerMask("Rifle Hold", 0);
-        _animator.SmoothLayerMask("Rifle Fire", 0);
-        _animator.SmoothLayerMask("Rifle Aim", 0);
-        _animator.SmoothLayerMask("Rifle Reload", 0);
-        holdRifleRig.SmoothRig(0);
-        aimRifleRig.SmoothRig(0);
-        equipRifle = false;
     }
 }
