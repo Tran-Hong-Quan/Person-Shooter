@@ -50,10 +50,16 @@ MonoBehaviour:
   firePoint: {fileID: 7166383609198578462}
   fireRate: 650
   muzzleVelocity: 0.1
+  shakeCamAmplitude: 2
+  bulletsCount: 120
+  magazineBullet: 30
   fireEffect: {fileID: 6756977361486156386}
   bulletHitEff: {fileID: 3964462216021553480}
   audioSource: {fileID: 291290870864282796}
   fireAudioClip: {fileID: 8300000, guid: 247998cdbf1ef354b875a1cc82b931ee, type: 3}
+  removeMagAudioClip: {fileID: 8300000, guid: 4f54749511931974ab6c19ed4de90e1d, type: 3}
+  attachMagAudioClip: {fileID: 8300000, guid: 28cc864a7b5ec3442ab2c0c545f204f9, type: 3}
+  reloadAudioClip: {fileID: 8300000, guid: ee3ca23f4db539742b7b952571fe841d, type: 3}
 --- !u!1 &4973396320088573687
 GameObject:
   m_ObjectHideFlags: 0

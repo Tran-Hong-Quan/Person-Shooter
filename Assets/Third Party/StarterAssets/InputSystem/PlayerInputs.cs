@@ -51,11 +51,11 @@ public class PlayerInputs : MonoBehaviour
     private void Start()
     {
         var moveAction = inputs.actions.FindAction("Move");
-        moveAction.performed += OnStartMove;
+        moveAction.started += OnStartMove;
         moveAction.canceled += OnEndMove;
 
         var fireAction = inputs.actions.FindAction("Fire");
-        fireAction.performed += OnStartFire;
+        fireAction.started += OnStartFire;
         fireAction.canceled += OnStopFire;
     }
 

@@ -19,6 +19,9 @@ public class Gun : MonoBehaviour
 
     [SerializeField] protected AudioSource audioSource;
     [SerializeField] protected AudioClip fireAudioClip;
+    [SerializeField] protected AudioClip removeMagAudioClip;
+    [SerializeField] protected AudioClip attachMagAudioClip;
+    [SerializeField] protected AudioClip reloadAudioClip;
 
     protected PlayerInputs inputs;
     protected Camera mainCam;
@@ -74,20 +77,28 @@ public class Gun : MonoBehaviour
         if (clk > 0) clk -= Time.deltaTime;
     }
 
+    bool isFire = false;
     private void StartFire()
     {
         if (isReloading) return;
         playerController.StartRifleFireAnimation();
-        if (currentBullet <= 0) Reload();
+        isFire = true;
+        if (currentBullet <= 0)
+        {
+            Reload();
+            isFire = false;
+        }
     }
 
     private void StopFire()
     {
         playerController.StopRifleFireAnimation();
+        isFire = false;
     }
 
     private void Fire()
     {
+        if (!isFire) return;
         if (clk > 0f) return;
 
         if (currentBullet <= 0) return;
@@ -125,13 +136,22 @@ public class Gun : MonoBehaviour
     bool isReloading;
     private void Reload()
     {
-        if(isReloading) return;
+        if (isReloading) return;
         isReloading = true;
 
-        playerController.PlayReloadAnimation(() =>
+        playerController.PlayReloadAnimation(onComplete: () =>
         {
             currentBullet = magazineBullet;
             isReloading = false;
+        }, onRemoveMag: () =>
+        {
+            audioSource.PlayOneShot(removeMagAudioClip);
+        }, onReload: () =>
+        {
+            audioSource.PlayOneShot(reloadAudioClip);
+        }, onAttachMag: () =>
+        {
+            audioSource.PlayOneShot(attachMagAudioClip);
         });
     }
 
