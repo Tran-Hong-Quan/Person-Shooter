@@ -89,6 +89,96 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""d208853f-a9fc-4d0e-842c-891282051e02"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use"",
+                    ""type"": ""Button"",
+                    ""id"": ""db0e7bd0-b5ec-4f38-ba23-418ed0a9161e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""41b9cf0e-3d18-41dc-a50e-f61a51795870"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseFirstRifle"",
+                    ""type"": ""Button"",
+                    ""id"": ""7f35bc3e-0f74-4740-b873-cfa602e19988"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseSecondRifle"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c873236-2928-41a4-9d6e-b7d988cb06b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChoosePiston"",
+                    ""type"": ""Button"",
+                    ""id"": ""79248204-836c-4f24-a4f9-e439dac23a65"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseMelee"",
+                    ""type"": ""Button"",
+                    ""id"": ""240f5f35-63d4-4e2e-a84b-cbdd7318370c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""4448dfd5-d168-4e6c-8542-e497904204b3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""e64d6b4b-b98d-4b47-a75f-5d82d769a8ba"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseFist"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b460ff9-cb36-4c19-9838-4065b03fc27e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -300,6 +390,193 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72b9c160-02eb-4660-84b1-d36b0828dbde"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0bce918-c9d6-467e-80f7-eab643129fb2"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""981b511f-436e-46b8-bbf5-0d732d928a34"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e322f23-4804-46df-8f59-07bea3b970b2"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseFirstRifle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90b3467f-3222-4926-a505-75cfa84dad5b"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseFirstRifle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3da34ee7-c496-4fef-8cec-9cf79994d2bf"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseSecondRifle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f0219d3f-5edc-41b5-90c9-2f1d3bc300b0"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseSecondRifle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4f89cb9-fd84-4042-bb6d-34afab02047d"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChoosePiston"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cdca185-7d34-48a4-b2ab-c28ee448ef71"",
+                    ""path"": ""<Keyboard>/numpad3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChoosePiston"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b692e261-615c-48aa-b55b-329bca28c6c5"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseMelee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9022d68e-e10c-4290-ac64-afb7dc1cbeb5"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseMelee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fecb8812-448c-4d0b-aa8e-0c9dff5d0d62"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a102f2e5-89b7-464c-92cd-824ce6fe8efb"",
+                    ""path"": ""<Keyboard>/numpad5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f79348d-233d-4247-a8d8-c2a9fdd6162c"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a462ecfa-6471-457d-9e8f-ec0195e2cd8c"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31ba7b5e-829f-41f9-bc6d-8c3cef082926"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseFist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e83f1e8b-66cb-495d-bd15-25541effaf30"",
+                    ""path"": ""<Keyboard>/numpad0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseFist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -363,6 +640,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_ChangeView = m_Player.FindAction("ChangeView", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
+        m_Player_Use = m_Player.FindAction("Use", throwIfNotFound: true);
+        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+        m_Player_ChooseFirstRifle = m_Player.FindAction("ChooseFirstRifle", throwIfNotFound: true);
+        m_Player_ChooseSecondRifle = m_Player.FindAction("ChooseSecondRifle", throwIfNotFound: true);
+        m_Player_ChoosePiston = m_Player.FindAction("ChoosePiston", throwIfNotFound: true);
+        m_Player_ChooseMelee = m_Player.FindAction("ChooseMelee", throwIfNotFound: true);
+        m_Player_ChooseBomb = m_Player.FindAction("ChooseBomb", throwIfNotFound: true);
+        m_Player_ChooseItem = m_Player.FindAction("ChooseItem", throwIfNotFound: true);
+        m_Player_ChooseFist = m_Player.FindAction("ChooseFist", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -431,6 +718,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ChangeView;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Aim;
+    private readonly InputAction m_Player_Drop;
+    private readonly InputAction m_Player_Use;
+    private readonly InputAction m_Player_Reload;
+    private readonly InputAction m_Player_ChooseFirstRifle;
+    private readonly InputAction m_Player_ChooseSecondRifle;
+    private readonly InputAction m_Player_ChoosePiston;
+    private readonly InputAction m_Player_ChooseMelee;
+    private readonly InputAction m_Player_ChooseBomb;
+    private readonly InputAction m_Player_ChooseItem;
+    private readonly InputAction m_Player_ChooseFist;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -442,6 +739,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ChangeView => m_Wrapper.m_Player_ChangeView;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
+        public InputAction @Drop => m_Wrapper.m_Player_Drop;
+        public InputAction @Use => m_Wrapper.m_Player_Use;
+        public InputAction @Reload => m_Wrapper.m_Player_Reload;
+        public InputAction @ChooseFirstRifle => m_Wrapper.m_Player_ChooseFirstRifle;
+        public InputAction @ChooseSecondRifle => m_Wrapper.m_Player_ChooseSecondRifle;
+        public InputAction @ChoosePiston => m_Wrapper.m_Player_ChoosePiston;
+        public InputAction @ChooseMelee => m_Wrapper.m_Player_ChooseMelee;
+        public InputAction @ChooseBomb => m_Wrapper.m_Player_ChooseBomb;
+        public InputAction @ChooseItem => m_Wrapper.m_Player_ChooseItem;
+        public InputAction @ChooseFist => m_Wrapper.m_Player_ChooseFist;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -472,6 +779,36 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
+            @Use.started += instance.OnUse;
+            @Use.performed += instance.OnUse;
+            @Use.canceled += instance.OnUse;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
+            @ChooseFirstRifle.started += instance.OnChooseFirstRifle;
+            @ChooseFirstRifle.performed += instance.OnChooseFirstRifle;
+            @ChooseFirstRifle.canceled += instance.OnChooseFirstRifle;
+            @ChooseSecondRifle.started += instance.OnChooseSecondRifle;
+            @ChooseSecondRifle.performed += instance.OnChooseSecondRifle;
+            @ChooseSecondRifle.canceled += instance.OnChooseSecondRifle;
+            @ChoosePiston.started += instance.OnChoosePiston;
+            @ChoosePiston.performed += instance.OnChoosePiston;
+            @ChoosePiston.canceled += instance.OnChoosePiston;
+            @ChooseMelee.started += instance.OnChooseMelee;
+            @ChooseMelee.performed += instance.OnChooseMelee;
+            @ChooseMelee.canceled += instance.OnChooseMelee;
+            @ChooseBomb.started += instance.OnChooseBomb;
+            @ChooseBomb.performed += instance.OnChooseBomb;
+            @ChooseBomb.canceled += instance.OnChooseBomb;
+            @ChooseItem.started += instance.OnChooseItem;
+            @ChooseItem.performed += instance.OnChooseItem;
+            @ChooseItem.canceled += instance.OnChooseItem;
+            @ChooseFist.started += instance.OnChooseFist;
+            @ChooseFist.performed += instance.OnChooseFist;
+            @ChooseFist.canceled += instance.OnChooseFist;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -497,6 +834,36 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
+            @Use.started -= instance.OnUse;
+            @Use.performed -= instance.OnUse;
+            @Use.canceled -= instance.OnUse;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
+            @ChooseFirstRifle.started -= instance.OnChooseFirstRifle;
+            @ChooseFirstRifle.performed -= instance.OnChooseFirstRifle;
+            @ChooseFirstRifle.canceled -= instance.OnChooseFirstRifle;
+            @ChooseSecondRifle.started -= instance.OnChooseSecondRifle;
+            @ChooseSecondRifle.performed -= instance.OnChooseSecondRifle;
+            @ChooseSecondRifle.canceled -= instance.OnChooseSecondRifle;
+            @ChoosePiston.started -= instance.OnChoosePiston;
+            @ChoosePiston.performed -= instance.OnChoosePiston;
+            @ChoosePiston.canceled -= instance.OnChoosePiston;
+            @ChooseMelee.started -= instance.OnChooseMelee;
+            @ChooseMelee.performed -= instance.OnChooseMelee;
+            @ChooseMelee.canceled -= instance.OnChooseMelee;
+            @ChooseBomb.started -= instance.OnChooseBomb;
+            @ChooseBomb.performed -= instance.OnChooseBomb;
+            @ChooseBomb.canceled -= instance.OnChooseBomb;
+            @ChooseItem.started -= instance.OnChooseItem;
+            @ChooseItem.performed -= instance.OnChooseItem;
+            @ChooseItem.canceled -= instance.OnChooseItem;
+            @ChooseFist.started -= instance.OnChooseFist;
+            @ChooseFist.performed -= instance.OnChooseFist;
+            @ChooseFist.canceled -= instance.OnChooseFist;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -559,5 +926,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnChangeView(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnDrop(InputAction.CallbackContext context);
+        void OnUse(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
+        void OnChooseFirstRifle(InputAction.CallbackContext context);
+        void OnChooseSecondRifle(InputAction.CallbackContext context);
+        void OnChoosePiston(InputAction.CallbackContext context);
+        void OnChooseMelee(InputAction.CallbackContext context);
+        void OnChooseBomb(InputAction.CallbackContext context);
+        void OnChooseItem(InputAction.CallbackContext context);
+        void OnChooseFist(InputAction.CallbackContext context);
     }
 }

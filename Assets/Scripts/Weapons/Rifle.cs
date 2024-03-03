@@ -3,15 +3,16 @@ using HongQuan;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rifle : MonoBehaviour
+public class Rifle : MonoBehaviour, IEquiptableItem
 {
-    public Game.CharacterController playerController;
+    public Game.CharacterController characterController;
 
     [SerializeField] protected Transform firePoint;
     [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
     [SerializeField] protected float muzzleVelocity = 0.1f;
     [SerializeField] protected int bulletsCount = 120;
     [SerializeField] protected int magazineBullet = 30;
+    [SerializeField] protected EquipType equipType;
 
     [SerializeField] protected ParticleSystem fireEffect;
     [SerializeField] protected ParticleSystem bulletHitEff;
@@ -22,51 +23,29 @@ public class Rifle : MonoBehaviour
     [SerializeField] protected AudioClip attachMagAudioClip;
     [SerializeField] protected AudioClip reloadAudioClip;
 
-    protected PlayerInputs inputs;
+    protected CharacterInputs inputs;
     protected Camera mainCam;
     protected Animator animator;
     protected ProceduralRecoil recoil;
+    protected EquipController equipController;
+    [SerializeField]
+    protected EquipStatus equipStatus;
+
+    protected Rigidbody rb;
+    protected Collider col;
 
     protected int currentBullet;
+
+    public EquipStatus EquipStatus => equipStatus;
+
+    public EquipType EquipType => equipType;
 
     protected virtual void Awake()
     {
         mainCam = Camera.main;
         recoil = GetComponent<ProceduralRecoil>();
-    }
-
-    private void Start()
-    {
-        inputs = ((PlayerController)playerController).Inputs;
-
-        inputs.onAim.AddListener(Aim);
-
-        inputs.onFire.AddListener(Fire);
-        inputs.onStartFire.AddListener(StartFire);
-        inputs.onStopFire.AddListener(StopFire);
-
-        animator = playerController.Animator;
-
-        var recoilTargets = new List<Transform>();
-        recoilTargets.Add(((PlayerController)playerController).cameraRoot.GetChild(0));
-        foreach (var recoilTarget in ((PlayerController)playerController).camerasRootFollow)
-            if (recoilTarget.childCount > 0)
-                recoilTargets.Add(recoilTarget.GetChild(0));
-        recoil.Init(recoilTargets);
-
-        currentBullet = magazineBullet;
-
-        firePoint.forward = playerController.RightHand.transform.up;
-    }
-
-    public virtual void Equip(Game.CharacterController character)
-    {
-        var charRightHand = character.RightHand;
-        transform.SetParent(charRightHand, true);
-
-        transform.localScale = Vector3.one;
-        transform.localRotation = Quaternion.identity;
-        transform.localPosition = Vector3.zero;
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
     }
 
     public void Unequiq()
@@ -97,7 +76,7 @@ public class Rifle : MonoBehaviour
     private void StartFire()
     {
         if (isReloading) return;
-        playerController.StartRifleFireAnimation();
+        characterController.StartRifleFireAnimation();
         isFire = true;
         if (currentBullet <= 0)
         {
@@ -108,7 +87,7 @@ public class Rifle : MonoBehaviour
 
     private void StopFire()
     {
-        playerController.StopRifleFireAnimation();
+        characterController.StopRifleFireAnimation();
         isFire = false;
     }
 
@@ -159,7 +138,7 @@ public class Rifle : MonoBehaviour
         if (isReloading) return;
         isReloading = true;
 
-        playerController.PlayReloadAnimation(onComplete: () =>
+        characterController.PlayReloadAnimation(onComplete: () =>
         {
             currentBullet = magazineBullet;
             isReloading = false;
@@ -184,7 +163,7 @@ public class Rifle : MonoBehaviour
         if (isReloading) return;
 
         isAiming = true;
-        playerController.StartRifleAimAnimation();
+        characterController.StartRifleAimAnimation();
     }
 
     private void StopAim()
@@ -192,11 +171,159 @@ public class Rifle : MonoBehaviour
         if (isReloading) return;
 
         isAiming = false;
-        playerController.StopRifleAimAnimation();
+        characterController.StopRifleAimAnimation();
     }
 
     private void OnDestroy()
     {
 
     }
+
+    public void Equip(EquipController equipController)
+    {
+        if (equipController == null) return;
+        if (equipController == this.equipController) return;
+        if (!equipController.CanEquipRifle()) return;
+
+        equipController.InitEquipRifle(this, ref equipStatus, ref equipType);
+
+        if (equipType == EquipType.None)
+        {
+            return;
+        }
+
+        characterController = equipController.characterController;
+        this.equipController = equipController;
+
+        if (equipStatus == EquipStatus.BeingHeld)
+        {
+            HoldRifle();
+        }
+        else
+        {
+            PutRifleOnBack();
+        }
+
+        rb.isKinematic = true;
+        col.enabled = false;
+
+        animator = characterController.Animator;
+        currentBullet = magazineBullet;
+    }
+
+    public void HoldRifle()
+    {
+        SetParentEquipTo(equipController.rightHand);
+        characterController.PlayHoldRifleAnimation();
+        inputs = characterController.Inputs;
+        AddListeners();
+        firePoint.forward = equipController.rightHand.up;
+        if (equipController is PlayerEquipController)
+        {
+            var recoilTargets = new List<Transform>();
+            recoilTargets.Add(((PlayerController)characterController).cameraRoot.GetChild(0));
+            foreach (var recoilTarget in ((PlayerController)characterController).camerasRootFollow)
+                if (recoilTarget.childCount > 0)
+                    recoilTargets.Add(recoilTarget.GetChild(0));
+            recoil.Init(recoilTargets);
+        }
+    }
+
+    public void PutRifleOnBack()
+    {
+        if (equipType == EquipType.RightBack)
+        {
+            SetParentEquipTo(equipController.rightBack);
+        }
+        else if (equipType == EquipType.LeftBack)
+        {
+            SetParentEquipTo(equipController.leftBack);
+        }
+    }
+
+    private void SetParentEquipTo(Transform to)
+    {
+        transform.SetParent(to, true);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
+    }
+
+    public void Unequip(EquipController equipController)
+    {
+        rb.isKinematic = false;
+        col.enabled = true;
+        transform.SetParent(null, true);
+        rb.AddForce((characterController.transform.forward + characterController.transform.up).normalized * 500);
+
+        equipController.InitUnequipRifle(this);
+
+        if (EquipStatus == EquipStatus.BeingHeld)
+        {
+            RemoveListeners();
+            characterController.StopHoldRifleAnimation();
+        }
+
+        equipController.InitUnequipRifle(this);
+
+        recoil.ClearTargets();
+        equipStatus = EquipStatus.None;
+        equipType = EquipType.None;
+        isAiming = false;
+        isFire = false;
+
+        this.DelayFuction(1, () => this.equipController = null);
+    }
+
+    public void Stored()
+    {
+        if (equipStatus != EquipStatus.BeingHeld)
+        {
+            Debug.LogWarning("Store " + name + " failed because it not held");
+            return;
+        }
+
+        characterController.StopHoldRifleAnimation();
+        PutRifleOnBack();
+        equipStatus = EquipStatus.Stored;
+        recoil.ClearTargets();
+        RemoveListeners();
+
+        if (characterController is PlayerController)
+        {
+            characterController.StopHoldRifleAnimation();
+        }
+    }
+
+    public void Use()
+    {
+        if (equipStatus != EquipStatus.Stored)
+        {
+            Debug.LogWarning(name + " failed because it not stored");
+            return;
+        }
+
+        equipStatus = EquipStatus.BeingHeld;
+
+        HoldRifle();
+    }
+
+    private void AddListeners()
+    {
+        inputs.onAim.AddListener(Aim);
+        inputs.onFire.AddListener(Fire);
+        inputs.onStartFire.AddListener(StartFire);
+        inputs.onStopFire.AddListener(StopFire);
+        inputs.onReload.AddListener(Reload);
+    }
+
+    private void RemoveListeners()
+    {
+        inputs.onAim.RemoveListener(Aim);
+        inputs.onFire.RemoveListener(Fire);
+        inputs.onStartFire.RemoveListener(StartFire);
+        inputs.onStopFire.RemoveListener(StopFire);
+        inputs.onReload.RemoveListener(Reload);
+    }
+
 }

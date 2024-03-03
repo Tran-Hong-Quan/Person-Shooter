@@ -20,6 +20,11 @@ public class ProceduralRecoil : MonoBehaviour
         this.targets = targets;
     }
 
+    public void ClearTargets()
+    {
+        targets.Clear();
+    }
+
     void Update()
     {
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, recoverySpeed * Time.deltaTime);

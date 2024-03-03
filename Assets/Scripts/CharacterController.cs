@@ -24,8 +24,12 @@ namespace Game
         [Header("Bone")]
         [SerializeField] protected Transform rightHand;
 
+        [Header("Inputs")]
+        [SerializeField] protected CharacterInputs inputs;
+
         public Transform RightHand => rightHand;
         public Animator Animator => _animator;
+        public CharacterInputs Inputs => inputs;
 
         protected Animator _animator;
 
@@ -86,7 +90,7 @@ namespace Game
             }
         }
 
-        public virtual void PlayEquipRifleAnimation()
+        public virtual void PlayHoldRifleAnimation()
         {
             _animator.SmoothLayerMask("Rifle Hold", 1);
             holdRifleRig.SmoothRig(1);
@@ -143,8 +147,10 @@ namespace Game
             onAttachNewRiffleMagazine.Invoke();
         }
 
-        public virtual void StoEquipRifleAnimation()
+        public virtual void StopHoldRifleAnimation()
         {
+            if(isRifleAiming) StopRifleAimAnimation();
+            if (isRifleFiring) StopRifleAimAnimation();
             _animator.SmoothLayerMask("Rifle Hold", 0);
             _animator.SmoothLayerMask("Rifle Fire", 0);
             _animator.SmoothLayerMask("Rifle Aim", 0);

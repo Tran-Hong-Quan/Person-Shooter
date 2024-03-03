@@ -7,16 +7,16 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 #endif
 
-public class PlayerInputs : MonoBehaviour
+public class PlayerInputs : CharacterInputs
 {
-    [Header("Character Input Values")]
+    [Header("Player Input Values")]
     public Vector2 move;
     public Vector2 look;
     public bool jump;
     public bool sprint;
-    public bool changeView;
     public bool isAim;
     public bool isFire;
+    public bool changeView;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -26,19 +26,7 @@ public class PlayerInputs : MonoBehaviour
     public bool cursorInputForLook = true;
 
     [Header("Events")]
-    public UnityEvent onChangeView;
-
-    public UnityEvent onAim;
-
-    public UnityEvent onStartFire;
-    public UnityEvent onFire;
-    public UnityEvent onStopFire;
-
-    public UnityEvent<Vector2> onStartMove;
-    public UnityEvent<Vector2> onMove;
-    public UnityEvent<Vector2> onStopMove;
-
-
+    public UnityEvent<float> onChangeEquipment;
 
 #if ENABLE_INPUT_SYSTEM
     public PlayerInput inputs;
@@ -116,6 +104,57 @@ public class PlayerInputs : MonoBehaviour
     {
         StartMoveInput(context.ReadValue<Vector2>());
     }
+
+    private void OnUse(InputValue value)
+    {
+        Use();
+    }
+
+    private void OnDrop(InputValue value)
+    {
+        Drop();
+    }
+
+    private void OnReload(InputValue value)
+    {
+        Reload();
+    }
+
+    private void OnChangeEquipment(InputValue value)
+    {
+        ChangeEquipment(value.Get<float>());
+    }
+
+    private void OnChooseFirstRifle(InputValue value)
+    {
+        ChooseFirstRifle();
+    }
+    private void OnChooseSecondRifle(InputValue value)
+    {
+        ChooseSecondRifle();
+    }
+    private void OnChoosePiston(InputValue value)
+    {
+        ChoosePiston();
+    }
+    private void OnChooseMelee(InputValue value)
+    {
+        ChooseMelee();
+    }
+    private void OnChooseBomb(InputValue value)
+    {
+        ChooseBomb();
+    }
+    private void OnChooseItem(InputValue value)
+    {
+        ChooseItem();
+    }
+    private void OnChooseFist(InputValue value)
+    {
+        ChooseFist();
+    }
+
+
 
 #endif
 
@@ -204,5 +243,57 @@ public class PlayerInputs : MonoBehaviour
     public void FireInput(bool newState)
     {
         isFire = newState;
+    }
+
+    public void Use()
+    {
+        onUse?.Invoke();
+    }
+
+    public void Drop()
+    {
+        onDrop?.Invoke();
+    }
+
+    public void Reload()
+    {
+        onReload?.Invoke();
+    }
+
+    public void ChangeEquipment(float dir)
+    {
+        onChangeEquipment?.Invoke(dir);
+    }
+
+    public void ChooseFirstRifle()
+    {
+        onChooseFirstRifle?.Invoke();
+    }
+
+    public void ChooseSecondRifle()
+    {
+        onChooseSecondRifle?.Invoke();
+    }
+
+    public void ChoosePiston()
+    {
+        onChoosePiston?.Invoke();
+    }
+
+    public void ChooseMelee()
+    {
+        onChooseMelee?.Invoke();
+    }
+    public void ChooseBomb()
+    {
+        onChooseBomb?.Invoke();
+    }
+    public void ChooseItem()
+    {
+        onChooseItem?.Invoke();
+    }
+    public void ChooseFist()
+    {
+        onChooseFist?.Invoke();
     }
 }

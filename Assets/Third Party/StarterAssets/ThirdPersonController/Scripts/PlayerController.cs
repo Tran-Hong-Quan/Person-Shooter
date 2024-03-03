@@ -135,7 +135,7 @@ public class PlayerController : Game.CharacterController
         }
     }
 
-    public PlayerInputs Inputs { get { return _input; } }
+    public new PlayerInputs Inputs { get { return _input; } }
 
 
     protected override void Awake()
