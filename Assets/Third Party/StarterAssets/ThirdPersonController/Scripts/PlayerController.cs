@@ -11,8 +11,6 @@ using UnityEngine.Rendering.Universal;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
-
-[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
 [RequireComponent(typeof(PlayerInput))]
 #endif
@@ -34,6 +32,7 @@ public class PlayerController : Game.CharacterController
     [Tooltip("Acceleration and deceleration")]
     public float SpeedChangeRate = 10.0f;
 
+    public Transform footAudioPos;
     public AudioClip LandingAudioClip;
     public AudioClip[] FootstepAudioClips;
     [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
@@ -43,7 +42,9 @@ public class PlayerController : Game.CharacterController
     public float JumpHeight = 1.2f;
 
     [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-    public float Gravity = -15.0f;
+    public float Gravity = -9.81f;
+    public float jumpAnimationThresholdVelocity = 2;
+    public float jumpHeightThresholod = 0.2f;
 
     [Space(10)]
     [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
@@ -69,7 +70,6 @@ public class PlayerController : Game.CharacterController
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
     public Transform cameraRoot;
     public Transform[] camerasRootFollow;
-    public Transform aimObj;
     public float aimDistance = 10f;
     public CinemachineVirtualCamera fpCam;
     public CinemachineVirtualCamera tpCam;
@@ -113,7 +113,6 @@ public class PlayerController : Game.CharacterController
 #if ENABLE_INPUT_SYSTEM
     private PlayerInput _playerInput;
 #endif
-    private CharacterController _controller;
     private PlayerInputs _input;
     private Transform _mainCameraTransform;
     private Camera _mainCamera;
@@ -148,7 +147,6 @@ public class PlayerController : Game.CharacterController
             _mainCamera = Camera.main;
             _mainCameraTransform = _mainCamera.transform;
         }
-        _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputs>();
         _hasAnimator = TryGetComponent(out _animator);
         cineCamTarget = cameraRoot.GetChild(0);
@@ -177,7 +175,7 @@ public class PlayerController : Game.CharacterController
     {
         _hasAnimator = TryGetComponent(out _animator);
 
-        JumpAndGravity();
+        Jump();
         GroundedCheck();
         Move();
     }
@@ -258,7 +256,7 @@ public class PlayerController : Game.CharacterController
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+        float currentHorizontalSpeed = new Vector3(rigidbody.velocity.x, 0.0f, rigidbody.velocity.z).magnitude;
 
         float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -315,8 +313,7 @@ public class PlayerController : Game.CharacterController
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
         // move the player
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        Move(targetDirection.normalized * _speed * Time.deltaTime);
 
         // update animator if using character
         if (_hasAnimator)
@@ -331,28 +328,18 @@ public class PlayerController : Game.CharacterController
                 0);
     }
 
-    private void JumpAndGravity()
+    protected float hig = 0;
+    private void Jump()
     {
+        if (rigidbody.velocity.y > hig)
+            hig = rigidbody.velocity.y;
+        print("HIg=" + hig);
         if (Grounded)
         {
-            // reset the fall timeout timer
-            _fallTimeoutDelta = FallTimeout;
-
-            // update animator if using character
-            if (_hasAnimator)
-            {
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, false);
-            }
-
-            // stop our velocity dropping infinitely when grounded
-            if (_verticalVelocity < 0.0f)
-            {
-                _verticalVelocity = -2f;
-            }
-
+            _animator.SetBool(_animIDJump, false);
+            _animator.SetBool(_animIDFreeFall, false);
             // Jump
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+            if (_input.jump)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -362,42 +349,20 @@ public class PlayerController : Game.CharacterController
                 {
                     _animator.SetBool(_animIDJump, true);
                 }
+                rigidbody.velocity += new Vector3(0, _verticalVelocity, 0);
+                _input.jump = false;
             }
 
-            // jump timeout
-            if (_jumpTimeoutDelta >= 0.0f)
-            {
-                _jumpTimeoutDelta -= Time.deltaTime;
-            }
         }
         else
         {
-            // reset the jump timeout timer
-            _jumpTimeoutDelta = JumpTimeout;
-
-            // fall timeout
-            if (_fallTimeoutDelta >= 0.0f)
-            {
-                _fallTimeoutDelta -= Time.deltaTime;
-            }
-            else
-            {
-                // update animator if using character
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(_animIDFreeFall, true);
-                }
-            }
-
+            if (rigidbody.velocity.y > jumpAnimationThresholdVelocity)
+                _animator.SetBool(_animIDFreeFall, true);
             // if we are not grounded, do not jump
             _input.jump = false;
         }
 
-        // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-        if (_verticalVelocity < _terminalVelocity)
-        {
-            _verticalVelocity += Gravity * Time.deltaTime;
-        }
+
     }
 
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -428,7 +393,7 @@ public class PlayerController : Game.CharacterController
             if (FootstepAudioClips.Length > 0)
             {
                 var index = Random.Range(0, FootstepAudioClips.Length);
-                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(footAudioPos.position), FootstepAudioVolume);
             }
         }
     }
@@ -437,7 +402,7 @@ public class PlayerController : Game.CharacterController
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
-            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(footAudioPos.position), FootstepAudioVolume);
         }
     }
 

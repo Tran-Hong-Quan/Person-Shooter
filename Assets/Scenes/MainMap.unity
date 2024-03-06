@@ -3055,6 +3055,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AKM
       objectReference: {fileID: 0}
+    - target: {fileID: 3964462216002155528, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d3e555f05ff0d7458bc1adce33c1283, type: 3}
 --- !u!4 &2110001813 stripped
@@ -4267,15 +4271,14 @@ GameObject:
   m_Component:
   - component: {fileID: 3893294199639930361}
   - component: {fileID: 6982812147933622147}
-  - component: {fileID: 4416926083347132233}
   - component: {fileID: 4416926083347132232}
-  - component: {fileID: 5885216829670671795}
   - component: {fileID: 135756641613574975}
   - component: {fileID: 4416926083347132239}
   - component: {fileID: 6982812147933622150}
   - component: {fileID: 6982812147933622151}
   - component: {fileID: 6982812147933622152}
   - component: {fileID: 6982812147933622153}
+  - component: {fileID: 6982812147933622154}
   m_Layer: 2
   m_Name: PlayerArmature
   m_TagString: Player
@@ -4298,6 +4301,7 @@ MonoBehaviour:
   aimRig: {fileID: 790735133}
   holdRifleRig: {fileID: 346054628}
   aimRifleRig: {fileID: 769384388}
+  aimObj: {fileID: 1109040585}
   isRotatePlayerWithCam: 0
   isFpcam: 0
   equipRifle: 0
@@ -4311,6 +4315,7 @@ MonoBehaviour:
   RotateSpeed: 10
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
+  footAudioPos: {fileID: 1356458453}
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
   FootstepAudioClips:
   - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
@@ -4326,18 +4331,19 @@ MonoBehaviour:
   FootstepAudioVolume: 0.3
   JumpHeight: 1.2
   Gravity: -15
+  jumpAnimationThresholdVelocity: 2
+  jumpHeightThresholod: 2
   JumpTimeout: 0.3
   FallTimeout: 0.15
   Grounded: 1
   GroundedOffset: -0.14
-  GroundedRadius: 0.28
+  GroundedRadius: 0.2
   GroundLayers:
     serializedVersion: 2
     m_Bits: 513
   cameraRoot: {fileID: 8338988565591873055}
   camerasRootFollow:
   - {fileID: 1271964853}
-  aimObj: {fileID: 1109040585}
   aimDistance: 10
   fpCam: {fileID: 2070925442925897141}
   tpCam: {fileID: 2070925443028286826}
@@ -4346,24 +4352,6 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
---- !u!143 &4416926083347132233
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416926083347132227}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1.8
-  m_Radius: 0.3
-  m_SlopeLimit: 45
-  m_StepOffset: 0.25
-  m_SkinWidth: 0.02
-  m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 0.93, z: 0}
 --- !u!114 &4416926083347132239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4451,23 +4439,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -15.76}
---- !u!114 &5885216829670671795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416926083347132227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 909d917d73a63f940ac158d02e936645, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pushLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  canPush: 1
-  strength: 1.1
 --- !u!1001 &5959203425865605456
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4903,13 +4874,29 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4416926083347132227}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_Material: {fileID: 13400000, guid: 8fb499bc6e4c4b545a933ad44d75986f, type: 2}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.35
-  m_Height: 2
+  m_Radius: 0.2
+  m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0.93, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!54 &6982812147933622154
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416926083347132227}
+  serializedVersion: 2
+  m_Mass: 60
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1001 &7113428976217114833
 PrefabInstance:
   m_ObjectHideFlags: 0

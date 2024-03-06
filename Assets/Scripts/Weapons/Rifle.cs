@@ -98,7 +98,18 @@ public class Rifle : MonoBehaviour, IEquiptableItem
 
         if (currentBullet <= 0) return;
 
-        Ray ray = new Ray(firePoint.position, firePoint.forward);
+        Vector3 idealPoint = characterController.AimObj.position;
+        Ray ray = new Ray();
+        Ray practicalRay = new Ray(firePoint.position, firePoint.forward);
+        Ray idealRay = new Ray(firePoint.position, idealPoint - firePoint.position);
+        float angle = Vector3.Angle(practicalRay.direction, idealRay.direction);
+        //Debug.Log("Angle = " + angle);
+
+        if (angle < 15f || Vector3.SqrMagnitude(idealPoint - firePoint.position) < .1f)
+            ray = idealRay;
+        else
+            ray = practicalRay;
+
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {

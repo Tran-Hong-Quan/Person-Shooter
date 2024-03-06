@@ -12,6 +12,7 @@ namespace Game
         [SerializeField] protected Rig aimRig;
         [SerializeField] protected Rig holdRifleRig;
         [SerializeField] protected Rig aimRifleRig;
+        [SerializeField] protected Transform aimObj;
 
         [Header("Boolen State")]
         [SerializeField] public bool isRotatePlayerWithCam;
@@ -32,12 +33,26 @@ namespace Game
         public CharacterInputs Inputs => inputs;
 
         protected Animator _animator;
+        protected new Rigidbody rigidbody;
+        public Transform AimObj => aimObj;
 
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
+            rigidbody = GetComponent<Rigidbody>();
         }
-        
+
+        public void Move(Vector3 motion)
+        {
+            motion.y = 0;
+
+            Vector3 targetPosition = rigidbody.position + motion;
+            Vector3 targetVelocity = (targetPosition - transform.position) / Time.deltaTime;
+
+            bool useVerticalVelocity = true;
+            if (useVerticalVelocity) targetVelocity.y = rigidbody.velocity.y;
+            rigidbody.velocity = targetVelocity;
+        }
 
         public virtual void StartRifleAimAnimation()
         {
@@ -149,7 +164,7 @@ namespace Game
 
         public virtual void StopHoldRifleAnimation()
         {
-            if(isRifleAiming) StopRifleAimAnimation();
+            if (isRifleAiming) StopRifleAimAnimation();
             if (isRifleFiring) StopRifleAimAnimation();
             _animator.SmoothLayerMask("Rifle Hold", 0);
             _animator.SmoothLayerMask("Rifle Fire", 0);

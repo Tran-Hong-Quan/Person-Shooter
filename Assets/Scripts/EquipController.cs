@@ -66,6 +66,13 @@ public class EquipController : MonoBehaviour
         Equip(item);
     }
 
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag != "Item") return;
+        if (!collision.transform.TryGetComponent(out IEquiptableItem item)) return;
+        Equip(item);
+    }
+
     public void InitEquipRifle(IEquiptableItem rifle, ref EquipStatus equipStatus, ref EquipType equipType)
     {
         equipStatus = EquipStatus.Stored;
