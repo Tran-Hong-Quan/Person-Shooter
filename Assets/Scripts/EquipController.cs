@@ -13,6 +13,8 @@ public class EquipController : MonoBehaviour
     public Transform rightBack;
     public Transform leftBack;
 
+    public Transform pistolWaist;
+
     public IEquiptableItem holdingEquipment;
 
     public IEquiptableItem rightBackEquipment;
@@ -123,10 +125,34 @@ public class EquipController : MonoBehaviour
         return leftBackEquipment == null || rightBackEquipment == null;
     }
 
+    public void InitEquipPistol(IEquiptableItem pistol, ref EquipStatus equipStatus, ref EquipType equipType)
+    {
+        equipStatus = EquipStatus.Stored;
+        if (pistonEquipment == null)
+        {
+            canBeHeldItems[2] = pistol;
+            pistonEquipment = pistol;
+            equipType = EquipType.PistolWaist;
+        }
+        else
+        {
+            equipStatus = EquipStatus.None;
+            equipType = EquipType.None;
+            return;
+        }
+
+        if (holdingEquipment == null)
+        {
+            holdingEquipment = pistol;
+            equipStatus = EquipStatus.BeingHeld;
+        }
+    }
+
     public bool CanEquipPistol()
     {
         return pistonEquipment == null;
     }
+
 
     //Choose Weopon
     public virtual void ChooseFirstRifle()
@@ -207,4 +233,5 @@ public enum EquipType
     None,
     RightBack,
     LeftBack,
+    PistolWaist,
 }

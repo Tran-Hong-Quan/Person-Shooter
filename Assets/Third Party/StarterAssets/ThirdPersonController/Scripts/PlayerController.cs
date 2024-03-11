@@ -43,8 +43,6 @@ public class PlayerController : Game.CharacterController
 
     [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
     public float Gravity = -9.81f;
-    public float jumpAnimationThresholdVelocity = 2;
-    public float jumpHeightThresholod = 0.2f;
 
     [Space(10)]
     [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
@@ -87,6 +85,8 @@ public class PlayerController : Game.CharacterController
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
 
+    public bool UseMouse = true;
+
     // cinemachine
     private float _cinemachineTargetYaw;
     private float _cinemachineTargetPitch;
@@ -97,11 +97,6 @@ public class PlayerController : Game.CharacterController
     private float _targetRotation = 0.0f;
     private float _rotationVelocity;
     private float _verticalVelocity;
-    private float _terminalVelocity = 53.0f;
-
-    // timeout deltatime
-    private float _jumpTimeoutDelta;
-    private float _fallTimeoutDelta;
 
     // animation IDs
     private int _animIDSpeed;
@@ -127,7 +122,7 @@ public class PlayerController : Game.CharacterController
         get
         {
 #if ENABLE_INPUT_SYSTEM
-            return _playerInput.currentControlScheme == "KeyboardMouse";
+            return _playerInput.currentControlScheme == "KeyboardMouse" && UseMouse;
 #else
 				return false;
 #endif
@@ -166,9 +161,6 @@ public class PlayerController : Game.CharacterController
 
         AssignAnimationIDs();
 
-        // reset our timeouts on start
-        _jumpTimeoutDelta = JumpTimeout;
-        _fallTimeoutDelta = FallTimeout;
     }
 
     private void Update()
@@ -208,6 +200,14 @@ public class PlayerController : Game.CharacterController
         {
             _animator.SetBool(_animIDGrounded, Grounded);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+           transform.position.z);
+        Gizmos.DrawSphere(spherePosition, GroundedRadius);
     }
 
     private void CameraRotation()
@@ -356,8 +356,7 @@ public class PlayerController : Game.CharacterController
         }
         else
         {
-            if (rigidbody.velocity.y > jumpAnimationThresholdVelocity)
-                _animator.SetBool(_animIDFreeFall, true);
+            _animator.SetBool(_animIDFreeFall, true);
             // if we are not grounded, do not jump
             _input.jump = false;
         }
@@ -415,6 +414,12 @@ public class PlayerController : Game.CharacterController
             if (isRifleAiming) return true;
             if (isRifleFiring) return true;
         }
+        else if (equipPistol)
+        {
+            if (isPistolReloading) return false;
+            if (isPistolAiming) return true;
+            if (isPistolFiring) return true;
+        }
         if (isRotatePlayerWithCam) return true;
 
         return false;
@@ -457,6 +462,18 @@ public class PlayerController : Game.CharacterController
     public override void StopRifleAimAnimation()
     {
         base.StopRifleAimAnimation();
+        tpAimCam.Priority = 9;
+    }
+
+    public override void StartPistolAimAnimtion()
+    {
+        base.StartPistolAimAnimtion();
+        tpAimCam.Priority = 11;
+    }
+
+    public override void StopPistolAimAnimation()
+    {
+        base.StopHoldingPistolAnimation();
         tpAimCam.Priority = 9;
     }
 }

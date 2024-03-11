@@ -12,15 +12,22 @@ namespace Game
         [SerializeField] protected Rig aimRig;
         [SerializeField] protected Rig holdRifleRig;
         [SerializeField] protected Rig aimRifleRig;
+        [SerializeField] protected Rig aimPistoleRig;
         [SerializeField] protected Transform aimObj;
 
         [Header("Boolen State")]
         [SerializeField] public bool isRotatePlayerWithCam;
         [SerializeField] public bool isFpcam;
-        [SerializeField] public bool equipRifle = true;
+
+        [SerializeField] public bool equipRifle;
         [SerializeField] public bool isRifleAiming;
         [SerializeField] public bool isRifleFiring;
         [SerializeField] public bool isRifleReloading;
+
+        [SerializeField] public bool equipPistol;
+        [SerializeField] public bool isPistolAiming;
+        [SerializeField] public bool isPistolFiring;
+        [SerializeField] public bool isPistolReloading;
 
         [Header("Bone")]
         [SerializeField] protected Transform rightHand;
@@ -53,6 +60,8 @@ namespace Game
             if (useVerticalVelocity) targetVelocity.y = rigidbody.velocity.y;
             rigidbody.velocity = targetVelocity;
         }
+
+        #region Rifle
 
         public virtual void StartRifleAimAnimation()
         {
@@ -87,6 +96,7 @@ namespace Game
 
             _animator.SmoothLayerMask("Rifle Fire", 1);
             _animator.SmoothLayerMask("Rifle Aim", 1);
+            _animator.Play("Fire", _animator.GetLayerIndex("Rifle Fire"), 0);
             aimRifleRig.SmoothRig(1);
         }
 
@@ -112,7 +122,7 @@ namespace Game
             equipRifle = true;
         }
 
-        public virtual void PlayReloadAnimation(System.Action onComplete = null, System.Action onRemoveMag = null,
+        public virtual void PlayReloadRifleAnimation(System.Action onComplete = null, System.Action onRemoveMag = null,
             System.Action onReload = null, System.Action onAttachMag = null)
         {
             if (isRifleReloading) return;
@@ -159,7 +169,7 @@ namespace Game
 
         protected virtual void OnAttachNewRiffleMagazine()
         {
-            onAttachNewRiffleMagazine.Invoke();
+            onAttachNewRiffleMagazine?.Invoke();
         }
 
         public virtual void StopHoldRifleAnimation()
@@ -173,6 +183,86 @@ namespace Game
             holdRifleRig.SmoothRig(0);
             aimRifleRig.SmoothRig(0);
             equipRifle = false;
+        }
+
+        #endregion Rifle
+
+        public virtual void PlayHoldingPistolAnimation()
+        {
+            equipPistol = true;
+        }
+
+        public virtual void StartPistolAimAnimtion()
+        {
+            if (!equipPistol) return;
+
+            isPistolAiming = true;
+
+            aimPistoleRig.SmoothRig(1);
+            _animator.SmoothLayerMask("Pistol Aim", 1);
+        }
+
+        public virtual void StopPistolAimAnimation()
+        {
+            isPistolAiming = false;
+
+            if (!isPistolFiring)
+            {
+                aimPistoleRig.SmoothRig(0);
+                _animator.SmoothLayerMask("Pistol Aim", 0);
+            }
+        }
+
+        public virtual void StartPistolFiringAnimation()
+        {
+            isPistolFiring = true;
+
+            _animator.SmoothLayerMask("Pistol Aim", 1);
+            //_animator.SmoothLayerMask("Pistol Fire", 1);
+            aimPistoleRig.SmoothRig(1);
+        }
+
+        public virtual void StopPistolFireAnimation()
+        {
+            isPistolFiring = false;
+            //_animator.SmoothLayerMask("Pistol Fire", 0);
+            if (!isPistolAiming)
+            {
+                aimPistoleRig.SmoothRig(0);
+                _animator.SmoothLayerMask("Pistol Aim", 0);
+            }
+        }
+
+        public virtual void PlayPistolReloadAnimtion(NoParamaterDelegate onDone = null)
+        {
+            if (isPistolReloading) return;
+            isPistolReloading = true;
+
+            int layerMaskId = _animator.GetLayerIndex("Pistol Reload");
+            _animator.SmoothLayerMask(layerMaskId, 1);
+            _animator.Play("Reload", layerMaskId, 0);
+            var animState = _animator.GetCurrentAnimatorStateInfo(layerMaskId);
+            float duration = animState.length / animState.speed;
+
+            onDone += DoneReload;
+
+            this.DelayFuction(duration - 0.5f, onDone);
+
+            void DoneReload()
+            {
+                _animator.SmoothLayerMask(layerMaskId, 0);
+                isPistolReloading = false;
+            }
+        }
+
+        public virtual void StopHoldingPistolAnimation()
+        {
+            equipPistol = false;
+            StopRifleAimAnimation();
+            StopRifleAimAnimation();
+            aimPistoleRig.SmoothRig(0);
+            _animator.SmoothLayerMask("Pistol", 0);
+            _animator.SmoothLayerMask("Pistol Reload", 0);
         }
     }
 

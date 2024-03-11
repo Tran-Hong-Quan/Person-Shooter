@@ -1,17 +1,17 @@
-using Cinemachine;
 using HongQuan;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rifle : MonoBehaviour, IEquiptableItem
+public class Pistol : MonoBehaviour, IEquiptableItem
 {
     public Game.CharacterController characterController;
 
     [SerializeField] protected Transform firePoint;
-    [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
-    [SerializeField] protected float muzzleVelocity = 0.1f;
-    [SerializeField] protected int bulletsCount = 120;
-    [SerializeField] protected int magazineBullet = 30;
+    [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.4f;
+    [SerializeField] protected float muzzleVelocity = 0.4f;
+    [SerializeField] protected int bulletsCount = 90;
+    [SerializeField] protected int magazineBullet = 15;
     [SerializeField] protected EquipType equipType;
 
     [SerializeField] protected ParticleSystem fireEffect;
@@ -19,8 +19,6 @@ public class Rifle : MonoBehaviour, IEquiptableItem
 
     [SerializeField] protected AudioSource audioSource;
     [SerializeField] protected AudioClip fireAudioClip;
-    [SerializeField] protected AudioClip removeMagAudioClip;
-    [SerializeField] protected AudioClip attachMagAudioClip;
     [SerializeField] protected AudioClip reloadAudioClip;
 
     protected CharacterInputs inputs;
@@ -76,7 +74,7 @@ public class Rifle : MonoBehaviour, IEquiptableItem
     private void StartFire()
     {
         if (isReloading) return;
-        characterController.StartRifleFireAnimation();
+        characterController.StartPistolFiringAnimation();
         isFire = true;
         if (currentBullet <= 0)
         {
@@ -87,7 +85,7 @@ public class Rifle : MonoBehaviour, IEquiptableItem
 
     private void StopFire()
     {
-        characterController.StopRifleFireAnimation();
+        characterController.StopPistolFireAnimation();
         isFire = false;
     }
 
@@ -123,14 +121,15 @@ public class Rifle : MonoBehaviour, IEquiptableItem
 
         var eff = SimplePool.Spawn(fireEffect, fireEffect.transform.position, fireEffect.transform.rotation);
         eff.transform.SetParent(fireEffect.transform.parent, true);
+        eff.transform.position = firePoint.position;
+        eff.transform.rotation = firePoint.rotation;
+        eff.transform.localScale = firePoint.localScale;
         eff.Play();
         this.DelayFuction(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
 
         audioSource.PlayOneShot(fireAudioClip);
 
         recoil.Aim();
-
-        animator.Play("Fire", animator.GetLayerIndex("Fire"), 0);
 
         clk = fireRate;
 
@@ -149,23 +148,12 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         if (isReloading) return;
         isReloading = true;
 
-        characterController.PlayReloadRifleAnimation(onComplete: () =>
+        characterController.PlayPistolReloadAnimtion(onDone: () =>
         {
             currentBullet = magazineBullet;
             isReloading = false;
-        }, onRemoveMag: () =>
-        {
-            audioSource.PlayOneShot(removeMagAudioClip);
-        }, onReload: () =>
-        {
-            audioSource.PlayOneShot(reloadAudioClip);
-        }, onAttachMag: () =>
-        {
-            audioSource.PlayOneShot(attachMagAudioClip);
         });
     }
-
-    Vector2 recoilValue = Vector2.zero;
 
     bool isAiming;
 
@@ -174,7 +162,7 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         if (isReloading) return;
 
         isAiming = true;
-        characterController.StartRifleAimAnimation();
+        characterController.StartPistolAimAnimtion();
     }
 
     private void StopAim()
@@ -182,7 +170,7 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         if (isReloading) return;
 
         isAiming = false;
-        characterController.StopRifleAimAnimation();
+        characterController.StopPistolAimAnimation();
     }
 
     private void OnDestroy()
@@ -194,9 +182,9 @@ public class Rifle : MonoBehaviour, IEquiptableItem
     {
         if (equipController == null) return;
         if (equipController == this.equipController) return;
-        if (!equipController.CanEquipRifle()) return;
+        if (!equipController.CanEquipPistol()) return;
 
-        equipController.InitEquipRifle(this, ref equipStatus, ref equipType);
+        equipController.InitEquipPistol(this, ref equipStatus, ref equipType);
 
         if (equipType == EquipType.None)
         {
@@ -208,11 +196,11 @@ public class Rifle : MonoBehaviour, IEquiptableItem
 
         if (equipStatus == EquipStatus.BeingHeld)
         {
-            HoldRifle();
+            Hold();
         }
         else
         {
-            PutRifleOnBack();
+            PutToWaist();
         }
 
         rb.isKinematic = true;
@@ -222,10 +210,10 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         currentBullet = magazineBullet;
     }
 
-    public void HoldRifle()
+    public void Hold()
     {
         SetParentEquipTo(equipController.rightHand);
-        characterController.PlayHoldRifleAnimation();
+        characterController.PlayHoldingPistolAnimation();
         inputs = characterController.Inputs;
         AddListeners();
         firePoint.forward = equipController.rightHand.up;
@@ -240,16 +228,9 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         }
     }
 
-    public void PutRifleOnBack()
+    public void PutToWaist()
     {
-        if (equipType == EquipType.RightBack)
-        {
-            SetParentEquipTo(equipController.rightBack);
-        }
-        else if (equipType == EquipType.LeftBack)
-        {
-            SetParentEquipTo(equipController.leftBack);
-        }
+        SetParentEquipTo(equipController.pistolWaist);
     }
 
     private void SetParentEquipTo(Transform to)
@@ -267,15 +248,15 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         transform.SetParent(null, true);
         rb.AddForce((characterController.transform.forward + characterController.transform.up).normalized * 500);
 
-        equipController.InitUnequipRifle(this);
+        //equipController.InitUnequipRifle(this);
 
         if (EquipStatus == EquipStatus.BeingHeld)
         {
             RemoveListeners();
-            characterController.StopHoldRifleAnimation();
+            characterController.StopHoldingPistolAnimation();
         }
 
-        equipController.InitUnequipRifle(this);
+        //equipController.InitUnequipRifle(this);
 
         recoil.ClearTargets();
         equipStatus = EquipStatus.None;
@@ -294,8 +275,8 @@ public class Rifle : MonoBehaviour, IEquiptableItem
             return;
         }
 
-        characterController.StopHoldRifleAnimation();
-        PutRifleOnBack();
+        characterController.StopHoldingPistolAnimation();
+        PutToWaist();
         equipStatus = EquipStatus.Stored;
         recoil.ClearTargets();
         RemoveListeners();
@@ -316,7 +297,7 @@ public class Rifle : MonoBehaviour, IEquiptableItem
 
         equipStatus = EquipStatus.BeingHeld;
 
-        HoldRifle();
+        Hold();
     }
 
     private void AddListeners()
@@ -336,5 +317,4 @@ public class Rifle : MonoBehaviour, IEquiptableItem
         inputs.onStopFire.RemoveListener(StopFire);
         inputs.onReload.RemoveListener(Reload);
     }
-
 }
