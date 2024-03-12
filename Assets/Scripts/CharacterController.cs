@@ -56,8 +56,7 @@ namespace Game
             Vector3 targetPosition = rigidbody.position + motion;
             Vector3 targetVelocity = (targetPosition - transform.position) / Time.deltaTime;
 
-            bool useVerticalVelocity = true;
-            if (useVerticalVelocity) targetVelocity.y = rigidbody.velocity.y;
+            targetVelocity.y = rigidbody.velocity.y;
             rigidbody.velocity = targetVelocity;
         }
 
@@ -174,7 +173,7 @@ namespace Game
 
         public virtual void StopHoldRifleAnimation()
         {
-            if (isRifleAiming) StopRifleAimAnimation();
+            if (isRifleAiming) StopRifleFireAnimation();
             if (isRifleFiring) StopRifleAimAnimation();
             _animator.SmoothLayerMask("Rifle Hold", 0);
             _animator.SmoothLayerMask("Rifle Fire", 0);
@@ -258,8 +257,8 @@ namespace Game
         public virtual void StopHoldingPistolAnimation()
         {
             equipPistol = false;
-            StopRifleAimAnimation();
-            StopRifleAimAnimation();
+            StopPistolFireAnimation();
+            StopPistolAimAnimation();
             aimPistoleRig.SmoothRig(0);
             _animator.SmoothLayerMask("Pistol", 0);
             _animator.SmoothLayerMask("Pistol Reload", 0);

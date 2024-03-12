@@ -473,7 +473,7 @@ public class PlayerController : Game.CharacterController
 
     public override void StopPistolAimAnimation()
     {
-        base.StopHoldingPistolAnimation();
+        base.StopPistolAimAnimation();
         tpAimCam.Priority = 9;
     }
 }

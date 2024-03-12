@@ -10,13 +10,9 @@ using UnityEngine.InputSystem;
 public class PlayerInputs : CharacterInputs
 {
     [Header("Player Input Values")]
-    public Vector2 move;
     public Vector2 look;
-    public bool jump;
-    public bool sprint;
-    public bool isAim;
-    public bool isFire;
     public bool changeView;
+
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -47,12 +43,12 @@ public class PlayerInputs : CharacterInputs
         fireAction.canceled += OnStopFire;
     }
 
-    public void OnMove(InputValue value)
+    private void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
     }
 
-    public void OnLook(InputValue value)
+    private void OnLook(InputValue value)
     {
         if (cursorInputForLook)
         {
@@ -60,7 +56,12 @@ public class PlayerInputs : CharacterInputs
         }
     }
 
-    public void OnJump(InputValue value)
+    public void LookInput(Vector2 newLookDirection)
+    {
+        look = newLookDirection;
+    }
+
+    private void OnJump(InputValue value)
     {
         JumpInput(value.isPressed);
     }
@@ -70,17 +71,17 @@ public class PlayerInputs : CharacterInputs
         SprintInput(value.isPressed);
     }
 
-    public void OnChangeView(InputValue value)
+    private void OnChangeView(InputValue value)
     {
         ChangeView(value.isPressed);
     }
 
-    public void OnFire(InputValue value)
+    private void OnFire(InputValue value)
     {
         FireInput(value.isPressed);
     }
 
-    public void OnAim(InputValue value)
+    private void OnAim(InputValue value)
     {
         AimInput(value.isPressed);
     }
@@ -122,7 +123,7 @@ public class PlayerInputs : CharacterInputs
 
     private void OnChangeEquipment(InputValue value)
     {
-        ChangeEquipment(value.Get<float>());
+        //ChangeEquipment(value.Get<float>());
     }
 
     private void OnChooseFirstRifle(InputValue value)
@@ -158,38 +159,6 @@ public class PlayerInputs : CharacterInputs
 
 #endif
 
-
-    public void StartMoveInput(Vector2 dir)
-    {
-        onStartMove?.Invoke(dir);
-    }
-
-    public void StopMoveInput(Vector2 dir)
-    {
-        onStopMove?.Invoke(dir);
-    }
-
-    public void MoveInput(Vector2 newMoveDirection)
-    {
-        move = newMoveDirection;
-        onMove?.Invoke(move);
-    }
-
-    public void LookInput(Vector2 newLookDirection)
-    {
-        look = newLookDirection;
-    }
-
-    public void JumpInput(bool newJumpState)
-    {
-        jump = newJumpState;
-    }
-
-    public void SprintInput(bool newSprintState)
-    {
-        sprint = newSprintState;
-    }
-
     private void OnApplicationFocus(bool hasFocus)
     {
         SetCursorState(cursorLocked);
@@ -204,96 +173,5 @@ public class PlayerInputs : CharacterInputs
     {
         changeView = newState;
         onChangeView?.Invoke();
-    }
-
-    public void AimInput(bool newState)
-    {
-        isAim = newState;
-        onAim?.Invoke();
-    }
-
-    public void StartFireInput()
-    {
-        isFire = true;
-        onStartFire?.Invoke();
-
-        loopFireCorotine = LoopFireCorotine();
-        StartCoroutine(loopFireCorotine);
-    }
-
-    IEnumerator loopFireCorotine;
-
-    private IEnumerator LoopFireCorotine()
-    {
-        while(true)
-        {
-            yield return null;
-            onFire?.Invoke();
-        }
-    }
-
-    public void StopFireInput()
-    {
-        StopCoroutine(loopFireCorotine);
-
-        isFire = false;
-        onStopFire?.Invoke();
-    }
-
-    public void FireInput(bool newState)
-    {
-        isFire = newState;
-    }
-
-    public void Use()
-    {
-        onUse?.Invoke();
-    }
-
-    public void Drop()
-    {
-        onDrop?.Invoke();
-    }
-
-    public void Reload()
-    {
-        onReload?.Invoke();
-    }
-
-    public void ChangeEquipment(float dir)
-    {
-        onChangeEquipment?.Invoke(dir);
-    }
-
-    public void ChooseFirstRifle()
-    {
-        onChooseFirstRifle?.Invoke();
-    }
-
-    public void ChooseSecondRifle()
-    {
-        onChooseSecondRifle?.Invoke();
-    }
-
-    public void ChoosePiston()
-    {
-        onChoosePiston?.Invoke();
-    }
-
-    public void ChooseMelee()
-    {
-        onChooseMelee?.Invoke();
-    }
-    public void ChooseBomb()
-    {
-        onChooseBomb?.Invoke();
-    }
-    public void ChooseItem()
-    {
-        onChooseItem?.Invoke();
-    }
-    public void ChooseFist()
-    {
-        onChooseFist?.Invoke();
     }
 }

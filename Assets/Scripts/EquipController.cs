@@ -32,6 +32,7 @@ public class EquipController : MonoBehaviour
 
         characterInputs.onChooseFirstRifle.AddListener(ChooseFirstRifle);
         characterInputs.onChooseSecondRifle.AddListener(ChooseSecondRifle);
+        characterInputs.onChoosePiston.AddListener(ChoosePistol);
         characterInputs.onChooseFist.AddListener(ChooseFist);
         characterInputs.onDrop.AddListener(Unequip);
     }
@@ -197,6 +198,29 @@ public class EquipController : MonoBehaviour
         {
             holdingEquipment.Stored();
             holdingEquipment = rightBackEquipment;
+            holdingEquipment.Use();
+        }
+    }
+
+    public virtual void ChoosePistol()
+    {
+        if (pistonEquipment == null) return;
+
+        if (holdingEquipment == null) //Not holding anythings
+        {
+            holdingEquipment = pistonEquipment;
+            holdingEquipment.Use();
+        }
+        else if (holdingEquipment == pistonEquipment) //Holding pistol
+        {
+            holdingEquipment.Stored();
+            holdingEquipment = null;
+            ChooseFist();
+        }
+        else //Hold something else
+        {
+            holdingEquipment.Stored();
+            holdingEquipment = pistonEquipment;
             holdingEquipment.Use();
         }
     }
