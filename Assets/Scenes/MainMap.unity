@@ -1924,7 +1924,7 @@ GameObject:
   - component: {fileID: 1109040585}
   - component: {fileID: 1109040587}
   - component: {fileID: 1109040586}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Aim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4858,7 +4858,6 @@ GameObject:
   - component: {fileID: 6982812147933622151}
   - component: {fileID: 6982812147933622152}
   - component: {fileID: 6982812147933622153}
-  - component: {fileID: 6982812147933622154}
   m_Layer: 2
   m_Name: PlayerArmature
   m_TagString: Player
@@ -4914,13 +4913,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
-  JumpHeight: 1.5
-  Gravity: -9.81
+  JumpHeight: 1.2
+  Gravity: -15
   JumpTimeout: 0.3
   FallTimeout: 0.15
   Grounded: 1
   GroundedOffset: 0
-  GroundedRadius: 0.2
+  GroundedRadius: 0.8
   GroundLayers:
     serializedVersion: 2
     m_Bits: 513
@@ -4936,6 +4935,7 @@ MonoBehaviour:
   CameraAngleOverride: 0
   LockCameraPosition: 0
   UseMouse: 1
+  _verticalVelocity: 0
 --- !u!114 &4416926083347132239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5469,36 +5469,24 @@ MonoBehaviour:
   rightBack: {fileID: 2067747396}
   leftBack: {fileID: 854767640}
   pistolWaist: {fileID: 1131746369}
---- !u!136 &6982812147933622153
-CapsuleCollider:
+--- !u!143 &6982812147933622153
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4416926083347132227}
-  m_Material: {fileID: 13400000, guid: 8fb499bc6e4c4b545a933ad44d75986f, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.2
-  m_Height: 1.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0}
---- !u!54 &6982812147933622154
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416926083347132227}
   serializedVersion: 2
-  m_Mass: 60
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
+  m_Height: 1.22
+  m_Radius: 0.2
+  m_SlopeLimit: 45
+  m_StepOffset: 0.25
+  m_SkinWidth: 0.02
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1.21, z: 0}
 --- !u!54 &7023205135001153663
 Rigidbody:
   m_ObjectHideFlags: 0

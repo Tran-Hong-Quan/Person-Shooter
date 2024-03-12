@@ -6,6 +6,7 @@ using UnityEngine.Animations.Rigging;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.Rendering.Universal;
 #endif
 
@@ -97,7 +98,12 @@ public class PlayerController : Game.CharacterController
     private float _animationBlend;
     private float _targetRotation = 0.0f;
     private float _rotationVelocity;
-    private float _verticalVelocity;
+    [SerializeField] private float _verticalVelocity;
+    private float _terminalVelocity = 53.0f;
+
+    // timeout deltatime
+    private float _jumpTimeoutDelta;
+    private float _fallTimeoutDelta;
 
     // animation IDs
     private int _animIDSpeed;
@@ -110,6 +116,7 @@ public class PlayerController : Game.CharacterController
     private PlayerInput _playerInput;
 #endif
     private PlayerInputs _input;
+    private CharacterController _controller;
     private Transform _mainCameraTransform;
     private Camera _mainCamera;
     private Transform cineCamTarget;
@@ -144,6 +151,7 @@ public class PlayerController : Game.CharacterController
             _mainCameraTransform = _mainCamera.transform;
         }
         _input = GetComponent<PlayerInputs>();
+        _controller = GetComponent<CharacterController>();
         _hasAnimator = TryGetComponent(out _animator);
         cineCamTarget = cameraRoot.GetChild(0);
     }
@@ -162,6 +170,9 @@ public class PlayerController : Game.CharacterController
 
         AssignAnimationIDs();
 
+        _jumpTimeoutDelta = JumpTimeout;
+        _fallTimeoutDelta = FallTimeout;
+
     }
 
     private void Update()
@@ -169,7 +180,7 @@ public class PlayerController : Game.CharacterController
         _hasAnimator = TryGetComponent(out _animator);
 
         AimObjectSetup();
-        Jump();
+        JumpAndGravity();
         GroundedCheck();
         Move();
     }
@@ -223,14 +234,6 @@ public class PlayerController : Game.CharacterController
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-           transform.position.z);
-        Gizmos.DrawSphere(spherePosition, GroundedRadius);
-    }
-
     private void CameraRotation()
     {
         // if there is an input and camera position is not fixed
@@ -265,7 +268,7 @@ public class PlayerController : Game.CharacterController
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(rigidbody.velocity.x, 0.0f, rigidbody.velocity.z).magnitude;
+        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
         float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -322,8 +325,10 @@ public class PlayerController : Game.CharacterController
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
         // move the player
-        Move(targetDirection.normalized * _speed * Time.deltaTime);
+        //Move(targetDirection.normalized * _speed * Time.deltaTime);
         //Move(targetDirection.normalized,_speed);
+        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
         // update animator if using character
         if (_hasAnimator)
@@ -338,17 +343,28 @@ public class PlayerController : Game.CharacterController
                 0);
     }
 
-    protected float hig = 0;
-    private void Jump()
+    private void JumpAndGravity()
     {
-        if (rigidbody.velocity.y > hig)
-            hig = rigidbody.velocity.y;
         if (Grounded)
         {
-            _animator.SetBool(_animIDJump, false);
-            _animator.SetBool(_animIDFreeFall, false);
+            // reset the fall timeout timer
+            _fallTimeoutDelta = FallTimeout;
+
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDJump, false);
+                _animator.SetBool(_animIDFreeFall, false);
+            }
+
+            // stop our velocity dropping infinitely when grounded
+            if (_verticalVelocity < 0.0f)
+            {
+                _verticalVelocity = -2f;
+            }
+
             // Jump
-            if (_input.jump)
+            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -358,19 +374,42 @@ public class PlayerController : Game.CharacterController
                 {
                     _animator.SetBool(_animIDJump, true);
                 }
-                rigidbody.velocity += new Vector3(0, _verticalVelocity, 0);
-                _input.jump = false;
             }
 
+            // jump timeout
+            if (_jumpTimeoutDelta >= 0.0f)
+            {
+                _jumpTimeoutDelta -= Time.deltaTime;
+            }
         }
         else
         {
-            _animator.SetBool(_animIDFreeFall, true);
+            // reset the jump timeout timer
+            _jumpTimeoutDelta = JumpTimeout;
+
+            // fall timeout
+            if (_fallTimeoutDelta >= 0.0f)
+            {
+                _fallTimeoutDelta -= Time.deltaTime;
+            }
+            else
+            {
+                // update animator if using character
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDFreeFall, true);
+                }
+            }
+
             // if we are not grounded, do not jump
             _input.jump = false;
         }
 
-
+        // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
+        if (_verticalVelocity < _terminalVelocity)
+        {
+            _verticalVelocity += Gravity * Time.deltaTime;
+        }
     }
 
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
