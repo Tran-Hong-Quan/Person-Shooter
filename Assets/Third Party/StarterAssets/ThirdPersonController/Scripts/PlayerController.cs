@@ -314,6 +314,7 @@ public class PlayerController : Game.CharacterController
 
         // move the player
         Move(targetDirection.normalized * _speed * Time.deltaTime);
+        //Move(targetDirection.normalized,_speed);
 
         // update animator if using character
         if (_hasAnimator)
@@ -333,7 +334,6 @@ public class PlayerController : Game.CharacterController
     {
         if (rigidbody.velocity.y > hig)
             hig = rigidbody.velocity.y;
-        print("HIg=" + hig);
         if (Grounded)
         {
             _animator.SetBool(_animIDJump, false);

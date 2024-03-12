@@ -51,13 +51,16 @@ namespace Game
 
         public void Move(Vector3 motion)
         {
-            motion.y = 0;
-
-            Vector3 targetPosition = rigidbody.position + motion;
+            Vector3 targetPosition = transform.position + motion;
             Vector3 targetVelocity = (targetPosition - transform.position) / Time.deltaTime;
 
             targetVelocity.y = rigidbody.velocity.y;
             rigidbody.velocity = targetVelocity;
+        }
+        public void Move(Vector3 dir, float speed)
+        {
+            dir.y = 0;
+            rigidbody.AddForce(dir * speed * 10f, ForceMode.Force);
         }
 
         #region Rifle

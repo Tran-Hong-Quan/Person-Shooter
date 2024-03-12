@@ -3153,7 +3153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
       propertyPath: m_RootOrder
@@ -3526,6 +3526,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e087ecce43ebbff45a1b360637807d93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  move: {x: 0, y: 0}
+  jump: 0
+  sprint: 0
+  isAim: 0
+  isFire: 0
   onChangeView:
     m_PersistentCalls:
       m_Calls: []
@@ -3580,12 +3585,7 @@ MonoBehaviour:
   onChooseFist:
     m_PersistentCalls:
       m_Calls: []
-  move: {x: 0, y: 0}
   look: {x: 0, y: 0}
-  jump: 0
-  sprint: 0
-  isAim: 0
-  isFire: 0
   changeView: 0
   analogMovement: 0
   cursorLocked: 1
@@ -4038,7 +4038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.25, z: 0.3}
+  Damping: {x: 0, y: 0, z: 0}
   ShoulderOffset: {x: 2, y: 0, z: 0}
   VerticalArmLength: 0
   CameraSide: 0.6
@@ -4390,7 +4390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.25, z: 0.3}
+  Damping: {x: 0, y: 0, z: 0}
   ShoulderOffset: {x: 1, y: 0, z: 0}
   VerticalArmLength: 0
   CameraSide: 0.6
@@ -4895,7 +4895,7 @@ MonoBehaviour:
   isPistolReloading: 0
   rightHand: {fileID: 1554204740}
   inputs: {fileID: 135756641613574975}
-  MoveSpeed: 2
+  MoveSpeed: 3
   SprintSpeed: 5.335
   RotateSpeed: 10
   RotationSmoothTime: 0.12

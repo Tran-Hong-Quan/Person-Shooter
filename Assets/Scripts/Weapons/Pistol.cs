@@ -34,6 +34,8 @@ public class Pistol : MonoBehaviour, IEquiptableItem
 
     protected int currentBullet;
 
+    protected TransformData fireEffectTransformData;
+
     public EquipStatus EquipStatus => equipStatus;
 
     public EquipType EquipType => equipType;
@@ -46,9 +48,10 @@ public class Pistol : MonoBehaviour, IEquiptableItem
         col = GetComponent<Collider>();
     }
 
-    public void Unequiq()
+    protected virtual void Start()
     {
-
+        fireEffectTransformData = new TransformData(fireEffect.transform);
+        fireEffect.gameObject.SetActive(false);
     }
 
     private void Aim()
@@ -119,11 +122,9 @@ public class Pistol : MonoBehaviour, IEquiptableItem
             this.DelayFuction(hitEff.main.duration, () => SimplePool.Despawn(hitEff.gameObject));
         }
 
-        var eff = SimplePool.Spawn(fireEffect, fireEffect.transform.position, fireEffect.transform.rotation);
-        eff.transform.SetParent(fireEffect.transform.parent, true);
-        eff.transform.position = firePoint.position;
-        eff.transform.rotation = firePoint.rotation;
-        eff.transform.localScale = firePoint.localScale;
+        var eff = SimplePool.Spawn(fireEffect);
+        fireEffectTransformData.SetParent(eff.transform);
+        fireEffectTransformData.InsertLocalData(eff.transform);
         eff.Play();
         this.DelayFuction(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
 
