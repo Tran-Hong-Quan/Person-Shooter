@@ -268,7 +268,7 @@ namespace Game
             StopPistolFireAnimation();
             StopPistolAimAnimation();
             aimPistoleRig.SmoothRig(0);
-            _animator.SmoothLayerMask("Pistol", 0);
+            _animator.SmoothLayerMask("Pistol Aim", 0);
             _animator.SmoothLayerMask("Pistol Reload", 0);
         }
     }
