@@ -99,7 +99,7 @@ public class Pistol : MonoBehaviour, IEquiptableItem
 
         if (currentBullet <= 0) return;
 
-        Vector3 idealPoint = characterController.AimObj.position;
+        Vector3 idealPoint = characterController.GetAimPoint();
         Ray ray = new Ray();
         Ray practicalRay = new Ray(firePoint.position, firePoint.forward);
         Ray idealRay = new Ray(firePoint.position, idealPoint - firePoint.position);

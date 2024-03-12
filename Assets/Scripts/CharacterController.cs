@@ -89,6 +89,11 @@ namespace Game
             }
         }
 
+        public virtual Vector3 GetAimPoint()
+        {
+            return aimObj.transform.position;
+        }
+
         public virtual void StartRifleFireAnimation()
         {
             if (!equipRifle) return;

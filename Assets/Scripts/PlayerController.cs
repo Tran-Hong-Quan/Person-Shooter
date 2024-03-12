@@ -69,6 +69,7 @@ public class PlayerController : Game.CharacterController
     public Transform cameraRoot;
     public Transform[] camerasRootFollow;
     public float aimDistance = 10f;
+
     public CinemachineVirtualCamera fpCam;
     public CinemachineVirtualCamera tpCam;
     public CinemachineVirtualCamera tpAimCam;
@@ -167,6 +168,7 @@ public class PlayerController : Game.CharacterController
     {
         _hasAnimator = TryGetComponent(out _animator);
 
+        AimObjectSetup();
         Jump();
         GroundedCheck();
         Move();
@@ -185,6 +187,25 @@ public class PlayerController : Game.CharacterController
         _animIDJump = Animator.StringToHash("Jump");
         _animIDFreeFall = Animator.StringToHash("FreeFall");
         _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+    }
+
+    private void AimObjectSetup()
+    {
+
+        aimObj.position = cineCamTarget.position + cineCamTarget.forward * aimDistance;
+
+    }
+
+    public override Vector3 GetAimPoint()
+    {
+        Ray ray = _mainCamera.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            return hit.point;
+        }
+
+        return aimObj.position;
     }
 
     private void GroundedCheck()
@@ -230,18 +251,6 @@ public class PlayerController : Game.CharacterController
         Vector3 targetRotation = new Vector3(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         cameraRoot.rotation = Quaternion.Euler(targetRotation);
         foreach (var c in camerasRootFollow) c.rotation = Quaternion.Euler(targetRotation);
-
-        //Aiming Point
-        Ray ray = _mainCamera.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            aimObj.position = hit.point;
-        }
-        else
-        {
-            aimObj.position = cineCamTarget.position + cineCamTarget.forward * aimDistance;
-        }
     }
 
     private void Move()
