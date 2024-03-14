@@ -101,7 +101,8 @@ public class PlayerController : Game.CharacterController
     private float _animationBlend;
     private float _targetRotation = 0.0f;
     private float _rotationVelocity;
-    [SerializeField] private float _verticalVelocity;
+    private float _verticalVelocity;
+    private Vector3 moveMotion;
     private float _terminalVelocity = 53.0f;
 
     // timeout deltatime
@@ -331,8 +332,9 @@ public class PlayerController : Game.CharacterController
         // move the player
         //Move(targetDirection.normalized * _speed * Time.deltaTime);
         //Move(targetDirection.normalized,_speed);
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        moveMotion = targetDirection.normalized * (_speed * Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+        _controller.Move(moveMotion);
 
         // update animator if using character
         if (_hasAnimator)
@@ -364,7 +366,8 @@ public class PlayerController : Game.CharacterController
             // stop our velocity dropping infinitely when grounded
             if (_verticalVelocity < 0.0f)
             {
-                _verticalVelocity = -2f;
+                //_verticalVelocity = -2f;
+                _verticalVelocity = 0f;
             }
 
             // Jump
@@ -412,7 +415,20 @@ public class PlayerController : Game.CharacterController
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += Gravity * Time.deltaTime;
+            //float maxHeight = _controller.center.y;
+            //Vector3 origin = transform.position + _controller.center;
+            //RaycastHit hit;
+            //bool isHit;
+            //isHit = Physics.Raycast(origin, -transform.up, out hit, maxHeight, GroundLayers);
+            //if (!isHit && !inputs.jump)
+            //    isHit = Physics.SphereCast(origin, GroundedRadius, -transform.up, out hit, maxHeight, GroundLayers);
+
+            //if (isHit)
+            //{
+            //    _verticalVelocity = Mathf.Lerp((hit.point.y - transform.position.y) * Mathf.Abs(Gravity), 0, Time.deltaTime * Gravity);
+            //}
+            //else
+                _verticalVelocity += Gravity * Time.deltaTime;
         }
     }
 
