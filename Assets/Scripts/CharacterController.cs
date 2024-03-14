@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UniversalInventorySystem;
 
 namespace Game
 {
@@ -41,12 +42,14 @@ namespace Game
 
         protected Animator _animator;
         protected new Rigidbody rigidbody;
+        protected UniversalInventorySystem.Inventory inventory;
         public Transform AimObj => aimObj;
 
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
             rigidbody = GetComponent<Rigidbody>();
+            inventory = new Inventory(18);
         }
 
         public void Move(Vector3 motion)
@@ -268,7 +271,7 @@ namespace Game
             StopPistolFireAnimation();
             StopPistolAimAnimation();
             aimPistoleRig.SmoothRig(0);
-            _animator.SmoothLayerMask("Pistol", 0);
+            _animator.SmoothLayerMask("Pistol Aim", 0);
             _animator.SmoothLayerMask("Pistol Reload", 0);
         }
     }

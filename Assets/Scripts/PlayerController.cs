@@ -8,6 +8,7 @@ using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.Rendering.Universal;
+using UniversalInventorySystem;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -86,8 +87,10 @@ public class PlayerController : Game.CharacterController
 
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
-
     public bool UseMouse = true;
+
+    [Header("UI")]
+    [SerializeField] protected InventoryUI inventoryUI;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -154,6 +157,7 @@ public class PlayerController : Game.CharacterController
         _controller = GetComponent<CharacterController>();
         _hasAnimator = TryGetComponent(out _animator);
         cineCamTarget = cameraRoot.GetChild(0);
+        inventory.set
     }
 
     private void Start()
