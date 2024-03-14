@@ -15,19 +15,21 @@
  * 
  *  
  *  This is one of the most important base classes, its the item, its a scriptable object.
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
+using static UnityEditor.PlayerSettings;
 
 namespace UniversalInventorySystem
 {
     [
-        AddComponentMenu("UniversalInventorySystem/Item"), 
-        CreateAssetMenu(fileName = "Item", menuName = "UniversalInventorySystem/Item", order = 1), 
+        AddComponentMenu("UniversalInventorySystem/Item"),
+        CreateAssetMenu(fileName = "Item", menuName = "UniversalInventorySystem/Item", order = 1),
         Serializable
     ]
     public class Item : ScriptableObject
@@ -47,7 +49,7 @@ namespace UniversalInventorySystem
         public bool stackOnSpecifDurability;
         public StackOptions stackOptions;
         public List<uint> stackDurabilities;*/
-public List<DurabilityImage> durabilityImages
+        public List<DurabilityImage> durabilityImages
         {
             get
             {
@@ -62,6 +64,8 @@ public List<DurabilityImage> durabilityImages
         private List<DurabilityImage> _durabilityImages;
         public MonoScript onUseFunc;
         public MonoScript optionalOnDropBehaviour;
+        public UnityEvent<UseItemData> onUse;
+        public UnityEvent<DropItemData> onDrop;
         public ToolTipInfo tooltip;
 
         public void OnEnable()
@@ -71,6 +75,7 @@ public List<DurabilityImage> durabilityImages
 
         public void OnUse(Inventory inv, int slot)
         {
+            onUse?.Invoke(new UseItemData(inv,slot));
             if (onUseFunc == null) return;
             InventoryHandler.UseItemEventArgs uea = new InventoryHandler.UseItemEventArgs(inv, this, slot);
             object[] tmp = new object[2] { this, uea };
@@ -86,6 +91,8 @@ public List<DurabilityImage> durabilityImages
         public void OnDrop(Inventory inv, bool tss, int slot, int amount, bool dbui, Vector3? pos)
         {
             if ((inv.interactiable & InventoryController.DropInvFlags) != InventoryController.DropInvFlags) return;
+
+            onDrop?.Invoke(new DropItemData(inv, tss, slot, amount, dbui, pos));
 
             if (optionalOnDropBehaviour == null)
             {
@@ -126,7 +133,7 @@ public List<DurabilityImage> durabilityImages
                 }
             }
             return inputArray;
-        }       
+        }
     }
 
     [Serializable]
@@ -135,6 +142,42 @@ public List<DurabilityImage> durabilityImages
         [SerializeField] public string imageName;
         [SerializeField] public Sprite sprite;
         [SerializeField] public int durability;
+    }
+
+    public class UseItemData
+    {
+        public Inventory inv;
+        public int slot;
+
+        public UseItemData(Inventory inv, int slot)
+        {
+            this.inv = inv;
+            this.slot = slot;
+        }
+
+        public UseItemData() { }
+    }
+
+    public class DropItemData
+    {
+        public Inventory inv;
+        public bool tss;
+        public int slot;
+        public int amount;
+        public bool dbui;
+        public Vector3? pos;
+
+        public DropItemData(Inventory inv, bool tss, int slot, int amount, bool dbui, Vector3? pos)
+        {
+            this.inv = inv;
+            this.slot = slot;
+            this.amount = amount;
+            this.dbui = dbui;
+            this.tss = tss;
+            this.pos = pos;
+        }
+
+        public DropItemData() { }
     }
 
     /*public enum StackOptions

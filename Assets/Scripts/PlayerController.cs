@@ -158,7 +158,6 @@ public class PlayerController : Game.CharacterController
         _controller = GetComponent<CharacterController>();
         _hasAnimator = TryGetComponent(out _animator);
         cineCamTarget = cameraRoot.GetChild(0);
-        inventory.set
     }
 
     private void Start()
