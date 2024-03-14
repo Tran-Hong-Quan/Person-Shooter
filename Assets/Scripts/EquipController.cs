@@ -64,14 +64,14 @@ public class EquipController : MonoBehaviour
     protected virtual void OnTriggerEnter(Collider collider)
     {
         //print("Enter " + collider.gameObject.name);
-        if (collider.transform.tag != "Item") return;
+        if (!collider.CompareTag("Equipment")) return;
         if (!collider.transform.TryGetComponent(out IEquiptableItem item)) return;
         Equip(item);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.tag != "Item") return;
+        if (!collision.transform.CompareTag("Equipment")) return;
         if (!collision.transform.TryGetComponent(out IEquiptableItem item)) return;
         Equip(item);
     }

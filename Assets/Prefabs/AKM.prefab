@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4960411805056721324}
   m_Layer: 0
   m_Name: AKM
-  m_TagString: Item
+  m_TagString: Equipment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   muzzleVelocity: 700
   bulletsCount: 120
   magazineBullet: 30
-  canEquipIn: 030000000500000006000000
+  equipType: 0
   fireEffect: {fileID: 6756977361486156386}
   bulletHitEff: {fileID: 3964462216021553480}
   audioSource: {fileID: 291290870864282796}
@@ -63,6 +63,7 @@ MonoBehaviour:
   removeMagAudioClip: {fileID: 8300000, guid: 4f54749511931974ab6c19ed4de90e1d, type: 3}
   attachMagAudioClip: {fileID: 8300000, guid: 28cc864a7b5ec3442ab2c0c545f204f9, type: 3}
   reloadAudioClip: {fileID: 8300000, guid: ee3ca23f4db539742b7b952571fe841d, type: 3}
+  equipStatus: 0
 --- !u!65 &4441677915573163182
 BoxCollider:
   m_ObjectHideFlags: 0

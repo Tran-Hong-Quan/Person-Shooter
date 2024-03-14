@@ -42,14 +42,14 @@ namespace Game
 
         protected Animator _animator;
         protected new Rigidbody rigidbody;
-        protected UniversalInventorySystem.Inventory inventory;
+        protected Inventory inventory;
         public Transform AimObj => aimObj;
 
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
             rigidbody = GetComponent<Rigidbody>();
-            inventory = new Inventory(18);
+            inventory = new Inventory(18, true, InventoryController.AllInventoryFlags, true);
         }
 
         public void Move(Vector3 motion)
@@ -273,6 +273,22 @@ namespace Game
             aimPistoleRig.SmoothRig(0);
             _animator.SmoothLayerMask("Pistol Aim", 0);
             _animator.SmoothLayerMask("Pistol Reload", 0);
+        }
+
+        protected void OnCollisionEnter(Collision collision)
+        {
+            
+        }
+
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("InventoryItem"))
+            {
+                if(other.TryGetComponent(out InventoryItem invItem))
+                {
+                    invItem.AddItemToInventory(inventory);
+                }
+            }
         }
     }
 

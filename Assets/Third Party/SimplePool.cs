@@ -222,6 +222,8 @@ public static class SimplePool
     public static void Despawn(GameObject obj)
     {
         Pool p = null;
+        if (_pools == null)
+            _pools = new Dictionary<int, Pool>();
         foreach (var pool in _pools.Values)
         {
             if (pool.MemberIDs.Contains(obj.GetInstanceID()))
