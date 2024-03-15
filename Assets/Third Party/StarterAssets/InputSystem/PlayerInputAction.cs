@@ -179,6 +179,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9d967af-6fd1-407f-889e-1809bb0af218"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -577,6 +586,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ChooseFist"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bf2404d-2b4f-4926-b089-533595b0d627"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e1fe3ca-9dbc-4159-b8bc-441d1eb6b6dd"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -650,6 +681,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_ChooseBomb = m_Player.FindAction("ChooseBomb", throwIfNotFound: true);
         m_Player_ChooseItem = m_Player.FindAction("ChooseItem", throwIfNotFound: true);
         m_Player_ChooseFist = m_Player.FindAction("ChooseFist", throwIfNotFound: true);
+        m_Player_ChooseInventory = m_Player.FindAction("ChooseInventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -728,6 +760,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ChooseBomb;
     private readonly InputAction m_Player_ChooseItem;
     private readonly InputAction m_Player_ChooseFist;
+    private readonly InputAction m_Player_ChooseInventory;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -749,6 +782,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ChooseBomb => m_Wrapper.m_Player_ChooseBomb;
         public InputAction @ChooseItem => m_Wrapper.m_Player_ChooseItem;
         public InputAction @ChooseFist => m_Wrapper.m_Player_ChooseFist;
+        public InputAction @ChooseInventory => m_Wrapper.m_Player_ChooseInventory;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -809,6 +843,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChooseFist.started += instance.OnChooseFist;
             @ChooseFist.performed += instance.OnChooseFist;
             @ChooseFist.canceled += instance.OnChooseFist;
+            @ChooseInventory.started += instance.OnChooseInventory;
+            @ChooseInventory.performed += instance.OnChooseInventory;
+            @ChooseInventory.canceled += instance.OnChooseInventory;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -864,6 +901,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChooseFist.started -= instance.OnChooseFist;
             @ChooseFist.performed -= instance.OnChooseFist;
             @ChooseFist.canceled -= instance.OnChooseFist;
+            @ChooseInventory.started -= instance.OnChooseInventory;
+            @ChooseInventory.performed -= instance.OnChooseInventory;
+            @ChooseInventory.canceled -= instance.OnChooseInventory;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -936,5 +976,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnChooseBomb(InputAction.CallbackContext context);
         void OnChooseItem(InputAction.CallbackContext context);
         void OnChooseFist(InputAction.CallbackContext context);
+        void OnChooseInventory(InputAction.CallbackContext context);
     }
 }

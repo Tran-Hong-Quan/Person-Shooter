@@ -104,14 +104,15 @@ namespace UniversalInventorySystem
         public Item GetItemWithName(string itemAssetStrId, string itemName) { return GetItemAssetWithName(itemAssetStrId).GetItemWithName(itemName); }
 
         public Dictionary<Item, InventoryItem> itemPrefabs;
-        public List<InventoryItemPrefab> itemsPrefabDatas;
+        public List<InventoryItem> itemsPrefabDatas;
+        public LayerMask dropItemLayermask;
 
         private void InitItemPrefabs()
         {
             itemPrefabs = new Dictionary<Item, InventoryItem>();
             foreach(var i in itemsPrefabDatas)
             {
-                itemPrefabs.Add(i.itemData, i.prefab);
+                itemPrefabs.Add(i.InventoryItemData,i);
             }
         }
 
@@ -459,14 +460,6 @@ namespace UniversalInventorySystem
             }
         }
         #endregion
-    }
-
-    [Serializable]
-
-    public struct InventoryItemPrefab
-    {
-        public Item itemData;
-        public InventoryItem prefab;
     }
 
     public enum BroadcastEventType

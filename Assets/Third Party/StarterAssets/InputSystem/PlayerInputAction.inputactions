@@ -157,6 +157,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ChooseInventory",
+                    "type": "Button",
+                    "id": "a9d967af-6fd1-407f-889e-1809bb0af218",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -553,6 +562,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChooseFist",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8bf2404d-2b4f-4926-b089-533595b0d627",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChooseInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e1fe3ca-9dbc-4159-b8bc-441d1eb6b6dd",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChooseInventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

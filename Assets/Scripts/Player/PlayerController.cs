@@ -91,6 +91,8 @@ public class PlayerController : Game.CharacterController
 
     [Header("UI")]
     [SerializeField] protected InventoryUI inventoryUI;
+    [SerializeField] protected GameObject inventoryCamera;
+    [SerializeField] protected UIAnimation inventoryBoard;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -178,6 +180,8 @@ public class PlayerController : Game.CharacterController
 
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
+
+        _input.onChooseInventory.AddListener(ChooseInventory);
 
     }
 
@@ -544,5 +548,34 @@ public class PlayerController : Game.CharacterController
     {
         base.StopPistolAimAnimation();
         tpAimCam.Priority = 9;
+    }
+
+    bool canToggleInventory = true;
+    private void ChooseInventory()
+    {
+        if (!canToggleInventory) return;
+        canToggleInventory = false;
+
+        bool isOpenInventory = inventoryBoard.gameObject.activeSelf; 
+        
+        if (isOpenInventory)
+        {
+            _input.SetCursorState(true);
+            inventoryBoard.Hide(() =>
+            {
+                inventoryCamera.gameObject.SetActive(false);
+                canToggleInventory = true;
+            });
+        }
+        else
+        {
+            _input.SetCursorState(false);
+            inventoryCamera.SetActive(true);
+            inventoryBoard.Show(() =>
+            {
+                canToggleInventory = true;
+            });
+        }
+
     }
 }

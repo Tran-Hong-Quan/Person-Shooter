@@ -13,7 +13,6 @@ public class PlayerInputs : CharacterInputs
     public Vector2 look;
     public bool changeView;
 
-
     [Header("Movement Settings")]
     public bool analogMovement;
 
@@ -21,8 +20,9 @@ public class PlayerInputs : CharacterInputs
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
 
-    [Header("Events")]
+    [Header("Player Events")]
     public UnityEvent<float> onChangeEquipment;
+    public UnityEvent onChooseInventory;
 
 #if ENABLE_INPUT_SYSTEM
     public PlayerInput inputs;
@@ -42,6 +42,8 @@ public class PlayerInputs : CharacterInputs
         fireAction.started += OnStartFire;
         fireAction.canceled += OnStopFire;
     }
+
+    #region Receive Messages
 
     private void OnMove(InputValue value)
     {
@@ -66,7 +68,7 @@ public class PlayerInputs : CharacterInputs
         JumpInput(value.isPressed);
     }
 
-    public void OnSprint(InputValue value)
+    private void OnSprint(InputValue value)
     {
         SprintInput(value.isPressed);
     }
@@ -155,6 +157,12 @@ public class PlayerInputs : CharacterInputs
         ChooseFist();
     }
 
+    private void OnChooseInventory(InputValue value)
+    {
+        ChooseInventory();
+    }
+
+    #endregion
 
 
 #endif
@@ -164,7 +172,7 @@ public class PlayerInputs : CharacterInputs
         SetCursorState(cursorLocked);
     }
 
-    private void SetCursorState(bool newState)
+    public void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
@@ -173,5 +181,10 @@ public class PlayerInputs : CharacterInputs
     {
         changeView = newState;
         onChangeView?.Invoke();
+    }
+
+    public void ChooseInventory()
+    {
+        onChooseInventory?.Invoke();
     }
 }
