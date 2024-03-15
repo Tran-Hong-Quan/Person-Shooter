@@ -28,13 +28,16 @@ namespace UniversalInventorySystem
     [Serializable]
     public class InventoryHandler : MonoBehaviour
     {
+        [SerializeField] Camera inventoryCamera;
         private void Awake()
         {
+            InventoryController.camera = inventoryCamera;
             if (current == null) current = this;
         }
         private void Start()
         {
             if (current == null) current = this;
+            InitItemPrefabs();
         }
         private void OnEnable()
         {
@@ -99,6 +102,18 @@ namespace UniversalInventorySystem
         public Item GetItemWithName(int id, string itemName) { return GetItemAssetWithID(id).GetItemWithName(itemName); }
 
         public Item GetItemWithName(string itemAssetStrId, string itemName) { return GetItemAssetWithName(itemAssetStrId).GetItemWithName(itemName); }
+
+        public Dictionary<Item, InventoryItem> itemPrefabs;
+        public List<InventoryItemPrefab> itemsPrefabDatas;
+
+        private void InitItemPrefabs()
+        {
+            itemPrefabs = new Dictionary<Item, InventoryItem>();
+            foreach(var i in itemsPrefabDatas)
+            {
+                itemPrefabs.Add(i.itemData, i.prefab);
+            }
+        }
 
         #endregion
 
@@ -444,6 +459,14 @@ namespace UniversalInventorySystem
             }
         }
         #endregion
+    }
+
+    [Serializable]
+
+    public struct InventoryItemPrefab
+    {
+        public Item itemData;
+        public InventoryItem prefab;
     }
 
     public enum BroadcastEventType

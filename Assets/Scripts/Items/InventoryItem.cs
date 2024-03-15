@@ -5,8 +5,6 @@ using UniversalInventorySystem;
 public class InventoryItem : MonoBehaviour
 {
     [SerializeField] protected Item inventoryItemData;
-    [SerializeField] protected InventoryItem prefab;
-
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Collider col;
     [HideInInspector] public Inventory inventory;
@@ -16,18 +14,9 @@ public class InventoryItem : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void OnUse(object sender, InventoryHandler.UseItemEventArgs e)
+    public void Init(Item inventoryItemData)
     {
-        e.inv.RemoveItem(e.item, 1);
-    }
-
-    public void OnDrop(object sender, InventoryHandler.UseItemEventArgs e)
-    {
-        InventoryItem invItem = SimplePool.Spawn(prefab);
-        invItem.transform.position = e.inv.parent.transform.position;
-        invItem.rb.AddForce(e.inv.parent.transform.forward * 2, ForceMode.VelocityChange);
-        invItem.inventory = e.inv;
-        e.inv.parent.DelayFuction(1, () => invItem.inventory = null);
+        this.inventoryItemData = inventoryItemData;
     }
 
     public void AddItemToInventory(Inventory inventory)

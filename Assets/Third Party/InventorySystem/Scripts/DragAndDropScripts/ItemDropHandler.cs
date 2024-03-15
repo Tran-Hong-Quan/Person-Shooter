@@ -38,23 +38,22 @@ namespace UniversalInventorySystem
                 nativeInvUI = UI;
                 break;
             }
-
             if (nativeInvUI != null)
             {
-                if (!RectTransformUtility.RectangleContainsScreenPoint(invPanel, Camera.main.ScreenToWorldPoint(Input.mousePosition)))
+                if (!RectTransformUtility.RectangleContainsScreenPoint(invPanel, InventoryController.camera.ScreenToWorldPoint(Input.mousePosition)))
                 {
                     nativeInvUI.shouldSwap = false;
 
                     foreach (InventoryUI invUI in invsUI)
                     {
                         if (!invUI.togglableObject.activeInHierarchy) continue;
-                        if (invUI.DontDropItemRect.activeInHierarchy && RectTransformUtility.RectangleContainsScreenPoint(invUI.DontDropItemRect.GetComponent<RectTransform>(), Camera.main.ScreenToWorldPoint(Input.mousePosition)))
+                        if (invUI.DontDropItemRect.activeInHierarchy && RectTransformUtility.RectangleContainsScreenPoint(invUI.DontDropItemRect.GetComponent<RectTransform>(), InventoryController.camera.ScreenToWorldPoint(Input.mousePosition)))
                         {
                             var min = float.MaxValue;
                             int index = 0;
                             for (int i = 0; i < invUI.slots.Count; i++)
                             {
-                                var tmp = Vector3.Distance(Camera.main.ScreenToWorldPoint(Input.mousePosition), invUI.slots[i].GetComponent<RectTransform>().position);
+                                var tmp = Vector3.Distance(InventoryController.camera.ScreenToWorldPoint(Input.mousePosition), invUI.slots[i].GetComponent<RectTransform>().position);
                                 if (tmp <= min)
                                 {
                                     min = tmp;
@@ -67,7 +66,7 @@ namespace UniversalInventorySystem
                     }
                     Slot s = nativeInvUI.inv.slots[nativeInvUI.dragSlotNumber.GetValueOrDefault()];
 
-                    s.item.OnDrop(nativeInvUI.inv, true, nativeInvUI.dragSlotNumber.GetValueOrDefault(), nativeInvUI.dragObj.GetComponent<DragSlot>().amount, true, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                    s.item.OnDrop(nativeInvUI.inv, true, nativeInvUI.dragSlotNumber.GetValueOrDefault(), nativeInvUI.dragObj.GetComponent<DragSlot>().amount, true, InventoryController.camera.ScreenToWorldPoint(Input.mousePosition));
 
                 }
                 else nativeInvUI.shouldSwap = true;

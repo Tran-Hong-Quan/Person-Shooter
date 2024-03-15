@@ -64,8 +64,6 @@ namespace UniversalInventorySystem
         private List<DurabilityImage> _durabilityImages;
         public MonoScript onUseFunc;
         public MonoScript optionalOnDropBehaviour;
-        public UnityEvent<UseItemData> onUse;
-        public UnityEvent<DropItemData> onDrop;
         public ToolTipInfo tooltip;
 
         public void OnEnable()
@@ -75,7 +73,6 @@ namespace UniversalInventorySystem
 
         public void OnUse(Inventory inv, int slot)
         {
-            onUse?.Invoke(new UseItemData(inv,slot));
             if (onUseFunc == null) return;
             InventoryHandler.UseItemEventArgs uea = new InventoryHandler.UseItemEventArgs(inv, this, slot);
             object[] tmp = new object[2] { this, uea };
@@ -91,8 +88,6 @@ namespace UniversalInventorySystem
         public void OnDrop(Inventory inv, bool tss, int slot, int amount, bool dbui, Vector3? pos)
         {
             if ((inv.interactiable & InventoryController.DropInvFlags) != InventoryController.DropInvFlags) return;
-
-            onDrop?.Invoke(new DropItemData(inv, tss, slot, amount, dbui, pos));
 
             if (optionalOnDropBehaviour == null)
             {
@@ -142,42 +137,6 @@ namespace UniversalInventorySystem
         [SerializeField] public string imageName;
         [SerializeField] public Sprite sprite;
         [SerializeField] public int durability;
-    }
-
-    public class UseItemData
-    {
-        public Inventory inv;
-        public int slot;
-
-        public UseItemData(Inventory inv, int slot)
-        {
-            this.inv = inv;
-            this.slot = slot;
-        }
-
-        public UseItemData() { }
-    }
-
-    public class DropItemData
-    {
-        public Inventory inv;
-        public bool tss;
-        public int slot;
-        public int amount;
-        public bool dbui;
-        public Vector3? pos;
-
-        public DropItemData(Inventory inv, bool tss, int slot, int amount, bool dbui, Vector3? pos)
-        {
-            this.inv = inv;
-            this.slot = slot;
-            this.amount = amount;
-            this.dbui = dbui;
-            this.tss = tss;
-            this.pos = pos;
-        }
-
-        public DropItemData() { }
     }
 
     /*public enum StackOptions

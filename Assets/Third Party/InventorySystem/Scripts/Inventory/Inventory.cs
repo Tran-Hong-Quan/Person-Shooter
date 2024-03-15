@@ -31,6 +31,7 @@ namespace UniversalInventorySystem
         public static List<Inventory> inventories = new List<Inventory>();
 
         public static readonly Slot nullSlot = new Slot(null, 0, false, 0);
+        public static Camera camera;
 
         #region Protection consts
 

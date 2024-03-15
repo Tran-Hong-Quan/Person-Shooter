@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 21306845}
   - component: {fileID: 21306847}
   - component: {fileID: 21306846}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 75500318}
   - component: {fileID: 75500320}
   - component: {fileID: 75500319}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 112564482}
   - component: {fileID: 112564481}
   - component: {fileID: 112564480}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -770,7 +770,7 @@ GameObject:
   - component: {fileID: 156301640}
   - component: {fileID: 156301642}
   - component: {fileID: 156301641}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -846,7 +846,7 @@ GameObject:
   - component: {fileID: 164861870}
   - component: {fileID: 164861872}
   - component: {fileID: 164861871}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -981,7 +981,7 @@ GameObject:
   - component: {fileID: 166081461}
   - component: {fileID: 166081463}
   - component: {fileID: 166081462}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: SecondaryUIForSameInvPanel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1196,7 +1196,7 @@ GameObject:
   - component: {fileID: 330194636}
   - component: {fileID: 330194638}
   - component: {fileID: 330194637}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1445,6 +1445,7 @@ MonoBehaviour:
     id: 0
     areItemsUsable: 0
     areItemsDroppable: 1
+    parent: {fileID: 0}
     interactiable: -1
     hasInitializated: 0
   isCraftInventory: 1
@@ -1472,6 +1473,124 @@ Transform:
   m_Father: {fileID: 2006171381}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &339516244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 339516248}
+  - component: {fileID: 339516245}
+  - component: {fileID: 339516247}
+  - component: {fileID: 339516246}
+  m_Layer: 0
+  m_Name: InvCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &339516245
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339516244}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 64
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &339516246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339516244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 1
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+--- !u!81 &339516247
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339516244}
+  m_Enabled: 1
+--- !u!4 &339516248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339516244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 519420032}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &360333228
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,7 +1602,7 @@ GameObject:
   - component: {fileID: 360333229}
   - component: {fileID: 360333231}
   - component: {fileID: 360333230}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1745,7 +1864,7 @@ GameObject:
   - component: {fileID: 383172739}
   - component: {fileID: 383172741}
   - component: {fileID: 383172740}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2056,7 +2175,7 @@ GameObject:
   - component: {fileID: 467073802}
   - component: {fileID: 467073801}
   - component: {fileID: 467073800}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2198,7 +2317,7 @@ GameObject:
   - component: {fileID: 508372615}
   - component: {fileID: 508372617}
   - component: {fileID: 508372616}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2333,6 +2452,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2374,12 +2494,12 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2402,10 +2522,45 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 339516248}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras:
+  - {fileID: 339516245}
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!850595691 &539244510
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -2733,7 +2888,7 @@ GameObject:
   - component: {fileID: 574046324}
   - component: {fileID: 574046326}
   - component: {fileID: 574046325}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2997,7 +3152,7 @@ GameObject:
   - component: {fileID: 592414560}
   - component: {fileID: 592414562}
   - component: {fileID: 592414561}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3389,7 +3544,7 @@ GameObject:
   - component: {fileID: 641519608}
   - component: {fileID: 641519607}
   - component: {fileID: 641519606}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3610,6 +3765,7 @@ MonoBehaviour:
     id: 0
     areItemsUsable: 1
     areItemsDroppable: 1
+    parent: {fileID: 0}
     interactiable: -1
     hasInitializated: 0
   isCraftInventory: 0
@@ -3658,7 +3814,7 @@ GameObject:
   - component: {fileID: 747462574}
   - component: {fileID: 747462576}
   - component: {fileID: 747462575}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: InvPanel2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3990,7 +4146,7 @@ GameObject:
   - component: {fileID: 879429268}
   - component: {fileID: 879429270}
   - component: {fileID: 879429269}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4181,6 +4337,7 @@ MonoBehaviour:
     id: 0
     areItemsUsable: 0
     areItemsDroppable: 0
+    parent: {fileID: 0}
     interactiable: 1
     hasInitializated: 0
   isCraftInventory: 0
@@ -4264,7 +4421,7 @@ GameObject:
   - component: {fileID: 883005019}
   - component: {fileID: 883005018}
   - component: {fileID: 883005017}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4367,7 +4524,7 @@ GameObject:
   - component: {fileID: 892560760}
   - component: {fileID: 892560759}
   - component: {fileID: 892560758}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4489,7 +4646,7 @@ GameObject:
   - component: {fileID: 949798187}
   - component: {fileID: 949798189}
   - component: {fileID: 949798188}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4566,7 +4723,7 @@ GameObject:
   - component: {fileID: 964499172}
   - component: {fileID: 964499171}
   - component: {fileID: 964499170}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4687,7 +4844,7 @@ GameObject:
   - component: {fileID: 1014057764}
   - component: {fileID: 1014057763}
   - component: {fileID: 1014057762}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4809,7 +4966,7 @@ GameObject:
   - component: {fileID: 1018746863}
   - component: {fileID: 1018746865}
   - component: {fileID: 1018746864}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4885,7 +5042,7 @@ GameObject:
   - component: {fileID: 1019968733}
   - component: {fileID: 1019968735}
   - component: {fileID: 1019968734}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5031,7 +5188,7 @@ GameObject:
   - component: {fileID: 1056231229}
   - component: {fileID: 1056231228}
   - component: {fileID: 1056231227}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5153,7 +5310,7 @@ GameObject:
   - component: {fileID: 1098047098}
   - component: {fileID: 1098047100}
   - component: {fileID: 1098047099}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5229,7 +5386,7 @@ GameObject:
   - component: {fileID: 1135914353}
   - component: {fileID: 1135914355}
   - component: {fileID: 1135914354}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5418,6 +5575,7 @@ MonoBehaviour:
     id: 0
     areItemsUsable: 1
     areItemsDroppable: 1
+    parent: {fileID: 0}
     interactiable: -1
     hasInitializated: 0
   isCraftInventory: 0
@@ -5501,7 +5659,7 @@ MonoBehaviour:
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   BackgroundColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
-  mat: {fileID: 2100000, guid: cd550b8782840724f90029424cec8b35, type: 2}
+  mat: {fileID: 2100000, guid: aeb3b7ab9031afe46a8b7ed306326f31, type: 2}
   percentageX: 83.3
   percentageY: 9
   offset: {x: 0, y: -0.5}
@@ -5516,7 +5674,7 @@ GameObject:
   - component: {fileID: 1162427723}
   - component: {fileID: 1162427725}
   - component: {fileID: 1162427724}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5652,7 +5810,7 @@ GameObject:
   - component: {fileID: 1194624420}
   - component: {fileID: 1194624419}
   - component: {fileID: 1194624418}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5775,7 +5933,7 @@ GameObject:
   - component: {fileID: 1198337624}
   - component: {fileID: 1198337623}
   - component: {fileID: 1198337622}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5886,7 +6044,7 @@ GameObject:
   - component: {fileID: 1345432269}
   - component: {fileID: 1345432268}
   - component: {fileID: 1345432267}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6010,7 +6168,7 @@ GameObject:
   - component: {fileID: 1427843707}
   - component: {fileID: 1427843706}
   - component: {fileID: 1427843710}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6046,7 +6204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -6067,7 +6225,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 519420031}
+  m_Camera: {fileID: 339516245}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -6252,7 +6410,7 @@ GameObject:
   - component: {fileID: 1459554220}
   - component: {fileID: 1459554222}
   - component: {fileID: 1459554221}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: InvPanel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6409,7 +6567,7 @@ GameObject:
   - component: {fileID: 1555698203}
   - component: {fileID: 1555698202}
   - component: {fileID: 1555698201}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6531,7 +6689,7 @@ GameObject:
   - component: {fileID: 1595597884}
   - component: {fileID: 1595597886}
   - component: {fileID: 1595597885}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6608,7 +6766,7 @@ GameObject:
   - component: {fileID: 1605797283}
   - component: {fileID: 1605797282}
   - component: {fileID: 1605797281}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6988,7 +7146,7 @@ GameObject:
   - component: {fileID: 1628850584}
   - component: {fileID: 1628850586}
   - component: {fileID: 1628850585}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7125,7 +7283,7 @@ GameObject:
   - component: {fileID: 1652197366}
   - component: {fileID: 1652197368}
   - component: {fileID: 1652197367}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: CraftPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7205,7 +7363,7 @@ GameObject:
   - component: {fileID: 1675439468}
   - component: {fileID: 1675439467}
   - component: {fileID: 1675439466}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7316,7 +7474,7 @@ GameObject:
   - component: {fileID: 1687697598}
   - component: {fileID: 1687697597}
   - component: {fileID: 1687697596}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7438,7 +7596,7 @@ GameObject:
   - component: {fileID: 1725404257}
   - component: {fileID: 1725404259}
   - component: {fileID: 1725404258}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7573,7 +7731,7 @@ GameObject:
   - component: {fileID: 1784346104}
   - component: {fileID: 1784346106}
   - component: {fileID: 1784346105}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7649,7 +7807,7 @@ GameObject:
   - component: {fileID: 1812890628}
   - component: {fileID: 1812890630}
   - component: {fileID: 1812890629}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7784,7 +7942,7 @@ GameObject:
   - component: {fileID: 1834369846}
   - component: {fileID: 1834369848}
   - component: {fileID: 1834369847}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7977,7 +8135,7 @@ GameObject:
   - component: {fileID: 1905865588}
   - component: {fileID: 1905865590}
   - component: {fileID: 1905865589}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8113,7 +8271,7 @@ GameObject:
   - component: {fileID: 1939823383}
   - component: {fileID: 1939823382}
   - component: {fileID: 1939823381}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8245,7 +8403,7 @@ GameObject:
   - component: {fileID: 1975570748}
   - component: {fileID: 1975570750}
   - component: {fileID: 1975570749}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8542,7 +8700,7 @@ GameObject:
   - component: {fileID: 2073162849}
   - component: {fileID: 2073162851}
   - component: {fileID: 2073162850}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8753,15 +8911,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 415101497773589926, guid: e2ec85dcac666aa4587e5e46ec3a9f99, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 415101497773589926, guid: e2ec85dcac666aa4587e5e46ec3a9f99, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 415101497773589926, guid: e2ec85dcac666aa4587e5e46ec3a9f99, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 415101497773589926, guid: e2ec85dcac666aa4587e5e46ec3a9f99, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8775,6 +8933,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2706381649648841959, guid: e2ec85dcac666aa4587e5e46ec3a9f99, type: 3}
+      propertyPath: inventoryCamera
+      value: 
+      objectReference: {fileID: 339516245}
     - target: {fileID: 2706381649648841959, guid: e2ec85dcac666aa4587e5e46ec3a9f99, type: 3}
       propertyPath: autoSaveOnChange
       value: 1

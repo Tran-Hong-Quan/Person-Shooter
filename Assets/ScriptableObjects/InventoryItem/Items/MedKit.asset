@@ -23,8 +23,8 @@ MonoBehaviour:
   hasDurability: 0
   showAmount: 0
   _durabilityImages: []
-  onUseFunc: {fileID: 0}
-  optionalOnDropBehaviour: {fileID: 0}
+  onUseFunc: {fileID: 11500000, guid: 1f846cb9a8441764abd1a2704af0aacb, type: 3}
+  optionalOnDropBehaviour: {fileID: 11500000, guid: 1f846cb9a8441764abd1a2704af0aacb, type: 3}
   tooltip:
     useTooltip: 0
     usePrefab: 0
