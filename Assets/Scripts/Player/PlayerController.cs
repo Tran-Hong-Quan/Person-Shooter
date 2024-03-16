@@ -93,6 +93,7 @@ public class PlayerController : Game.CharacterController
     [SerializeField] protected InventoryUI inventoryUI;
     [SerializeField] protected GameObject inventoryCamera;
     [SerializeField] protected UIAnimation inventoryBoard;
+    [SerializeField] protected UIAnimation mainUI;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -182,14 +183,12 @@ public class PlayerController : Game.CharacterController
         _fallTimeoutDelta = FallTimeout;
 
         _input.onChooseInventory.AddListener(ChooseInventory);
-
+        aimObj.position = cineCamTarget.position + cineCamTarget.forward * aimDistance;
     }
 
     private void Update()
     {
         _hasAnimator = TryGetComponent(out _animator);
-
-        AimObjectSetup();
         JumpAndGravity();
         GroundedCheck();
         Move();
@@ -212,9 +211,7 @@ public class PlayerController : Game.CharacterController
 
     private void AimObjectSetup()
     {
-
-        aimObj.position = cineCamTarget.position + cineCamTarget.forward * aimDistance;
-
+        aimObj.position = Vector3.Lerp(aimObj.position, cineCamTarget.position + cineCamTarget.forward * aimDistance, Time.deltaTime * 50f);
     }
 
     public override Vector3 GetAimPoint()
@@ -263,6 +260,7 @@ public class PlayerController : Game.CharacterController
         // Cinemachine will follow this target
         Vector3 targetRotation = new Vector3(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         cameraRoot.rotation = Quaternion.Euler(targetRotation);
+        AimObjectSetup();
         foreach (var c in camerasRootFollow) c.rotation = Quaternion.Euler(targetRotation);
     }
 
@@ -433,7 +431,7 @@ public class PlayerController : Game.CharacterController
             //    _verticalVelocity = Mathf.Lerp((hit.point.y - transform.position.y) * Mathf.Abs(Gravity), 0, Time.deltaTime * Gravity);
             //}
             //else
-                _verticalVelocity += Gravity * Time.deltaTime;
+            _verticalVelocity += Gravity * Time.deltaTime;
         }
     }
 
@@ -556,11 +554,13 @@ public class PlayerController : Game.CharacterController
         if (!canToggleInventory) return;
         canToggleInventory = false;
 
-        bool isOpenInventory = inventoryBoard.gameObject.activeSelf; 
-        
+        bool isOpenInventory = inventoryBoard.gameObject.activeSelf;
+
         if (isOpenInventory)
         {
             _input.SetCursorState(true);
+            _input.canInput = true;
+            mainUI.Show();
             inventoryBoard.Hide(() =>
             {
                 inventoryCamera.gameObject.SetActive(false);
@@ -569,8 +569,12 @@ public class PlayerController : Game.CharacterController
         }
         else
         {
+            _input.canInput = false;
             _input.SetCursorState(false);
+            _input.MoveInput(Vector2.zero);
+            _input.LookInput(Vector2.zero);
             inventoryCamera.SetActive(true);
+            mainUI.Hide();
             inventoryBoard.Show(() =>
             {
                 canToggleInventory = true;

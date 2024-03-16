@@ -1,3 +1,4 @@
+using DG.Tweening;
 using HongQuan;
 using System.Collections;
 using System.Collections.Generic;
@@ -100,6 +101,7 @@ namespace Game
         public virtual void StartRifleFireAnimation()
         {
             if (!equipRifle) return;
+            if (isRifleReloading) return;
 
             isRotatePlayerWithCam = true;
             isRifleFiring = true;
@@ -138,9 +140,9 @@ namespace Game
             if (isRifleReloading) return;
             isRifleReloading = true;
 
-            onGrabRifleMagazine = onRemoveMag;
-            onReloadRifle = onReload;
-            onAttachNewRiffleMagazine = onAttachMag;
+            onGunMagazine = onRemoveMag;
+            onReloadGun = onReload;
+            onAttachNewGunMagazine = onAttachMag;
 
             int layerMaskId = _animator.GetLayerIndex("Rifle Reload");
             _animator.SmoothLayerMask(layerMaskId, 1);
@@ -152,9 +154,9 @@ namespace Game
             aimRifleRig.SmoothRig(0);
             holdRifleRig.SmoothRig(0);
 
-            this.DelayFuction(duration - 0.6f, () =>
+            reloadCorotine =  this.DelayFuction(duration - 0.6f, () =>
             {
-                _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
+                reloadTween = _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
                 {
                     if (isRifleAiming) aimRifleRig.SmoothRig(1);
                     isRifleReloading = false;
@@ -164,28 +166,38 @@ namespace Game
             });
         }
 
-        System.Action onGrabRifleMagazine;
-        System.Action onReloadRifle;
-        System.Action onAttachNewRiffleMagazine;
+        System.Action onGunMagazine;
+        System.Action onReloadGun;
+        System.Action onAttachNewGunMagazine;
+
+        IEnumerator reloadCorotine;
+        Tweener reloadTween;
+
         protected virtual void OnGrabRifleMagazine()
         {
-            onGrabRifleMagazine?.Invoke();
+            onGunMagazine?.Invoke();
         }
 
         protected virtual void OnReloadRifle()
         {
-            onReloadRifle?.Invoke();
+            onReloadGun?.Invoke();
         }
 
         protected virtual void OnAttachNewRiffleMagazine()
         {
-            onAttachNewRiffleMagazine?.Invoke();
+            onAttachNewGunMagazine?.Invoke();
         }
 
         public virtual void StopHoldRifleAnimation()
         {
             if (isRifleAiming) StopRifleFireAnimation();
             if (isRifleFiring) StopRifleAimAnimation();
+            reloadTween?.Kill();
+            if(reloadCorotine != null)
+            {
+                StopCoroutine(reloadCorotine);
+                reloadTween = null;
+            }
             _animator.SmoothLayerMask("Rifle Hold", 0);
             _animator.SmoothLayerMask("Rifle Fire", 0);
             _animator.SmoothLayerMask("Rifle Aim", 0);
@@ -225,6 +237,7 @@ namespace Game
 
         public virtual void StartPistolFiringAnimation()
         {
+            if(isPistolReloading) return;
             isPistolFiring = true;
 
             _animator.SmoothLayerMask("Pistol Aim", 1);
@@ -273,6 +286,12 @@ namespace Game
             aimPistoleRig.SmoothRig(0);
             _animator.SmoothLayerMask("Pistol Aim", 0);
             _animator.SmoothLayerMask("Pistol Reload", 0);
+            reloadTween?.Kill();
+            if (reloadCorotine != null)
+            {
+                StopCoroutine(reloadCorotine);
+                reloadTween = null;
+            }
         }
 
         protected void OnCollisionEnter(Collision collision)

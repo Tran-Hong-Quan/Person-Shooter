@@ -27,17 +27,17 @@ namespace HongQuan
             SmoothLayerMask(animator, id, to, duration, onDone);
         }
 
-        public static void SmoothLayerMask(this Animator animator, int id, float to, float duration = 0.5f, TweenCallback onDone = null)
+        public static Tweener SmoothLayerMask(this Animator animator, int id, float to, float duration = 0.5f, TweenCallback onDone = null)
         {
-            DOVirtual.Float(animator.GetLayerWeight(id), to, duration, value =>
+            return DOVirtual.Float(animator.GetLayerWeight(id), to, duration, value =>
             {
                 animator.SetLayerWeight(id, value);
             }).OnComplete(onDone).SetEase(Ease.Linear);
         }
 
-        public static void SmoothRig(this Rig rig, float to, float duration = 0.1f, TweenCallback onDone = null)
+        public static Tweener SmoothRig(this Rig rig, float to, float duration = 0.1f, TweenCallback onDone = null)
         {
-            DOVirtual.Float(rig.weight, to, duration, value =>
+            return DOVirtual.Float(rig.weight, to, duration, value =>
             {
                 rig.weight = value;
             }).OnComplete(onDone).SetEase(Ease.Linear);

@@ -76,7 +76,7 @@ public class EquipController : MonoBehaviour
         Equip(item);
     }
 
-    public void InitEquipRifle(IEquiptableItem rifle, ref EquipStatus equipStatus, ref EquipType equipType)
+    public virtual void InitEquipRifle(IEquiptableItem rifle, ref EquipStatus equipStatus, ref EquipType equipType)
     {
         equipStatus = EquipStatus.Stored;
         if (leftBackEquipment == null)
@@ -105,20 +105,45 @@ public class EquipController : MonoBehaviour
         }
     }
 
-    public void InitUnequipRifle(IEquiptableItem rifle)
+    protected int unequipData;
+    public virtual void InitUnequipRifle(IEquiptableItem rifle)
     {
+        //00
+        unequipData = 0;
         if (rifle == holdingEquipment)
+        {
             holdingEquipment = null;
+
+            //01
+            unequipData = 1;
+        }
         if (rifle.EquipType == EquipType.LeftBack)
         {
             canBeHeldItems[0] = null;
             leftBackEquipment = null;
+            //01
         }
         else if (rifle.EquipType == EquipType.RightBack)
         {
             canBeHeldItems[1] = null;
             rightBackEquipment = null;
+
+            //11
+            unequipData |= 1 << 1;
         }
+    }
+
+    public virtual void InitUnequipPistol(IEquiptableItem pistol)
+    {
+        //0
+        unequipData = 0;
+        if (pistol == holdingEquipment)
+        {
+            holdingEquipment = null;
+            unequipData = 1; //1
+        }
+        canBeHeldItems[0] = null;
+        pistonEquipment = null;
     }
 
     public bool CanEquipRifle()
@@ -126,7 +151,7 @@ public class EquipController : MonoBehaviour
         return leftBackEquipment == null || rightBackEquipment == null;
     }
 
-    public void InitEquipPistol(IEquiptableItem pistol, ref EquipStatus equipStatus, ref EquipType equipType)
+    public virtual void InitEquipPistol(IEquiptableItem pistol, ref EquipStatus equipStatus, ref EquipType equipType)
     {
         equipStatus = EquipStatus.Stored;
         if (pistonEquipment == null)
@@ -237,6 +262,7 @@ public interface IEquiptableItem
 {
     public EquipStatus EquipStatus { get; }
     public EquipType EquipType { get; }
+    public Sprite InconSprite { get; }
     public void Equip(EquipController equipController);
     public void Unequip(EquipController equipController);
     public void Stored();
