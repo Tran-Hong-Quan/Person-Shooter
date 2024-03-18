@@ -1,5 +1,5 @@
-using HongQuan;
 using UnityEngine;
+using UnityEngine.Events;
 using UniversalInventorySystem;
 
 public class InventoryItem : MonoBehaviour
@@ -11,6 +11,8 @@ public class InventoryItem : MonoBehaviour
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Collider col;
     [HideInInspector] public Inventory inventory;
+
+    public UnityEvent<InventoryItem, PreviewItems> onBeingTaken;
 
     public Item InventoryItemData => inventoryItemData;
 
@@ -62,5 +64,10 @@ public class InventoryItem : MonoBehaviour
         this.inventory = inventory;
         this.inventory.AddItem(inventoryItemData, amount);
         SimplePool.Despawn(gameObject);
+    }
+
+    public void OnBeingTaken(PreviewItems preview)
+    {
+        onBeingTaken?.Invoke(this, preview);
     }
 }

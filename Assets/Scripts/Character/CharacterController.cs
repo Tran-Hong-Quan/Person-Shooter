@@ -46,6 +46,8 @@ namespace Game
         protected Inventory inventory;
         public Transform AimObj => aimObj;
 
+        public Inventory Inventory => inventory;
+
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -301,13 +303,13 @@ namespace Game
 
         protected virtual void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("InventoryItem"))
-            {
-                if(other.TryGetComponent(out InventoryItem invItem))
-                {
-                    invItem.AddItemToInventory(inventory);
-                }
-            }
+            //if (other.CompareTag("InventoryItem"))
+            //{
+            //    if(other.TryGetComponent(out InventoryItem invItem))
+            //    {
+            //        invItem.AddItemToInventory(inventory);
+            //    }
+            //}
         }
     }
 

@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae5feda9e14d8d4194ed0d2d8b74df0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
+  amount: 1
   inventoryItemData: {fileID: 11400000, guid: 6a3e9fde015fce24e8535ee00a1fd600, type: 2}
   rb: {fileID: 0}
   col: {fileID: 0}
@@ -89,6 +89,18 @@ MonoBehaviour:
     parent: {fileID: 0}
     interactiable: 0
     hasInitializated: 0
+  onStartTouchingItem:
+    m_PersistentCalls:
+      m_Calls: []
+  onTouchingItem:
+    m_PersistentCalls:
+      m_Calls: []
+  onStopTouchingItem:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisable:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &3901778351586911937
 PrefabInstance:
   m_ObjectHideFlags: 0

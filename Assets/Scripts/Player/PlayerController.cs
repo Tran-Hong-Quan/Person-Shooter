@@ -549,25 +549,15 @@ public class PlayerController : Game.CharacterController
     }
 
     bool canToggleInventory = true;
+    bool isOpenInventory = false;
     private void ChooseInventory()
     {
         if (!canToggleInventory) return;
         canToggleInventory = false;
 
-        bool isOpenInventory = inventoryBoard.gameObject.activeSelf;
+        isOpenInventory ^= true;
 
         if (isOpenInventory)
-        {
-            _input.SetCursorState(true);
-            _input.canInput = true;
-            mainUI.Show();
-            inventoryBoard.Hide(() =>
-            {
-                inventoryCamera.gameObject.SetActive(false);
-                canToggleInventory = true;
-            });
-        }
-        else
         {
             _input.canInput = false;
             _input.SetCursorState(false);
@@ -577,6 +567,17 @@ public class PlayerController : Game.CharacterController
             mainUI.Hide();
             inventoryBoard.Show(() =>
             {
+                canToggleInventory = true;
+            });
+        }
+        else
+        {
+            _input.SetCursorState(true);
+            _input.canInput = true;
+            mainUI.Show();
+            inventoryBoard.Hide(() =>
+            {
+                inventoryCamera.gameObject.SetActive(false);
                 canToggleInventory = true;
             });
         }

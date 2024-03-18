@@ -9,7 +9,8 @@ public class ScaleImageWithTexture : MonoBehaviour
     public Image image;
     private void Awake()
     {
-        image = GetComponent<Image>();
+        if (image == null)
+            image = GetComponent<Image>();
     }
 
     public void SetSprite(Sprite sprite)
