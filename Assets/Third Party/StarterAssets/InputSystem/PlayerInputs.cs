@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,16 +7,13 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 #endif
 
-public class PlayerInputs : MonoBehaviour
+public class PlayerInputs : CharacterInputs
 {
-    [Header("Character Input Values")]
-    public Vector2 move;
+    public bool canInput = true;
+
+    [Header("Player Input Values")]
     public Vector2 look;
-    public bool jump;
-    public bool sprint;
     public bool changeView;
-    public bool isAim;
-    public bool isFire;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -23,56 +22,44 @@ public class PlayerInputs : MonoBehaviour
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
 
-    [Header("Events")]
-    public UnityEvent onChangeView;
-    public UnityEvent onAim;
-    public UnityEvent onFire;
+    [Header("Player Events")]
+    public UnityEvent<float> onChangeEquipment;
+    public UnityEvent onChooseInventory;
 
 #if ENABLE_INPUT_SYSTEM
-    public void OnMove(InputValue value)
+    public PlayerInput inputs;
+
+    private void Awake()
     {
+        inputs = GetComponent<PlayerInput>();
+    }
+
+    private void Start()
+    {
+        var moveAction = inputs.actions.FindAction("Move");
+        moveAction.started += OnStartMove;
+        moveAction.canceled += OnEndMove;
+
+        var fireAction = inputs.actions.FindAction("Fire");
+        fireAction.started += OnStartFire;
+        fireAction.canceled += OnStopFire;
+    }
+
+    #region Receive Messages
+
+    private void OnMove(InputValue value)
+    {
+        if (!canInput) return;
         MoveInput(value.Get<Vector2>());
     }
 
-    public void OnLook(InputValue value)
+    private void OnLook(InputValue value)
     {
+        if (!canInput) return;
         if (cursorInputForLook)
         {
             LookInput(value.Get<Vector2>());
         }
-    }
-
-    public void OnJump(InputValue value)
-    {
-        JumpInput(value.isPressed);
-    }
-
-    public void OnSprint(InputValue value)
-    {
-        SprintInput(value.isPressed);
-    }
-
-    public void OnChangeView(InputValue value)
-    {
-        ChangeView(value.isPressed);
-    }
-
-    public void OnFire(InputValue value)
-    {
-
-    }
-
-    public void OnAim(InputValue value)
-    {
-
-    }
-
-#endif
-
-
-    public void MoveInput(Vector2 newMoveDirection)
-    {
-        move = newMoveDirection;
     }
 
     public void LookInput(Vector2 newLookDirection)
@@ -80,41 +67,147 @@ public class PlayerInputs : MonoBehaviour
         look = newLookDirection;
     }
 
-    public void JumpInput(bool newJumpState)
+    private void OnJump(InputValue value)
     {
-        jump = newJumpState;
+        if (!canInput) return;
+        JumpInput(value.isPressed);
     }
 
-    public void SprintInput(bool newSprintState)
+    private void OnSprint(InputValue value)
     {
-        sprint = newSprintState;
+        if (!canInput) return;
+        SprintInput(value.isPressed);
     }
+
+    private void OnChangeView(InputValue value)
+    {
+        if (!canInput) return;
+        ChangeView(value.isPressed);
+    }
+
+    private void OnFire(InputValue value)
+    {
+        if (!canInput) return;
+        FireInput(value.isPressed);
+    }
+
+    private void OnAim(InputValue value)
+    {
+        if (!canInput) return;
+        AimInput(value.isPressed);
+    }
+
+    private void OnStopFire(InputAction.CallbackContext context)
+    {
+        if (!canInput) return;
+        StopFireInput();
+    }
+
+    private void OnStartFire(InputAction.CallbackContext context)
+    {
+        if (!canInput) return;
+        StartFireInput();
+    }
+
+    private void OnEndMove(InputAction.CallbackContext context)
+    {
+        if (!canInput) return;
+        StopMoveInput(context.ReadValue<Vector2>());
+    }
+
+    private void OnStartMove(InputAction.CallbackContext context)
+    {
+        if (!canInput) return;
+        StartMoveInput(context.ReadValue<Vector2>());
+    }
+
+    private void OnUse(InputValue value)
+    {
+        if (!canInput) return;
+        Use();
+    }
+
+    private void OnDrop(InputValue value)
+    {
+        if (!canInput) return;
+        Drop();
+    }
+
+    private void OnReload(InputValue value)
+    {
+        if (!canInput) return;
+        Reload();
+    }
+
+    private void OnChangeEquipment(InputValue value)
+    {
+        //ChangeEquipment(value.Get<float>());
+    }
+
+    private void OnChooseFirstRifle(InputValue value)
+    {
+        if (!canInput) return;
+        ChooseFirstRifle();
+    }
+    private void OnChooseSecondRifle(InputValue value)
+    {
+        if (!canInput) return;
+        ChooseSecondRifle();
+    }
+    private void OnChoosePiston(InputValue value)
+    {
+        if (!canInput) return;
+        ChoosePiston();
+    }
+    private void OnChooseMelee(InputValue value)
+    {
+        if (!canInput) return;
+        ChooseMelee();
+    }
+    private void OnChooseBomb(InputValue value)
+    {
+        if (!canInput) return;
+        ChooseBomb();
+    }
+    private void OnChooseItem(InputValue value)
+    {
+        if (!canInput) return;
+        ChooseItem();
+    }
+    private void OnChooseFist(InputValue value)
+    {
+        if (!canInput) return;
+        ChooseFist();
+    }
+
+    private void OnChooseInventory(InputValue value)
+    {
+        ChooseInventory();
+    }
+
+    #endregion
+
+
+#endif
 
     private void OnApplicationFocus(bool hasFocus)
     {
         SetCursorState(cursorLocked);
     }
 
-    private void SetCursorState(bool newState)
+    public void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
-    private void ChangeView(bool newState)
+    public void ChangeView(bool newState)
     {
         changeView = newState;
         onChangeView?.Invoke();
     }
 
-    private void Aim(bool newState)
+    public void ChooseInventory()
     {
-        isAim = newState;
-        onAim?.Invoke();
-    }
-
-    private void Fire(bool newState)
-    {
-        isFire = newState;
-        onFire?.Invoke();
+        onChooseInventory?.Invoke();
     }
 }
