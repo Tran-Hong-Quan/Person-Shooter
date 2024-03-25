@@ -8,7 +8,7 @@ using UniversalInventorySystem;
 
 namespace Game
 {
-    public class CharacterController : MonoBehaviour
+    public class CharacterController : MonoBehaviour, IHeath
     {
         [Header("Rig")]
         [SerializeField] protected Rig aimRig;
@@ -37,6 +37,10 @@ namespace Game
         [Header("Inputs")]
         [SerializeField] protected CharacterInputs inputs;
 
+        [Header("Fields")]
+        public float maxHealth = 100f;
+        public float currentHealth;
+
         public Transform RightHand => rightHand;
         public Animator Animator => _animator;
         public CharacterInputs Inputs => inputs;
@@ -48,11 +52,20 @@ namespace Game
 
         public Inventory Inventory => inventory;
 
+        public float MaxHealth => maxHealth;
+
+        public float CurrentHealth => currentHealth;
+
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
             rigidbody = GetComponent<Rigidbody>();
             inventory = new Inventory(18, true, InventoryController.AllInventoryFlags, true);
+        }
+
+        protected virtual void Start()
+        {
+            currentHealth = maxHealth;
         }
 
         public void Move(Vector3 motion)
@@ -156,7 +169,7 @@ namespace Game
             aimRifleRig.SmoothRig(0);
             holdRifleRig.SmoothRig(0);
 
-            reloadCorotine =  this.DelayFuction(duration - 0.6f, () =>
+            reloadCorotine = this.DelayFuction(duration - 0.6f, () =>
             {
                 reloadTween = _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
                 {
@@ -195,7 +208,7 @@ namespace Game
             if (isRifleAiming) StopRifleFireAnimation();
             if (isRifleFiring) StopRifleAimAnimation();
             reloadTween?.Kill();
-            if(reloadCorotine != null)
+            if (reloadCorotine != null)
             {
                 StopCoroutine(reloadCorotine);
                 reloadTween = null;
@@ -239,7 +252,7 @@ namespace Game
 
         public virtual void StartPistolFiringAnimation()
         {
-            if(isPistolReloading) return;
+            if (isPistolReloading) return;
             isPistolFiring = true;
 
             _animator.SmoothLayerMask("Pistol Aim", 1);
@@ -298,7 +311,7 @@ namespace Game
 
         protected void OnCollisionEnter(Collision collision)
         {
-            
+
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -311,6 +324,24 @@ namespace Game
             //    }
             //}
         }
+
+        public virtual void TakeDamge(float damge)
+        {
+            currentHealth -= damge;
+        }
+
+        public virtual void Regeneration(float regeneration)
+        {
+            currentHealth += regeneration;
+        }
     }
 
+}
+
+public interface IHeath
+{
+    public float MaxHealth { get; }
+    public float CurrentHealth { get; }
+    public void TakeDamge(float damge);
+    public void Regeneration(float regeneration);
 }

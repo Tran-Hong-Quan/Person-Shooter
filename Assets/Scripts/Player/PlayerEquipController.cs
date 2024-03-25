@@ -39,7 +39,7 @@ public class PlayerEquipController : EquipController
         ui.SetIcon(equipment.InconSprite);
         var gun = equipment.parent.GetComponent<Gun>();
         ui.SetBulletText(gun.CurrentBullet, 999);
-        gun.onFire.AddListener(currentBullet=>UpdateBulletText(currentBullet,ui));
+        gun.onChangeBulletCount.AddListener(currentBullet=>UpdateBulletText(currentBullet,ui));
 
         if (equipStatus == EquipStatus.BeingHeld)
         {
@@ -107,6 +107,7 @@ public class PlayerEquipController : EquipController
         if ((unequipData & 1 << 1) == 0)
         {
             firstRifleUI.SetIcon(transparentIcon);
+            firstRifleUI.ClearBulletText();
             //First bit equal 1, holding rifle
             if ((unequipData & 1) != 0)
             {
@@ -117,6 +118,7 @@ public class PlayerEquipController : EquipController
         else //Second bit equip 1, it's second weapon
         {
             secondRifleUI.SetIcon(transparentIcon);
+            secondRifleUI.ClearBulletText();
             //First bit equal 1, holding rifle
             if ((unequipData & 1) != 0)
             {
@@ -131,6 +133,7 @@ public class PlayerEquipController : EquipController
         base.InitUnequipPistol(pistol);
 
         pistolIUI.SetIcon(transparentIcon);
+        pistolIUI.ClearBulletText();
         if (unequipData == 1)
         {
             pistolIUI.Unselect();

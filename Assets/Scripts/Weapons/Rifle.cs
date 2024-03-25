@@ -43,6 +43,7 @@ public class Rifle : Gun
         {
             currentBullet = magazineBullet;
             isReloading = false;
+            onChangeBulletCount?.Invoke(currentBullet);
         }, onRemoveMag: () =>
         {
             audioSource.PlayOneShot(removeMagAudioClip);

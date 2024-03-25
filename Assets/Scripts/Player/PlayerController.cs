@@ -8,6 +8,7 @@ using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 using UniversalInventorySystem;
 #endif
 
@@ -96,6 +97,7 @@ public class PlayerController : Game.CharacterController
     [SerializeField] protected GameObject inventoryCamera;
     [SerializeField] protected UIAnimation inventoryBoard;
     [SerializeField] protected UIAnimation mainUI;
+    [SerializeField] protected Image healthBar;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -167,8 +169,9 @@ public class PlayerController : Game.CharacterController
         inventory.parent = this;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         InitCamera();
         _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y;
 
@@ -592,5 +595,22 @@ public class PlayerController : Game.CharacterController
         fpCam.Follow = fpCamTarget;
         tpCam.Follow = tpCamTarget;
         tpAimCam.Follow = tpCamTarget;
+    }
+
+    public override void TakeDamge(float damge)
+    {
+        base.TakeDamge(damge);
+        UpdateHealthBarUI();
+    }
+
+    public override void Regeneration(float regeneration)
+    {
+        base.Regeneration(regeneration);
+        UpdateHealthBarUI();
+    }
+
+    protected void UpdateHealthBarUI()
+    {
+        healthBar.DOFillAmount(Mathf.Abs(currentHealth / maxHealth), .5f);
     }
 }
