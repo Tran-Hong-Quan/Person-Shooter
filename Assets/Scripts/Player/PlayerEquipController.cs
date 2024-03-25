@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PlayerEquipController : EquipController
 {
-    [SerializeField] Sprite transparentIcon;
-    [SerializeField] WeaponUI firstRifleUI;
-    [SerializeField] WeaponUI secondRifleUI;
-    [SerializeField] WeaponUI pistolIUI;
+    public Sprite transparentIcon;
+    public WeaponUI firstRifleUI;
+    public WeaponUI secondRifleUI;
+    public WeaponUI pistolIUI;
 
     public override void InitEquipRifle(IEquiptableItem rifle, ref EquipStatus equipStatus, ref EquipType equipType)
     {
@@ -37,6 +37,10 @@ public class PlayerEquipController : EquipController
     void EquipUISetup(WeaponUI ui, IEquiptableItem equipment, EquipStatus equipStatus)
     {
         ui.SetIcon(equipment.InconSprite);
+        var gun = equipment.parent.GetComponent<Gun>();
+        ui.SetBulletText(gun.CurrentBullet, 999);
+        gun.onFire.AddListener(currentBullet=>UpdateBulletText(currentBullet,ui));
+
         if (equipStatus == EquipStatus.BeingHeld)
         {
             ui.Select();
@@ -45,6 +49,11 @@ public class PlayerEquipController : EquipController
         {
             ui.Unselect();
         }
+    }
+
+    private void UpdateBulletText(int currentBullet,WeaponUI ui)
+    {
+        ui.SetBulletText(currentBullet, 999);
     }
 
     public void UnselectAll()

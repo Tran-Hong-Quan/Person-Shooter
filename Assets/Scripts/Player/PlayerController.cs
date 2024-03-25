@@ -75,6 +75,8 @@ public class PlayerController : Game.CharacterController
     public CinemachineVirtualCamera fpCam;
     public CinemachineVirtualCamera tpCam;
     public CinemachineVirtualCamera tpAimCam;
+    public Transform fpCamTarget;
+    public Transform tpCamTarget;
 
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
@@ -167,6 +169,7 @@ public class PlayerController : Game.CharacterController
 
     private void Start()
     {
+        InitCamera();
         _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y;
 
         InitCameraView();
@@ -582,5 +585,12 @@ public class PlayerController : Game.CharacterController
             });
         }
 
+    }
+
+    private void InitCamera()
+    {
+        fpCam.Follow = fpCamTarget;
+        tpCam.Follow = tpCamTarget;
+        tpAimCam.Follow = tpCamTarget;
     }
 }

@@ -46,6 +46,8 @@ public class Gun : MonoBehaviour, IEquiptableItem
     public Sprite InconSprite => iconSprite;
     public int CurrentBullet => currentBullet;
 
+    public Transform parent => transform;
+
     public UnityEvent<int> onFire;
 
     protected virtual void Awake()
