@@ -238,11 +238,12 @@ public class Gun : MonoBehaviour, IEquiptableItem
             Debug.LogWarning("Store " + name + " failed because it not held");
             return;
         }
-
         equipStatus = EquipStatus.Stored;
         recoil.ClearTargets();
         RemoveListeners();
         characterController.StopHoldRifleAnimation();
+        isReloading = false;
+        isFire = false;
     }
 
     public virtual void Use()

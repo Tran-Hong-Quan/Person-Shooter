@@ -22,14 +22,10 @@ namespace Game
         [SerializeField] public bool isFpcam;
 
         [SerializeField] public bool equipRifle;
-        [SerializeField] public bool isRifleAiming;
-        [SerializeField] public bool isRifleFiring;
-        [SerializeField] public bool isRifleReloading;
-
         [SerializeField] public bool equipPistol;
-        [SerializeField] public bool isPistolAiming;
-        [SerializeField] public bool isPistolFiring;
-        [SerializeField] public bool isPistolReloading;
+        [SerializeField] public bool isAiming;
+        [SerializeField] public bool isFiring;
+        [SerializeField] public bool isReloading;
 
         [Header("Bone")]
         [SerializeField] protected Transform rightHand;
@@ -88,7 +84,7 @@ namespace Game
         {
             if (!equipRifle) return;
 
-            isRifleAiming = true;
+            isAiming = true;
             isRotatePlayerWithCam = true;
             _animator.SmoothLayerMask("Rifle Aim", 1);
             aimRifleRig.SmoothRig(1);
@@ -98,9 +94,9 @@ namespace Game
         {
             if (!equipRifle) return;
 
-            isRifleAiming = false;
+            isAiming = false;
 
-            if (!isRifleFiring)
+            if (!isFiring)
             {
                 _animator.SmoothLayerMask("Rifle Aim", 0, onDone: () => isRotatePlayerWithCam = false);
 
@@ -116,10 +112,10 @@ namespace Game
         public virtual void StartRifleFireAnimation()
         {
             if (!equipRifle) return;
-            if (isRifleReloading) return;
+            if (isReloading) return;
 
             isRotatePlayerWithCam = true;
-            isRifleFiring = true;
+            isFiring = true;
 
             _animator.SmoothLayerMask("Rifle Fire", 1);
             _animator.SmoothLayerMask("Rifle Aim", 1);
@@ -131,11 +127,11 @@ namespace Game
         {
             if (!equipRifle) return;
 
-            isRifleFiring = false;
+            isFiring = false;
 
             _animator.SmoothLayerMask("Rifle Fire", 0);
 
-            if (!isRifleAiming)
+            if (!isAiming)
             {
                 _animator.SmoothLayerMask("Rifle Aim", 0, onDone: () => { isRotatePlayerWithCam = false; });
                 aimRifleRig.SmoothRig(0);
@@ -152,8 +148,8 @@ namespace Game
         public virtual void PlayReloadRifleAnimation(System.Action onComplete = null, System.Action onRemoveMag = null,
             System.Action onReload = null, System.Action onAttachMag = null)
         {
-            if (isRifleReloading) return;
-            isRifleReloading = true;
+            if (isReloading) return;
+            isReloading = true;
 
             onGunMagazine = onRemoveMag;
             onReloadGun = onReload;
@@ -173,8 +169,8 @@ namespace Game
             {
                 reloadTween = _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
                 {
-                    if (isRifleAiming) aimRifleRig.SmoothRig(1);
-                    isRifleReloading = false;
+                    if (isAiming) aimRifleRig.SmoothRig(1);
+                    isReloading = false;
                     holdRifleRig.SmoothRig(1);
                     onComplete?.Invoke();
                 });
@@ -205,8 +201,8 @@ namespace Game
 
         public virtual void StopHoldRifleAnimation()
         {
-            if (isRifleAiming) StopRifleFireAnimation();
-            if (isRifleFiring) StopRifleAimAnimation();
+            if (isAiming) StopRifleFireAnimation();
+            if (isFiring) StopRifleAimAnimation();
             reloadTween?.Kill();
             if (reloadCorotine != null)
             {
@@ -220,6 +216,8 @@ namespace Game
             holdRifleRig.SmoothRig(0);
             aimRifleRig.SmoothRig(0);
             equipRifle = false;
+            ResetGunState();
+            
         }
 
         #endregion Rifle
@@ -233,7 +231,7 @@ namespace Game
         {
             if (!equipPistol) return;
 
-            isPistolAiming = true;
+            isAiming = true;
 
             aimPistoleRig.SmoothRig(1);
             _animator.SmoothLayerMask("Pistol Aim", 1);
@@ -241,9 +239,9 @@ namespace Game
 
         public virtual void StopPistolAimAnimation()
         {
-            isPistolAiming = false;
+            isAiming = false;
 
-            if (!isPistolFiring)
+            if (!isFiring)
             {
                 aimPistoleRig.SmoothRig(0);
                 _animator.SmoothLayerMask("Pistol Aim", 0);
@@ -252,8 +250,8 @@ namespace Game
 
         public virtual void StartPistolFiringAnimation()
         {
-            if (isPistolReloading) return;
-            isPistolFiring = true;
+            if (isReloading) return;
+            isFiring = true;
 
             _animator.SmoothLayerMask("Pistol Aim", 1);
             //_animator.SmoothLayerMask("Pistol Fire", 1);
@@ -262,9 +260,9 @@ namespace Game
 
         public virtual void StopPistolFireAnimation()
         {
-            isPistolFiring = false;
+            isFiring = false;
             //_animator.SmoothLayerMask("Pistol Fire", 0);
-            if (!isPistolAiming)
+            if (!isAiming)
             {
                 aimPistoleRig.SmoothRig(0);
                 _animator.SmoothLayerMask("Pistol Aim", 0);
@@ -273,8 +271,8 @@ namespace Game
 
         public virtual void PlayPistolReloadAnimtion(NoParamaterDelegate onDone = null)
         {
-            if (isPistolReloading) return;
-            isPistolReloading = true;
+            if (isReloading) return;
+            isReloading = true;
 
             int layerMaskId = _animator.GetLayerIndex("Pistol Reload");
             _animator.SmoothLayerMask(layerMaskId, 1);
@@ -289,13 +287,14 @@ namespace Game
             void DoneReload()
             {
                 _animator.SmoothLayerMask(layerMaskId, 0);
-                isPistolReloading = false;
+                isReloading = false;
             }
         }
 
         public virtual void StopHoldingPistolAnimation()
         {
             equipPistol = false;
+            ResetGunState();
             StopPistolFireAnimation();
             StopPistolAimAnimation();
             aimPistoleRig.SmoothRig(0);
@@ -307,6 +306,13 @@ namespace Game
                 StopCoroutine(reloadCorotine);
                 reloadTween = null;
             }
+        }
+
+        private void ResetGunState()
+        {
+            isReloading = false;
+            isFiring = false;
+            isAiming = false;
         }
 
         protected void OnCollisionEnter(Collision collision)

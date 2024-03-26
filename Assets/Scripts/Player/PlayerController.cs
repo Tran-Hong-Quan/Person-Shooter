@@ -177,6 +177,7 @@ public class PlayerController : Game.CharacterController
 
         InitCameraView();
 
+        MainMapManager.instance.playerController = this;
 #if ENABLE_INPUT_SYSTEM
         _playerInput = GetComponent<PlayerInput>();
 #else
@@ -485,17 +486,11 @@ public class PlayerController : Game.CharacterController
     private bool IsFollowCameraRotation()
     {
         if (isFpcam) return true;
-        if (equipRifle)
+        if (equipRifle || equipPistol)
         {
-            if (isRifleReloading) return false;
-            if (isRifleAiming) return true;
-            if (isRifleFiring) return true;
-        }
-        else if (equipPistol)
-        {
-            if (isPistolReloading) return false;
-            if (isPistolAiming) return true;
-            if (isPistolFiring) return true;
+            if (isReloading) return false;
+            if (isAiming) return true;
+            if (isFiring) return true;
         }
         if (isRotatePlayerWithCam) return true;
 

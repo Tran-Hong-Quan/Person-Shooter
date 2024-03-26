@@ -42,6 +42,18 @@ namespace HongQuan
                 rig.weight = value;
             }).OnComplete(onDone).SetEase(Ease.Linear);
         }
+        public static bool GetRandomSpawnPoint(Vector3 spawnCenter, float spawnRadious, LayerMask spawnLayermask, out Vector3 point)
+        {
+            Vector3 castCenter = spawnCenter + Vector3.up * 50f;
+            castCenter += spawnRadious * new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+            if (Physics.Raycast(castCenter, Vector3.down, out RaycastHit hitInfo, 100, spawnLayermask))
+            {
+                point = hitInfo.point;
+                return true;
+            }
+            point = default;
+            return false;
+        }
     }
 
     public delegate void NoParamaterDelegate();
