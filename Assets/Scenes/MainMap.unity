@@ -1038,7 +1038,7 @@ GameObject:
   - component: {fileID: 251840278}
   - component: {fileID: 251840277}
   m_Layer: 0
-  m_Name: Image
+  m_Name: HeathUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11705,6 +11705,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   healthBar: {fileID: 537402634}
+  healthUI: {fileID: 251840275}
 --- !u!54 &1949484159
 Rigidbody:
   m_ObjectHideFlags: 0

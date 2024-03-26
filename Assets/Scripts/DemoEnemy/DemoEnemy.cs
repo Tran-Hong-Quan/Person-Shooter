@@ -1,4 +1,5 @@
 using DG.Tweening;
+using HongQuan;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class DemoEnemy : MonoBehaviour, IHeath
     public float maxHealth = 100;
     public float currentHealth;
     public Image healthBar;
+    public GameObject healthUI;
     public float MaxHealth => maxHealth;
 
     public float CurrentHealth => currentHealth;
@@ -17,6 +19,7 @@ public class DemoEnemy : MonoBehaviour, IHeath
     {
         currentHealth = maxHealth;
         UpdateHealthUI();
+        healthUI.SetActive(false);
     }
 
     public void Regeneration(float regeneration)
@@ -39,9 +42,12 @@ public class DemoEnemy : MonoBehaviour, IHeath
     {
         SimplePool.Despawn(gameObject);
     }
-
+    IEnumerator offHealthUI;
     private void UpdateHealthUI()
     {
+        if(offHealthUI != null) StopCoroutine(offHealthUI);
+        offHealthUI = this.DelayFuction(2,()=> healthUI.SetActive(false));
+        healthUI.SetActive(true);
         healthBar.DOFillAmount(Mathf.Abs(currentHealth / maxHealth), .2f);
     }
 }
