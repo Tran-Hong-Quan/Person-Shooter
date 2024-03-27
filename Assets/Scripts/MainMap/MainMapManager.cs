@@ -34,7 +34,7 @@ public class MainMapManager : MonoBehaviour
 
             if (!Utilities.GetRandomSpawnPoint(playerController.transform.position, spawnRadious, groundLayerMask, out Vector3 spawnPoint)) continue;
             var obj = SimplePool.Spawn(enemyPrefab);
-            obj.rb.velocity = Vector3.zero;
+            //obj.rb.velocity = Vector3.zero;
             obj.transform.position = spawnPoint;
             obj.transform.rotation = Quaternion.Euler(0, Random.Range(0, 359), 0);
             obj.target = playerController.transform;
