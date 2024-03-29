@@ -189,7 +189,7 @@ public class PlayerController : Game.CharacterController
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
 
-        _input.onChooseInventory.AddListener(ChooseInventory);
+        _input.onToggleInventory.AddListener(ChooseInventory);
         aimObj.position = cineCamTarget.position + cineCamTarget.forward * aimDistance;
     }
 
@@ -549,18 +549,10 @@ public class PlayerController : Game.CharacterController
         tpAimCam.Priority = 9;
     }
 
-    bool canToggleInventory = true;
-    bool isOpenInventory = false;
-    private void ChooseInventory()
+    private void ChooseInventory(bool open)
     {
-        if (!canToggleInventory) return;
-        canToggleInventory = false;
-
-        isOpenInventory ^= true;
-
-        if (isOpenInventory)
+        if (open)
         {
-            _input.canInput = false;
             _input.SetCursorState(false);
             _input.MoveInput(Vector2.zero);
             _input.LookInput(Vector2.zero);
@@ -568,18 +560,16 @@ public class PlayerController : Game.CharacterController
             mainUI.Hide();
             inventoryBoard.Show(() =>
             {
-                canToggleInventory = true;
+
             });
         }
         else
         {
             _input.SetCursorState(true);
-            _input.canInput = true;
             mainUI.Show();
             inventoryBoard.Hide(() =>
             {
                 inventoryCamera.gameObject.SetActive(false);
-                canToggleInventory = true;
             });
         }
 

@@ -48,6 +48,30 @@ namespace StarterAssets
             playerInputs.AimInput(!playerInputs.isAim);
         }
 
+        public void Reload()
+        {
+            playerInputs.Reload();
+        }
+
+        public void Inventory(bool open)
+        {
+            playerInputs.ChooseInventory(open);
+        }
+
+        public void ChoosePistol()
+        {
+            playerInputs.ChoosePiston();
+        }
+
+        public void ChooseFirstRifle()
+        {
+            playerInputs.ChooseFirstRifle();
+        }
+
+        public void ChooseSecondRifle()
+        {
+            playerInputs.ChooseSecondRifle();
+        }
     }
 
 }
