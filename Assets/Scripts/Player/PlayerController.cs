@@ -8,6 +8,7 @@ using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 using UniversalInventorySystem;
 #endif
 
@@ -75,6 +76,8 @@ public class PlayerController : Game.CharacterController
     public CinemachineVirtualCamera fpCam;
     public CinemachineVirtualCamera tpCam;
     public CinemachineVirtualCamera tpAimCam;
+    public Transform fpCamTarget;
+    public Transform tpCamTarget;
 
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
@@ -94,6 +97,7 @@ public class PlayerController : Game.CharacterController
     [SerializeField] protected GameObject inventoryCamera;
     [SerializeField] protected UIAnimation inventoryBoard;
     [SerializeField] protected UIAnimation mainUI;
+    [SerializeField] protected Image healthBar;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -165,12 +169,15 @@ public class PlayerController : Game.CharacterController
         inventory.parent = this;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+        InitCamera();
         _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y;
 
         InitCameraView();
 
+        MainMapManager.instance.playerController = this;
 #if ENABLE_INPUT_SYSTEM
         _playerInput = GetComponent<PlayerInput>();
 #else
@@ -479,17 +486,11 @@ public class PlayerController : Game.CharacterController
     private bool IsFollowCameraRotation()
     {
         if (isFpcam) return true;
-        if (equipRifle)
+        if (equipRifle || equipPistol)
         {
-            if (isRifleReloading) return false;
-            if (isRifleAiming) return true;
-            if (isRifleFiring) return true;
-        }
-        else if (equipPistol)
-        {
-            if (isPistolReloading) return false;
-            if (isPistolAiming) return true;
-            if (isPistolFiring) return true;
+            if (isReloading) return false;
+            if (isAiming) return true;
+            if (isFiring) return true;
         }
         if (isRotatePlayerWithCam) return true;
 
@@ -582,5 +583,29 @@ public class PlayerController : Game.CharacterController
             });
         }
 
+    }
+
+    private void InitCamera()
+    {
+        fpCam.Follow = fpCamTarget;
+        tpCam.Follow = tpCamTarget;
+        tpAimCam.Follow = tpCamTarget;
+    }
+
+    public override void TakeDamge(float damge)
+    {
+        base.TakeDamge(damge);
+        UpdateHealthBarUI();
+    }
+
+    public override void Regeneration(float regeneration)
+    {
+        base.Regeneration(regeneration);
+        UpdateHealthBarUI();
+    }
+
+    protected void UpdateHealthBarUI()
+    {
+        healthBar.DOFillAmount(Mathf.Abs(currentHealth / maxHealth), .5f);
     }
 }

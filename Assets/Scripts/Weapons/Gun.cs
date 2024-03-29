@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
 
     [SerializeField] protected Transform firePoint;
     [SerializeField, Tooltip("1 Bullet duration")] protected float fireRate = 0.1f;
+    [SerializeField] protected float damge = 24f;
     [SerializeField] protected float muzzleVelocity = 0.1f;
     [SerializeField] protected int bulletsCount = 120;
     [SerializeField] protected int magazineBullet = 30;
@@ -46,7 +47,9 @@ public class Gun : MonoBehaviour, IEquiptableItem
     public Sprite InconSprite => iconSprite;
     public int CurrentBullet => currentBullet;
 
-    public UnityEvent<int> onFire;
+    public Transform parent => transform;
+
+    public UnityEvent<int> onChangeBulletCount;
 
     protected virtual void Awake()
     {
@@ -126,6 +129,10 @@ public class Gun : MonoBehaviour, IEquiptableItem
             hitEff.transform.rotation = Quaternion.LookRotation(hit.normal);
             hitEff.Play();
             this.DelayFuction(hitEff.main.duration, () => SimplePool.Despawn(hitEff.gameObject));
+            if(hit.transform.TryGetComponent(out IHeath entity))
+            {
+                entity.TakeDamge(damge);
+            }
         }
 
         var eff = SimplePool.Spawn(fireEffect);
@@ -142,7 +149,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
 
         currentBullet--;
 
-        onFire?.Invoke(currentBullet);
+        onChangeBulletCount?.Invoke(currentBullet);
     }
 
     protected virtual void OnDrawGizmos()
@@ -154,7 +161,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
     protected bool isReloading;
     protected virtual void Reload()
     {
-
+        onChangeBulletCount?.Invoke(currentBullet);
     }
 
     protected bool isAiming;
@@ -181,6 +188,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
 
         animator = characterController.Animator;
         currentBullet = magazineBullet;
+        onChangeBulletCount?.Invoke(currentBullet);
     }
 
     public virtual void Hold()
@@ -230,11 +238,12 @@ public class Gun : MonoBehaviour, IEquiptableItem
             Debug.LogWarning("Store " + name + " failed because it not held");
             return;
         }
-
         equipStatus = EquipStatus.Stored;
         recoil.ClearTargets();
         RemoveListeners();
         characterController.StopHoldRifleAnimation();
+        isReloading = false;
+        isFire = false;
     }
 
     public virtual void Use()

@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PlayerEquipController : EquipController
 {
-    [SerializeField] Sprite transparentIcon;
-    [SerializeField] WeaponUI firstRifleUI;
-    [SerializeField] WeaponUI secondRifleUI;
-    [SerializeField] WeaponUI pistolIUI;
+    public Sprite transparentIcon;
+    public WeaponUI firstRifleUI;
+    public WeaponUI secondRifleUI;
+    public WeaponUI pistolIUI;
 
     public override void InitEquipRifle(IEquiptableItem rifle, ref EquipStatus equipStatus, ref EquipType equipType)
     {
@@ -37,6 +37,10 @@ public class PlayerEquipController : EquipController
     void EquipUISetup(WeaponUI ui, IEquiptableItem equipment, EquipStatus equipStatus)
     {
         ui.SetIcon(equipment.InconSprite);
+        var gun = equipment.parent.GetComponent<Gun>();
+        ui.SetBulletText(gun.CurrentBullet, 999);
+        gun.onChangeBulletCount.AddListener(currentBullet=>UpdateBulletText(currentBullet,ui));
+
         if (equipStatus == EquipStatus.BeingHeld)
         {
             ui.Select();
@@ -45,6 +49,11 @@ public class PlayerEquipController : EquipController
         {
             ui.Unselect();
         }
+    }
+
+    private void UpdateBulletText(int currentBullet,WeaponUI ui)
+    {
+        ui.SetBulletText(currentBullet, 999);
     }
 
     public void UnselectAll()
@@ -98,6 +107,7 @@ public class PlayerEquipController : EquipController
         if ((unequipData & 1 << 1) == 0)
         {
             firstRifleUI.SetIcon(transparentIcon);
+            firstRifleUI.ClearBulletText();
             //First bit equal 1, holding rifle
             if ((unequipData & 1) != 0)
             {
@@ -108,6 +118,7 @@ public class PlayerEquipController : EquipController
         else //Second bit equip 1, it's second weapon
         {
             secondRifleUI.SetIcon(transparentIcon);
+            secondRifleUI.ClearBulletText();
             //First bit equal 1, holding rifle
             if ((unequipData & 1) != 0)
             {
@@ -122,6 +133,7 @@ public class PlayerEquipController : EquipController
         base.InitUnequipPistol(pistol);
 
         pistolIUI.SetIcon(transparentIcon);
+        pistolIUI.ClearBulletText();
         if (unequipData == 1)
         {
             pistolIUI.Unselect();

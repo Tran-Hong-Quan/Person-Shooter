@@ -42,6 +42,7 @@ public class Pistol : Gun
         {
             currentBullet = magazineBullet;
             isReloading = false;
+            onChangeBulletCount?.Invoke(currentBullet);
         });
     }
 
