@@ -20,6 +20,6 @@ public class InventoryItemUseDrop
         invItem.Init(e.item, e.amount);
         invItem.SpawnItemOnFloor(rot: Quaternion.Euler(0, e.inv.parent.transform.eulerAngles.y, 0));
         invItem.inventory = e.inv;
-        e.inv.parent.DelayFuction(1, () => invItem.inventory = null);
+        e.inv.parent.DelayFunction(1, () => invItem.inventory = null);
     }
 }

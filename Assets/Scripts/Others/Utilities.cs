@@ -8,7 +8,7 @@ namespace HongQuan
 {
     public static class Utilities
     {
-        public static IEnumerator DelayFuction(this MonoBehaviour mono, float delay, NoParamaterDelegate fuction)
+        public static IEnumerator DelayFunction(this MonoBehaviour mono, float delay, NoParamaterDelegate fuction)
         {
             var res = StartDelayFuction(delay, fuction);
             mono.StartCoroutine(res);

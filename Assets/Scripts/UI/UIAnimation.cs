@@ -16,7 +16,7 @@ public class UIAnimation : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void Show(TweenCallback onDone = null)
+    public void Show(TweenCallback onDone)
     {
         if (isSetActive) gameObject.SetActive(true);
         transform.localScale = baseScale * 1.5f;
@@ -34,7 +34,17 @@ public class UIAnimation : MonoBehaviour
         }
     }
 
-    public void Hide(TweenCallback onDone = null)
+    public void Show()
+    {
+        Show(null);
+    }
+
+    public void Hide()
+    {
+        Hide(null);
+    }
+
+    public void Hide(TweenCallback onDone)
     {
         onDone += () =>
         {
