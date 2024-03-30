@@ -14,6 +14,7 @@ public class PlayerInputs : CharacterInputs
     [Header("Player Input Values")]
     public Vector2 look;
     public bool changeView;
+    public bool isOpenInventory;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -24,7 +25,7 @@ public class PlayerInputs : CharacterInputs
 
     [Header("Player Events")]
     public UnityEvent<float> onChangeEquipment;
-    public UnityEvent onChooseInventory;
+    public UnityEvent<bool> onToggleInventory;
 
 #if ENABLE_INPUT_SYSTEM
     public PlayerInput inputs;
@@ -182,7 +183,8 @@ public class PlayerInputs : CharacterInputs
 
     private void OnChooseInventory(InputValue value)
     {
-        ChooseInventory();
+        isOpenInventory = !isOpenInventory;
+        ChooseInventory(isOpenInventory);
     }
 
     #endregion
@@ -206,8 +208,8 @@ public class PlayerInputs : CharacterInputs
         onChangeView?.Invoke();
     }
 
-    public void ChooseInventory()
+    public void ChooseInventory(bool value)
     {
-        onChooseInventory?.Invoke();
+        onToggleInventory?.Invoke(value);
     }
 }
