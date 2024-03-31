@@ -62,7 +62,7 @@ public class DemoEnemy : MonoBehaviour, IHeath
     private void UpdateHealthUI()
     {
         if(offHealthUI != null) StopCoroutine(offHealthUI);
-        offHealthUI = this.DelayFuction(2,()=> healthUI.SetActive(false));
+        offHealthUI = this.DelayFunction(2,()=> healthUI.SetActive(false));
         healthUI.SetActive(true);
         healthBar.DOFillAmount(Mathf.Abs(currentHealth / maxHealth), .2f);
     }

@@ -6,14 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Quyen/Menu.unity
-    guid: ae27ad233982b3e469ff8d52172dbc66
-  - enabled: 1
-    path: Assets/Quyen/Register.unity
-    guid: 4884dfb11146ed542bfcef0c1ec6915e
-  - enabled: 1
-    path: Assets/Quyen/Login.unity
-    guid: d2f2f3fa51dd11947b1a6852f597ec61
+    path: Assets/Scenes/MainMenu.unity
+    guid: 7ca8ed15c61054d4d9713dc410fc2cad
   - enabled: 1
     path: Assets/Scenes/MainMap.unity
     guid: bd2a9c7dbf521414fa42d1526a50eb9f

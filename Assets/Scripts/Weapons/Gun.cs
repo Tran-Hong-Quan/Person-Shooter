@@ -128,7 +128,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
             hitEff.transform.position = hit.point;
             hitEff.transform.rotation = Quaternion.LookRotation(hit.normal);
             hitEff.Play();
-            this.DelayFuction(hitEff.main.duration, () => SimplePool.Despawn(hitEff.gameObject));
+            this.DelayFunction(hitEff.main.duration, () => SimplePool.Despawn(hitEff.gameObject));
             if(hit.transform.TryGetComponent(out IHeath entity))
             {
                 entity.TakeDamge(damge);
@@ -139,7 +139,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
         fireEffectTransformData.InsertLocalData(eff.transform);
         fireEffectTransformData.SetParent(eff.transform, true);
         eff.Play();
-        this.DelayFuction(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
+        this.DelayFunction(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
 
         audioSource.PlayOneShot(fireAudioClip);
 
@@ -228,7 +228,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
         isAiming = false;
         isFire = false;
 
-        this.DelayFuction(1, () => this.equipController = null);
+        this.DelayFunction(1, () => this.equipController = null);
     }
 
     public virtual void Stored()

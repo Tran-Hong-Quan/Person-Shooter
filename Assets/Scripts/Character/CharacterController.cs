@@ -165,7 +165,7 @@ namespace Game
             aimRifleRig.SmoothRig(0);
             holdRifleRig.SmoothRig(0);
 
-            reloadCorotine = this.DelayFuction(duration - 0.6f, () =>
+            reloadCorotine = this.DelayFunction(duration - 0.6f, () =>
             {
                 reloadTween = _animator.SmoothLayerMask(layerMaskId, 0, onDone: () =>
                 {
@@ -282,7 +282,7 @@ namespace Game
 
             onDone += DoneReload;
 
-            this.DelayFuction(duration - 0.5f, onDone);
+            this.DelayFunction(duration - 0.5f, onDone);
 
             void DoneReload()
             {
