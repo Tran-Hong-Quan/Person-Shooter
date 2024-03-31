@@ -10,9 +10,10 @@ public class Account : MonoBehaviour
 
     private readonly string ULI = "http://localhost/UnityData/Infor.php";
 
+    [SerializeField] private string user_name;
+    [SerializeField] private int high_score;
     [SerializeField] private string email;
-    [SerializeField] private int highScore;
-    [SerializeField] private string dateCreated;
+    [SerializeField] private string date_created;
 
     private void Awake()
     {
@@ -39,7 +40,12 @@ public class Account : MonoBehaviour
         else
         {
             string jsonArrayString = www.downloadHandler.text;
-            //Jsona  
+            LoadFormJSON(jsonArrayString);
         }
+    }
+
+    public void LoadFormJSON(string jsonString)
+    {
+        JsonUtility.FromJsonOverwrite(jsonString, this);
     }
 }
