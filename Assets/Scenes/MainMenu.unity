@@ -1748,7 +1748,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 130}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &213762486
 MonoBehaviour:
@@ -1770,7 +1770,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Your Name
+  m_text: Your Information
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3664,13 +3664,14 @@ GameObject:
   - component: {fileID: 522072974}
   - component: {fileID: 522072977}
   - component: {fileID: 522072976}
+  - component: {fileID: 522072978}
   m_Layer: 5
   m_Name: Sign In
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &522072973
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3765,6 +3766,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &522072978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522072972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2b86c896890934aa4590991ef97624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  signInBoard: {fileID: 522072976}
+  accountBoard: {fileID: 1442861654}
+  username: {fileID: 262729580}
+  password: {fileID: 1786036498}
 --- !u!1 &527420652
 GameObject:
   m_ObjectHideFlags: 0
@@ -4804,8 +4821,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1307449763}
   m_HandleRect: {fileID: 1307449762}
   m_Direction: 2
-  m_Value: 0.9999994
-  m_Size: 0.8373437
+  m_Value: 1
+  m_Size: 0.8373438
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8866,6 +8883,7 @@ GameObject:
   - component: {fileID: 1045112371}
   - component: {fileID: 1045112370}
   - component: {fileID: 1045112369}
+  - component: {fileID: 1045112373}
   m_Layer: 5
   m_Name: Sign Up
   m_TagString: Untagged
@@ -8967,6 +8985,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1045112367}
   m_CullTransparentMesh: 1
+--- !u!114 &1045112373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045112367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 333977d56e2f0124b82d3429c6bcb613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  username: {fileID: 24137015}
+  email: {fileID: 724700097}
+  password: {fileID: 221327744}
 --- !u!1 &1173055620 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8944336655422409498, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
@@ -9800,21 +9833,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 522072976}
-        m_TargetAssemblyTypeName: UIAnimation, Assembly-CSharp
-        m_MethodName: Hide
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1442861654}
-        m_TargetAssemblyTypeName: UIAnimation, Assembly-CSharp
-        m_MethodName: Show
+      - m_Target: {fileID: 522072978}
+        m_TargetAssemblyTypeName: Login, Assembly-CSharp
+        m_MethodName: SignIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10819,15 +10840,15 @@ GameObject:
   - component: {fileID: 1442861650}
   - component: {fileID: 1442861652}
   - component: {fileID: 1442861651}
-  - component: {fileID: 1442861654}
   - component: {fileID: 1442861653}
+  - component: {fileID: 1442861654}
   m_Layer: 5
   m_Name: Account Infor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1442861650
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11411,7 +11432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1610612885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11717,13 +11738,14 @@ GameObject:
   - component: {fileID: 1751821154}
   - component: {fileID: 1751821152}
   - component: {fileID: 1751821153}
+  - component: {fileID: 1751821155}
   m_Layer: 5
   m_Name: Account
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1751821151
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11787,6 +11809,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1751821150}
   m_CullTransparentMesh: 1
+--- !u!114 &1751821155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751821150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2a167d3071e3a4d9eaa3750ea3e842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  email: 
+  highScore: 0
+  dateCreated: 
 --- !u!1 &1755373199
 GameObject:
   m_ObjectHideFlags: 0
@@ -12372,21 +12409,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1045112369}
-        m_TargetAssemblyTypeName: UIAnimation, Assembly-CSharp
-        m_MethodName: Hide
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1442861654}
-        m_TargetAssemblyTypeName: UIAnimation, Assembly-CSharp
-        m_MethodName: Show
+      - m_Target: {fileID: 1045112373}
+        m_TargetAssemblyTypeName: Register, Assembly-CSharp
+        m_MethodName: SignUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
