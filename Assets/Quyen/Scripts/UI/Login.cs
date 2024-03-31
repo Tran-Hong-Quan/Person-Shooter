@@ -2,29 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Login : MonoBehaviour
 {
-    private readonly string ULI = "http://localhost/UnityData/GetUser.php";
-    private string username;
-    private string password;
+    private static Login instance;
+    public static Login Instance => instance;
 
-    [Header("Message")]
-    [SerializeField] private Text usernameMess;
-    [SerializeField] private Text passwordMess;
+    //private readonly string ULI = "http://localhost/UnityData/LogIn.php";
+    private readonly string ULI = "https://tempquan.000webhostapp.com/Login.php";
 
-    private void Start()
+    [SerializeField] private UIAnimation signInBoard;
+    [SerializeField] private UIAnimation accountBoard;
+
+    [SerializeField] private TMP_InputField username;
+    [SerializeField] private TMP_InputField password;
+
+    public TMP_InputField Username => username;
+
+    private void Awake()
     {
-        usernameMess.enabled = false;
-        passwordMess.enabled = false;
-
-        usernameMess.text = "Username is not exists";
-        passwordMess.text = "Password is not correct";
+        instance = this;
     }
 
-    public void OnClick()
+    public void SignIn()
     {
         StartCoroutine(LoginUser());
     }
@@ -32,8 +33,8 @@ public class Login : MonoBehaviour
     IEnumerator LoginUser()
     {
         WWWForm form = new();
-        form.AddField("loginUser", this.username);
-        form.AddField("loginPass", this.password);
+        form.AddField("userName", this.username.text);
+        form.AddField("userPass", this.password.text);
 
         using UnityWebRequest www = UnityWebRequest.Post(ULI, form);
         yield return www.SendWebRequest();
@@ -45,33 +46,12 @@ public class Login : MonoBehaviour
         else
         {
             string mess = www.downloadHandler.text;
-            /// enable message
             if (mess.Equals("Success"))
             {
-                LoadMainMap();
+                signInBoard.Hide();
+                Account.Instance.Information();
+                accountBoard.Show();
             }
-            usernameMess.enabled = usernameMess.text.Equals(mess);
-            passwordMess.enabled = passwordMess.text.Equals(mess);
         }
-    }
-
-    public void LoginUsername(string username)
-    {
-        this.username = username;
-    }
-
-    public void LoginPassword(string password)
-    {
-        this.password = password;
-    }
-
-    public void LoadMainMap()
-    {
-        SceneManager.LoadScene("MainMap");
-    }
-
-    public void ButtonBack()
-    {
-        SceneManager.LoadScene("Menu");
     }
 }
