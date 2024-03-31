@@ -9,24 +9,26 @@ public class Login : MonoBehaviour
     private static Login instance;
     public static Login Instance => instance;
 
-    //private readonly string ULI = "http://localhost/UnityData/LogIn.php";
-    private readonly string ULI = "https://tempquan.000webhostapp.com/Login.php";
+    private readonly string ULI = "https://tempquan.000webhostapp.com/LogIn.php";
 
-    [SerializeField] private UIAnimation signInBoard;
-    [SerializeField] private UIAnimation accountBoard;
 
     [SerializeField] private TMP_InputField username;
     [SerializeField] private TMP_InputField password;
+
+    private UIAnimation UIAnimation;
+    [SerializeField] LoadingUI loadingUI;
 
     public TMP_InputField Username => username;
 
     private void Awake()
     {
         instance = this;
+        UIAnimation = GetComponent<UIAnimation>();
     }
 
     public void SignIn()
     {
+        MainMenu.instance.loadingUI.gameObject.SetActive(true);
         StartCoroutine(LoginUser());
     }
 
@@ -38,7 +40,7 @@ public class Login : MonoBehaviour
 
         using UnityWebRequest www = UnityWebRequest.Post(ULI, form);
         yield return www.SendWebRequest();
-
+        MainMenu.instance.loadingUI.gameObject.SetActive(false);
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError(www.error);
@@ -48,10 +50,10 @@ public class Login : MonoBehaviour
             string mess = www.downloadHandler.text;
             if (mess.Equals("Success"))
             {
-                signInBoard.Hide();
-                Account.Instance.Information();
-                accountBoard.Show();
+                UIAnimation.Hide();
+                Account.Instance.Information(username.text);
             }
         }
+        www.Dispose();
     }
 }

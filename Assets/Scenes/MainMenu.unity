@@ -1934,8 +1934,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 7
-  m_InputType: 2
+  m_ContentType: 0
+  m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -3570,6 +3570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e25af8b851d844aa47b84f0cac44ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingUI: {fileID: 109242015}
 --- !u!1 &511163480
 GameObject:
   m_ObjectHideFlags: 0
@@ -3777,10 +3778,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2b86c896890934aa4590991ef97624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signInBoard: {fileID: 522072976}
-  accountBoard: {fileID: 1442861654}
   username: {fileID: 262729580}
   password: {fileID: 1786036498}
+  loadingUI: {fileID: 0}
 --- !u!1 &527420652
 GameObject:
   m_ObjectHideFlags: 0
@@ -8999,6 +8999,7 @@ MonoBehaviour:
   username: {fileID: 24137015}
   email: {fileID: 724700097}
   password: {fileID: 221327744}
+  UIAnimation: {fileID: 0}
 --- !u!1 &1173055620 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8944336655422409498, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
@@ -11431,7 +11432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1610612885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11744,7 +11745,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1751821151
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11817,12 +11818,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1751821150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2a167d3071e3a4d9eaa3750ea3e842, type: 3}
+  m_Script: {fileID: 11500000, guid: ae12f72c24231ef40a014303c9ea6dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  email: 
-  highScore: 0
-  dateCreated: 
+  accountInformation:
+  - user_name: 1
+    high_score: 0
+    email: 1
+    date_created: 1
+  - user_name: 3
+    high_score: 0
+    email: 2
+    date_created: 1
+  userNameTMP: {fileID: 213762486}
+  inforTMP: {fileID: 591520891}
+  accountInforBoard: {fileID: 1442861654}
 --- !u!1 &1755373199
 GameObject:
   m_ObjectHideFlags: 0
@@ -13533,6 +13543,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: LoadingUI, Assembly-CSharp
         m_MethodName: OnInterputLoading
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 109242009}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

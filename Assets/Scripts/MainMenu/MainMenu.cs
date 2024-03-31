@@ -5,8 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public static MainMenu instance;
+
+    public LoadingUI loadingUI;
+
     private void Awake()
     {
+        instance = this;
         Application.targetFrameRate = 60;
     }
 

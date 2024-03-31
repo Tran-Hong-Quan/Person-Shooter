@@ -1,8 +1,11 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Windows;
+using Random = UnityEngine.Random;
 
 namespace HongQuan
 {
@@ -57,6 +60,31 @@ namespace HongQuan
     }
 
     public delegate void NoParamaterDelegate();
+
+    public class JsonHelper
+    {
+        public static T[] FromJsonArray<T>(string json)
+        {
+            string newJson = "{ \"array\": " + json + "}";
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
+            return wrapper.array;
+        }
+
+        public static string ToJsonArray<T>(T[] data)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.array = data;
+            string jsonData =  JsonUtility.ToJson(wrapper);
+            Debug.Log(jsonData);
+            return jsonData.Substring(9,jsonData.Length - 10);
+        }
+
+        [Serializable]
+        private class Wrapper<T>
+        {
+            public T[] array;
+        }
+    }
 }
 
 

@@ -6,14 +6,22 @@ using UnityEngine.Networking;
 
 public class Register : MonoBehaviour
 {
-    private readonly string ULI = "http://localhost/UnityData/Register.php";
+    private readonly string ULI = "https://tempquan.000webhostapp.com/Register.php";
     
     [SerializeField] private TMP_InputField username;
     [SerializeField] private TMP_InputField email;
     [SerializeField] private TMP_InputField password;
 
+    [SerializeField] UIAnimation UIAnimation;
+
+    private void Awake()
+    {
+        UIAnimation = GetComponent<UIAnimation>();
+    }
+
     public void SignUp()
     {
+        MainMenu.instance.loadingUI.gameObject.SetActive(true);
         StartCoroutine(RegisterUser());
     }
 
@@ -26,6 +34,7 @@ public class Register : MonoBehaviour
 
         using UnityWebRequest www = UnityWebRequest.Post(ULI, form);
         yield return www.SendWebRequest();
+        MainMenu.instance.loadingUI.gameObject.SetActive(false);
 
         if (www.result != UnityWebRequest.Result.Success)
         {
@@ -33,8 +42,9 @@ public class Register : MonoBehaviour
         }
         else
         {
-            // todo
             Debug.Log(www.downloadHandler.text);
+            UIAnimation.Hide();
+            Account.Instance.Information(username.text);
         }
     }
 }
