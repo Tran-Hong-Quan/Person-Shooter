@@ -56,6 +56,7 @@ public class DemoEnemy : MonoBehaviour, IHeath
     {
         SimplePool.Despawn(gameObject);
         onDie?.Invoke(this);
+        MainMapManager.instance.GetScore();
 
     }
     IEnumerator offHealthUI;

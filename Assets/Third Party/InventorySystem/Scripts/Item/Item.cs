@@ -22,8 +22,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
-using static UnityEditor.PlayerSettings;
 
 namespace UniversalInventorySystem
 {
@@ -62,8 +60,8 @@ namespace UniversalInventorySystem
         }
         [SerializeField]
         private List<DurabilityImage> _durabilityImages;
-        public MonoScript onUseFunc;
-        public MonoScript optionalOnDropBehaviour;
+        //public MonoScript onUseFunc;
+        //public MonoScript optionalOnDropBehaviour;
         public ToolTipInfo tooltip;
 
         public void OnEnable()
@@ -73,40 +71,40 @@ namespace UniversalInventorySystem
 
         public void OnUse(Inventory inv, int slot)
         {
-            if (onUseFunc == null) return;
-            InventoryHandler.UseItemEventArgs uea = new InventoryHandler.UseItemEventArgs(inv, this, slot);
-            object[] tmp = new object[2] { this, uea };
+            //if (onUseFunc == null) return;
+            //InventoryHandler.UseItemEventArgs uea = new InventoryHandler.UseItemEventArgs(inv, this, slot);
+            //object[] tmp = new object[2] { this, uea };
 
-            BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            //BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-            MethodInfo monoMethod = onUseFunc.GetClass().GetMethod("OnUse", flags);
-            if (monoMethod == null) Debug.LogError($"The script provided ({onUseFunc.name}) on item {itemName} does not contain, or its not accesible, the expected function OnUse.\n Check if this function exists and if the provided script derives from IUsable");
-            else monoMethod.Invoke(Activator.CreateInstance(onUseFunc.GetClass()), tmp);
+            //MethodInfo monoMethod = onUseFunc.GetClass().GetMethod("OnUse", flags);
+            //if (monoMethod == null) Debug.LogError($"The script provided ({onUseFunc.name}) on item {itemName} does not contain, or its not accesible, the expected function OnUse.\n Check if this function exists and if the provided script derives from IUsable");
+            //else monoMethod.Invoke(Activator.CreateInstance(onUseFunc.GetClass()), tmp);
 
         }
 
         public void OnDrop(Inventory inv, bool tss, int slot, int amount, bool dbui, Vector3? pos)
         {
-            if ((inv.interactiable & InventoryController.DropInvFlags) != InventoryController.DropInvFlags) return;
+            //if ((inv.interactiable & InventoryController.DropInvFlags) != InventoryController.DropInvFlags) return;
 
-            if (optionalOnDropBehaviour == null)
-            {
-                InventoryHandler.DropItemEventArgs dea = new InventoryHandler.DropItemEventArgs(inv, tss, slot, this, amount, dbui, pos.GetValueOrDefault(), true);
+            //if (optionalOnDropBehaviour == null)
+            //{
+            //    InventoryHandler.DropItemEventArgs dea = new InventoryHandler.DropItemEventArgs(inv, tss, slot, this, amount, dbui, pos.GetValueOrDefault(), true);
 
-                InventoryHandler.current.Broadcast(BroadcastEventType.DropItem, dea: dea);
-            }
-            else
-            {
-                InventoryHandler.DropItemEventArgs dea = new InventoryHandler.DropItemEventArgs(inv, tss, slot, this, amount, dbui, pos.GetValueOrDefault(), false);
-                object[] tmp = new object[2] { this, dea };
+            //    InventoryHandler.current.Broadcast(BroadcastEventType.DropItem, dea: dea);
+            //}
+            //else
+            //{
+            //    InventoryHandler.DropItemEventArgs dea = new InventoryHandler.DropItemEventArgs(inv, tss, slot, this, amount, dbui, pos.GetValueOrDefault(), false);
+            //    object[] tmp = new object[2] { this, dea };
 
-                BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            //    BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-                MethodInfo monoMethod = optionalOnDropBehaviour.GetClass().GetMethod("OnDropItem", flags);
+            //    MethodInfo monoMethod = optionalOnDropBehaviour.GetClass().GetMethod("OnDropItem", flags);
 
-                if (monoMethod == null) Debug.LogError($"The script provided ({optionalOnDropBehaviour.name}) on item {itemName} does not contain, or its not accesible, the expected function OnDropItem.\n Check if this function exists and if the provided script derives from DropBehaviour");
-                else monoMethod.Invoke(Activator.CreateInstance(optionalOnDropBehaviour.GetClass()), tmp);
-            }
+            //    if (monoMethod == null) Debug.LogError($"The script provided ({optionalOnDropBehaviour.name}) on item {itemName} does not contain, or its not accesible, the expected function OnDropItem.\n Check if this function exists and if the provided script derives from DropBehaviour");
+            //    else monoMethod.Invoke(Activator.CreateInstance(optionalOnDropBehaviour.GetClass()), tmp);
+            //}
         }
 
         public static List<DurabilityImage> SortDurabilityImages(List<DurabilityImage> inputArray)

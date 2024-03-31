@@ -1,16 +1,26 @@
 using HongQuan;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMapManager : MonoBehaviour
 {
     public static MainMapManager instance { get; private set; }
 
+    public int score;
+    public int time = 60;
+
     [SerializeField] DemoEnemy enemyPrefab;
     [SerializeField] LayerMask groundLayerMask;
     [SerializeField] float spawnRate = 2;
     [SerializeField] float spawnRadious = 20;
+
+    [SerializeField] TMP_Text scoreTMP;
+    [SerializeField] TMP_Text timeTMP;
+    [SerializeField] UIAnimation endGameBoard;
+    [SerializeField] TMP_Text scoreEndGameTMP;
 
     public PlayerController playerController;
 
@@ -24,6 +34,9 @@ public class MainMapManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(SpawnLoop());
+        this.DelayFunction(60, EndGame);
+        InvokeRepeating(nameof(UpdateTime), 0, 1);
+
     }
     private IEnumerator SpawnLoop()
     {
@@ -47,5 +60,36 @@ public class MainMapManager : MonoBehaviour
     {
         enemy.onDie.RemoveListener(RemoveEnemyFromList);
         enemyList.Remove(enemy);
+    }
+
+    public void GetScore()
+    {
+        score++;
+        scoreTMP.text = score.ToString();
+    }
+
+    private void UpdateTime()
+    {
+        time--;
+        timeTMP.text = time.ToString();
+    }
+
+    private void EndGame()
+    {
+        CancelInvoke();
+        StopAllCoroutines();
+        Time.timeScale = 0;
+        endGameBoard.Show();
+        scoreEndGameTMP.text = score.ToString();
+        GameManager.instance.achivementManager.AddScore(score);
+    }
+
+    public void PlayAgain()
+    {
+        GameManager.instance.transition.FullScreen(() => 
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene("MainMap");
+        }, null);
     }
 }

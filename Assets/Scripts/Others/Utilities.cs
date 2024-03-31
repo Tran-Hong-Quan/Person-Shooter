@@ -2,9 +2,11 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.Windows;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace HongQuan
@@ -57,6 +59,93 @@ namespace HongQuan
             point = default;
             return false;
         }
+
+        public static T RandomElement<T>(this T[] list)
+        {
+            return list[UnityEngine.Random.Range(0, list.Length)];
+        }
+
+        public static T RandomElement<T>(this List<T> list)
+        {
+            return list[UnityEngine.Random.Range(0, list.Count)];
+        }
+
+        public static int RandomElementIndex<T>(this T[] list)
+        {
+            return UnityEngine.Random.Range(0, list.Length);
+        }
+
+        /// <summary>
+        /// Use this if EventSystem.current.IsPointerOverGameObject() not work, this often occur in mobile
+        /// </summary>
+        /// <returns></returns>
+
+        public static bool IsPointerOverUIObject()
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            //eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y); //Old Input System
+            eventDataCurrentPosition.position = Mouse.current.position.value; //New Input System
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 0;
+        }
+
+        public static bool IsOverlapBox2D(this BoxCollider2D box1, BoxCollider2D box2)
+        {
+            return box1.bounds.Intersects(box2.bounds);
+        }
+
+        public static void SaveData(string data, string fileName)
+        {
+            string dataPath = $"{Application.persistentDataPath}/{fileName}.txt";
+
+            File.WriteAllText(dataPath, data);
+        }
+        public static string LoadData(string fileName)
+        {
+            string dataPath = $"{Application.persistentDataPath}/{fileName}.txt";
+
+            if (File.Exists(dataPath))
+                return File.ReadAllText(dataPath);
+            else
+                return "";
+        }
+
+        #region Camera Position
+
+        public static float BottomBorder(this Camera cam)
+        {
+            return cam.transform.position.y - cam.orthographicSize;
+        }
+        public static float TopBorder(this Camera cam)
+        {
+            return cam.transform.position.y + cam.orthographicSize;
+        }
+        public static float RightBorder(this Camera cam)
+        {
+            return cam.transform.position.x + cam.orthographicSize * cam.aspect;
+        }
+        public static float LeftBorder(this Camera cam)
+        {
+            return cam.transform.position.x - cam.orthographicSize * cam.aspect;
+        }
+        public static Vector2 UpRightCorner(this Camera cam)
+        {
+            return new Vector2(RightBorder(cam), TopBorder(cam));
+        }
+        public static Vector2 UpLeftCorner(this Camera cam)
+        {
+            return new Vector2(LeftBorder(cam), TopBorder(cam));
+        }
+        public static Vector2 DownLeftCorner(this Camera cam)
+        {
+            return new Vector2(LeftBorder(cam), BottomBorder(cam));
+        }
+        public static Vector2 DownRightCorner(this Camera cam)
+        {
+            return new Vector2(RightBorder(cam), BottomBorder(cam));
+        }
+        #endregion
     }
 
     public delegate void NoParamaterDelegate();
@@ -74,9 +163,9 @@ namespace HongQuan
         {
             Wrapper<T> wrapper = new Wrapper<T>();
             wrapper.array = data;
-            string jsonData =  JsonUtility.ToJson(wrapper);
+            string jsonData = JsonUtility.ToJson(wrapper);
             Debug.Log(jsonData);
-            return jsonData.Substring(9,jsonData.Length - 10);
+            return jsonData.Substring(9, jsonData.Length - 10);
         }
 
         [Serializable]

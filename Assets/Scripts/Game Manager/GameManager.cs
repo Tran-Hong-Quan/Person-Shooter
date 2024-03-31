@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -26,4 +26,6 @@ public class GameManager : MonoBehaviour
     }
 
     public Transition transition;
+    public NotificationBoard notificationBoard;
+    public AchivementManager achivementManager;
 }

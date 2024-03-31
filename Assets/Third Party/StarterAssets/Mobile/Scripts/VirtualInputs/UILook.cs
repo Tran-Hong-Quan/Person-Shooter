@@ -13,7 +13,7 @@ public class UILook : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     public CanvasScaler canvasScaler;
 
     [Header("Settings")]
-    public float magnitudeMultiplier = 1f;
+    public static float magnitudeMultiplier = 1f;
     public bool invertXOutputValue;
     public bool invertYOutputValue;
 

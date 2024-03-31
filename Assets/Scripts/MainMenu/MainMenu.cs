@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     public static MainMenu instance;
 
     public LoadingUI loadingUI;
+    public Gallery gallery;
 
     private void Awake()
     {

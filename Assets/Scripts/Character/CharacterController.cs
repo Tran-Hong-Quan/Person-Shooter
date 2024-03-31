@@ -42,7 +42,7 @@ namespace Game
         public CharacterInputs Inputs => inputs;
 
         protected Animator _animator;
-        protected new Rigidbody rigidbody;
+        protected Rigidbody rigidbody;
         protected Inventory inventory;
         public Transform AimObj => aimObj;
 
