@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance;
-    public static GameManager instance
+    public static GameManager instance;
+
+    private void Awake()
     {
-        get
+        if(instance == null)
         {
-            if (_instance == null)
-            {
-                _instance = Instantiate(Resources.Load<GameManager>("GameManager"));
-                DontDestroyOnLoad(_instance.gameObject);
-            }
-            return _instance;
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        private set
+        else
         {
-            _instance = value;
+            Destroy(gameObject);
         }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void OnBeforeSceneLoadRuntimeMethod()
+    {
+        Resources.Load<GameManager>("GameManager");
     }
 
     public Transition transition;

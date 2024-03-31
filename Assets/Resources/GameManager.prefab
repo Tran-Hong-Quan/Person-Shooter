@@ -342,6 +342,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSetActive: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!225 &6319013720833208375
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -351,8 +357,8 @@ CanvasGroup:
   m_GameObject: {fileID: 964120492909308013}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!222 &2310844268090379010
 CanvasRenderer:
@@ -516,6 +522,7 @@ GameObject:
   - component: {fileID: 6579206893841447445}
   - component: {fileID: 6666301013164934086}
   - component: {fileID: 446383198413577923}
+  - component: {fileID: 675828089668648847}
   m_Layer: 0
   m_Name: Setting Button
   m_TagString: Untagged
@@ -662,6 +669,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSetActive: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!225 &675828089668648847
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873836097880761064}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1916057445565785535
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,9 +913,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5095611626119488754}
   - {fileID: 8377234582721752569}
   - {fileID: 2847331373202226853}
+  - {fileID: 5095611626119488754}
   m_Father: {fileID: 2271810107255929608}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1007,6 +1032,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2271810107255929608}
   - component: {fileID: 7698120158617252906}
+  - component: {fileID: 416943184194888076}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1043,6 +1069,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transition: {fileID: 7534511754042972946}
+--- !u!114 &416943184194888076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2902934966599650029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8362c1d690869d40a30c5d83d974d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: fcb70ad67839bfd489006ca2af7239df, type: 2}
+  musicSlider: {fileID: 8033269947596642995}
+  sfxSlider: {fileID: 8532079634119360612}
+  gameSettingParent: {fileID: 5062546191508795279}
 --- !u!1 &3118876461176688213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,13 +1244,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 6066857400546149807}
   m_HandleRect: {fileID: 5108897958787810318}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 416943184194888076}
+        m_TargetAssemblyTypeName: GameSetting, Assembly-CSharp
+        m_MethodName: SetVolumeMusic
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3870448528357584415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,13 +1517,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 7275233054505642584}
   m_HandleRect: {fileID: 7625679643616037145}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 416943184194888076}
+        m_TargetAssemblyTypeName: GameSetting, Assembly-CSharp
+        m_MethodName: SetVolumeSFX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4816537791136154765
 GameObject:
   m_ObjectHideFlags: 0
@@ -1626,7 +1692,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4576578961438590856}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5062546191508795279}
+        m_TargetAssemblyTypeName: UIAnimation, Assembly-CSharp
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 446383198413577923}
+        m_TargetAssemblyTypeName: UIAnimation, Assembly-CSharp
+        m_MethodName: Show
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5790746478007931354
 GameObject:
   m_ObjectHideFlags: 0
@@ -2106,7 +2196,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6537550664908222715}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 416943184194888076}
+        m_TargetAssemblyTypeName: GameSetting, Assembly-CSharp
+        m_MethodName: OutToMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7767235159712691989
 GameObject:
   m_ObjectHideFlags: 0

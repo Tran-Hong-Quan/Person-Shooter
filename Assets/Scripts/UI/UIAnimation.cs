@@ -3,12 +3,16 @@ using HongQuan;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UIAnimation : MonoBehaviour
 {
     [SerializeField, Tooltip("Object will set active true and false when show and hide")] private bool isSetActive = true;
     protected Vector3 baseScale;
     protected CanvasGroup canvasGroup;
+
+    public UnityEvent<UIAnimation> onShow;
+    public UnityEvent<UIAnimation> onHide;
 
     private void Awake()
     {
@@ -20,7 +24,7 @@ public class UIAnimation : MonoBehaviour
     {
         if (isSetActive) gameObject.SetActive(true);
         transform.localScale = baseScale * 1.5f;
-        transform.DOScale(baseScale, 0.1f).OnComplete(onDone);
+        transform.DOScale(baseScale, 0.1f).OnComplete(onDone).SetUpdate(true);
 
         if (canvasGroup != null)
         {
@@ -30,8 +34,10 @@ public class UIAnimation : MonoBehaviour
             canvasGroup.DOFade(1, .1f).OnComplete(() =>
             {
                 canvasGroup.interactable = true;
-            });
+            }).SetUpdate(true);
         }
+
+        onShow?.Invoke(this);
     }
 
     public void Show()
@@ -53,14 +59,16 @@ public class UIAnimation : MonoBehaviour
 
 
         transform.localScale = baseScale;
-        transform.DOScale(baseScale * 1.5f, 0.1f).OnComplete(onDone);
+        transform.DOScale(baseScale * 1.5f, 0.1f).OnComplete(onDone).SetUpdate(true);
 
         if (canvasGroup != null)
         {
             canvasGroup.interactable = false;
             canvasGroup.alpha = 1;
             canvasGroup.blocksRaycasts = false;
-            canvasGroup.DOFade(0, .1f);
+            canvasGroup.DOFade(0, .1f).SetUpdate(true);
         }
+
+        onHide?.Invoke(this);
     }
 }
