@@ -1234,7 +1234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df0faed2459989a44a38d1a204c4ba95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingAnim: {fileID: 0}
   onInteruptLoading:
     m_PersistentCalls:
       m_Calls: []
@@ -11432,7 +11431,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1610612885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11745,7 +11744,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1751821151
 RectTransform:
   m_ObjectHideFlags: 0
