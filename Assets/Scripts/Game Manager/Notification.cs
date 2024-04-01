@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Notifications.Android;
 using UnityEngine;
+#if Enable_Notification
 using UnityEngine.Android;
+#endif
 
 public class Notification : MonoBehaviour
 {
+#if Enable_Notification
     void Start()
     {
         PushStartNotification();
@@ -66,5 +69,5 @@ public class Notification : MonoBehaviour
         FrequencyNotification();
         QuitGameNotification();
     }
-
+#endif
 }
