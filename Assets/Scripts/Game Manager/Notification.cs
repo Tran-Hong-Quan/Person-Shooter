@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Notifications.Android;
 using UnityEngine;
-#if Enable_Notification
 using UnityEngine.Android;
-#endif
 
 public class Notification : MonoBehaviour
 {
-#if Enable_Notification
     void Start()
     {
         PushStartNotification();
+        FrequencyNotification();
     }
 
     private void RequestPermission()
@@ -25,7 +23,6 @@ public class Notification : MonoBehaviour
     private void PushStartNotification()
     {
         RequestPermission();
-        AndroidNotificationCenter.CancelAllDisplayedNotifications();
         var channel = new AndroidNotificationChannel()
         {
             Id = "Start Game Notification",
@@ -34,21 +31,38 @@ public class Notification : MonoBehaviour
             Description = "Let's kill zombies",
         };
         AndroidNotificationCenter.RegisterNotificationChannel(channel);
+
+        var notification = new AndroidNotification();
+        notification.Title = "Welcome back";
+        notification.Text = "Let's kill zombies";
+        notification.LargeIcon = "icon_1";
+        notification.SmallIcon = "icon_0";
+        notification.FireTime = System.DateTime.Now;
+
+        AndroidNotificationCenter.SendNotification(notification, channel.Id);
+        Debug.Log("Notifaction Setup Success");
     }
 
     private void FrequencyNotification()
     {
+        var channel = new AndroidNotificationChannel()
+        {
+            Id = "Frequency Notification",
+            Name = "Call player back",
+            Importance = Importance.Default,
+            Description = "Let's kill zombies",
+        };
+        AndroidNotificationCenter.RegisterNotificationChannel(channel);
+
         var notification = new AndroidNotification();
         notification.Title = "Help us";
         notification.Text = "Zombies are atacking us, please help, we can't hold it for long";
-        notification.FireTime = System.DateTime.Now.AddHours(1);
+        notification.LargeIcon = "icon_1";
+        notification.SmallIcon = "icon_0";
+        notification.FireTime= System.DateTime.Now;
+        notification.RepeatInterval = System.TimeSpan.FromMinutes(1);
 
-        var id = AndroidNotificationCenter.SendNotification(notification, "Frequency Notification");
-        if (AndroidNotificationCenter.CheckScheduledNotificationStatus(id) == NotificationStatus.Scheduled)
-        {
-            AndroidNotificationCenter.CancelAllScheduledNotifications();
-            AndroidNotificationCenter.SendNotification(notification, "Frequency Notification");
-        }
+        AndroidNotificationCenter.SendNotification(notification, channel.Id);
     }
 
     private void QuitGameNotification()
@@ -60,14 +74,21 @@ public class Notification : MonoBehaviour
             Importance = Importance.Default,
             Description = "Bye player, we hope you back soon",
         };
+
+        var notification = new AndroidNotification();
+        notification.Title = "Goodbye";
+        notification.Text = "Bye player, we hope you back soon";
+        notification.LargeIcon = "icon_1";
+        notification.SmallIcon = "icon_0";
+        notification.FireTime = System.DateTime.Now;
+
         AndroidNotificationCenter.RegisterNotificationChannel(channel);
+        AndroidNotificationCenter.SendNotification(notification, channel.Id);
     }
 
     private void OnApplicationQuit()
     {
         AndroidNotificationCenter.CancelAllDisplayedNotifications();
-        FrequencyNotification();
         QuitGameNotification();
     }
-#endif
 }

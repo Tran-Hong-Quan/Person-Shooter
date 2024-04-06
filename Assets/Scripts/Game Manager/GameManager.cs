@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void OnBeforeSceneLoadRuntimeMethod()
     {
-        Resources.Load<GameManager>("GameManager");
+        Instantiate(Resources.Load<GameManager>("GameManager"));
     }
 
     public Transition transition;

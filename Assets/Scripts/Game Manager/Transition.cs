@@ -12,7 +12,7 @@ public class Transition : MonoBehaviour
     [SerializeField] private Image falldownImage;
     [SerializeField] private RawImage animatedImage;
 
-    public void FullScreen(float enterDuration, float stayDuration, float outDuraion, UnityAction onStay, UnityAction onOut, Color?color = default)
+    public void FullScreen(float enterDuration, float stayDuration, float outDuraion, UnityAction onStay, UnityAction onOut, Color? color = default)
     {
         fullScreenImage.gameObject.SetActive(true);
         if (color == default) color = Color.black;
@@ -29,8 +29,8 @@ public class Transition : MonoBehaviour
                     onOut?.Invoke();
                     fullScreenImage.gameObject.SetActive(false);
                 });
-            });
-        });
+            }, true);
+        }).SetUpdate(true);
     }
 
     public void FullScreen(UnityAction onStay, UnityAction onOut)
@@ -55,7 +55,7 @@ public class Transition : MonoBehaviour
 
         falldownImage.rectTransform.sizeDelta = ((RectTransform)falldownImage.rectTransform.parent).rect.size;
 
-        falldownImage.rectTransform.anchoredPosition = new Vector2(0, falldownImage.rectTransform.sizeDelta.y * scale.y) ;
+        falldownImage.rectTransform.anchoredPosition = new Vector2(0, falldownImage.rectTransform.sizeDelta.y * scale.y);
 
         Sequence fallDownSequence = DOTween.Sequence();
         fallDownSequence.Append(falldownImage.rectTransform.DOMoveY(0, enterDuration).SetEase(Ease.Linear).OnComplete(() =>
@@ -100,6 +100,6 @@ public class Transition : MonoBehaviour
 
     public void Animated(Texture2D texture, UnityAction onStay, UnityAction onOut)
     {
-        Animated(texture,1, 1, 1, onStay, onOut);
+        Animated(texture, 1, 1, 1, onStay, onOut);
     }
 }

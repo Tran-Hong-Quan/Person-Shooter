@@ -13,16 +13,19 @@ namespace HongQuan
 {
     public static class Utilities
     {
-        public static IEnumerator DelayFunction(this MonoBehaviour mono, float delay, NoParamaterDelegate fuction)
+        public static IEnumerator DelayFunction(this MonoBehaviour mono, float delay, NoParamaterDelegate fuction, bool ignoreTimeScale = false)
         {
             var res = StartDelayFuction(delay, fuction);
             mono.StartCoroutine(res);
             return res;
         }
 
-        static IEnumerator StartDelayFuction(float time, NoParamaterDelegate fuction)
+        static IEnumerator StartDelayFuction(float time, NoParamaterDelegate fuction, bool ignoreTimeScale = false)
         {
-            yield return new WaitForSeconds(time);
+            if (ignoreTimeScale)
+                yield return new WaitForSecondsRealtime(time);
+            else
+                yield return new WaitForSeconds(time);
             fuction?.Invoke();
         }
 
