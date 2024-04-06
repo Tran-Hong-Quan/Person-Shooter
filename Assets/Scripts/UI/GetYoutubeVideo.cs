@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Video;
+using YoutubePlayer;
 
 public class GetYoutubeVideo : MonoBehaviour
 {
@@ -18,11 +19,26 @@ public class GetYoutubeVideo : MonoBehaviour
 
         GetYoutubeLink((videoUri) =>
         {
-            loadingUI.gameObject.SetActive(false);
             if (videoUri == "") return;
-            videoPlayer.url = videoUri;
-            videoPlayer.Play();
+            Debug.Log("Get Uri success: " + videoUri);
+
+            if (videoUri.Contains("https://www.youtube.com/watch?v="))
+            {
+                PlayVideo(videoUri);
+            }    
+            else
+            {
+                videoPlayer.url = videoUri;
+                videoPlayer.Play();
+                loadingUI.gameObject.SetActive(false);
+            }    
         });
+    }
+
+    private async void PlayVideo(string uri)
+    {
+        await videoPlayer.PlayYoutubeVideoAsync(uri);
+        loadingUI.gameObject.SetActive(false);
     }
 
     private void StopLoadVideo()

@@ -8,12 +8,27 @@ public class MainMenu : MonoBehaviour
     public static MainMenu instance;
 
     public LoadingUI loadingUI;
-    public Gallery gallery;
+
+    public UIAnimation youtubeVideo;
+    public GameObject downloadData;
 
     private void Awake()
     {
         instance = this;
         Application.targetFrameRate = 60;
+    }
+
+    private void Start()
+    {
+        if (PlayerPrefs.GetInt("Download Data", 0) == 0)
+        {
+            downloadData.SetActive(true);
+        }
+        else
+        {
+            youtubeVideo.Show();
+        }
+
     }
 
     public void PlayGame()

@@ -1,3 +1,4 @@
+using QuanUtilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,4 +29,5 @@ public class GameManager : MonoBehaviour
     public Transition transition;
     public NotificationBoard notificationBoard;
     public AchivementManager achivementManager;
+    public AddressableHelper addressableHelper;
 }

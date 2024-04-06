@@ -35,8 +35,8 @@ public class Notification : MonoBehaviour
         var notification = new AndroidNotification();
         notification.Title = "Welcome back";
         notification.Text = "Let's kill zombies";
-        notification.LargeIcon = "icon_1";
-        notification.SmallIcon = "icon_0";
+        notification.LargeIcon = "large_icon";
+        notification.SmallIcon = "small_icon";
         notification.FireTime = System.DateTime.Now;
 
         AndroidNotificationCenter.SendNotification(notification, channel.Id);
@@ -57,8 +57,8 @@ public class Notification : MonoBehaviour
         var notification = new AndroidNotification();
         notification.Title = "Help us";
         notification.Text = "Zombies are atacking us, please help, we can't hold it for long";
-        notification.LargeIcon = "icon_1";
-        notification.SmallIcon = "icon_0";
+        notification.LargeIcon = "large_icon";
+        notification.SmallIcon = "small_icon";
         notification.FireTime= System.DateTime.Now;
         notification.RepeatInterval = System.TimeSpan.FromMinutes(1);
 
@@ -78,8 +78,8 @@ public class Notification : MonoBehaviour
         var notification = new AndroidNotification();
         notification.Title = "Goodbye";
         notification.Text = "Bye player, we hope you back soon";
-        notification.LargeIcon = "icon_1";
-        notification.SmallIcon = "icon_0";
+        notification.LargeIcon = "large_icon";
+        notification.SmallIcon = "small_icon";
         notification.FireTime = System.DateTime.Now;
 
         AndroidNotificationCenter.RegisterNotificationChannel(channel);
