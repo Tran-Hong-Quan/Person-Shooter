@@ -20,8 +20,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace UniversalInventorySystem
 {
@@ -62,6 +66,8 @@ namespace UniversalInventorySystem
         private List<DurabilityImage> _durabilityImages;
         //public MonoScript onUseFunc;
         //public MonoScript optionalOnDropBehaviour;
+        public OnUseItem onUse;
+        public OnDropItem onDrop;
         public ToolTipInfo tooltip;
 
         public void OnEnable()
@@ -69,23 +75,27 @@ namespace UniversalInventorySystem
             _durabilityImages = SortDurabilityImages(_durabilityImages);
         }
 
+        [System.Serializable]
+        public struct UseItemData
+        {
+            public Inventory inventory;
+            public Item item;
+            public int slot;
+        }
+
         public void OnUse(Inventory inv, int slot)
         {
             //if (onUseFunc == null) return;
-            //InventoryHandler.UseItemEventArgs uea = new InventoryHandler.UseItemEventArgs(inv, this, slot);
-            //object[] tmp = new object[2] { this, uea };
-
-            //BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-
-            //MethodInfo monoMethod = onUseFunc.GetClass().GetMethod("OnUse", flags);
-            //if (monoMethod == null) Debug.LogError($"The script provided ({onUseFunc.name}) on item {itemName} does not contain, or its not accesible, the expected function OnUse.\n Check if this function exists and if the provided script derives from IUsable");
-            //else monoMethod.Invoke(Activator.CreateInstance(onUseFunc.GetClass()), tmp);
-
+            InventoryHandler.UseItemEventArgs uea = new InventoryHandler.UseItemEventArgs(inv, this, slot);
+            onUse?.Invoke(uea);
         }
 
         public void OnDrop(Inventory inv, bool tss, int slot, int amount, bool dbui, Vector3? pos)
         {
-            //if ((inv.interactiable & InventoryController.DropInvFlags) != InventoryController.DropInvFlags) return;
+            if ((inv.interactiable & InventoryController.DropInvFlags) != InventoryController.DropInvFlags) return;
+            InventoryHandler.DropItemEventArgs dea = new InventoryHandler.DropItemEventArgs
+                (inv, tss, slot, this, amount, dbui, pos.GetValueOrDefault(), false);
+            onDrop?.Invoke(dea);
 
             //if (optionalOnDropBehaviour == null)
             //{
@@ -128,6 +138,9 @@ namespace UniversalInventorySystem
             return inputArray;
         }
     }
+
+    public delegate void OnUseItem(InventoryHandler.UseItemEventArgs dea);
+    public delegate void OnDropItem(InventoryHandler.DropItemEventArgs dea);
 
     [Serializable]
     public class DurabilityImage : object
