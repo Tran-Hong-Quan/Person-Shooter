@@ -16,6 +16,7 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] LayerMask groundLayerMask;
     [SerializeField] float spawnRate = 2;
     [SerializeField] float spawnRadious = 20;
+    [SerializeField] public int enemyCount;
 
     [SerializeField] TMP_Text scoreTMP;
     [SerializeField] TMP_Text timeTMP;
@@ -33,9 +34,8 @@ public class MainMapManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnLoop());
-        this.DelayFunction(60, EndGame);
         InvokeRepeating(nameof(UpdateTime), 0, 1);
+        StartCoroutine(SpawnLoop());
 
     }
     private IEnumerator SpawnLoop()
@@ -44,6 +44,8 @@ public class MainMapManager : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnRate);
             if (enemyList.Count >= 20) continue;
+            if(enemyCount <= 0) yield break;
+            enemyCount--;
 
             if (!Utilities.GetRandomSpawnPoint(playerController.transform.position, spawnRadious, groundLayerMask, out Vector3 spawnPoint)) continue;
             var obj = SimplePool.Spawn(enemyPrefab);
@@ -70,11 +72,11 @@ public class MainMapManager : MonoBehaviour
 
     private void UpdateTime()
     {
-        time--;
+        time++;
         timeTMP.text = time.ToString();
     }
 
-    private void EndGame()
+    public void EndGame()
     {
         CancelInvoke();
         StopAllCoroutines();
