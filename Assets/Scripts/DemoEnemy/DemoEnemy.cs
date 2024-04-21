@@ -70,9 +70,12 @@ public class DemoEnemy : MonoBehaviour, IHeath
 
     private void Update()
     {
-        if(target != null)
-        {
-            agent.destination = target.position;
-        }
+
     }
+
+    private void OnAnimatorMove()
+    {
+        agent.destination = target.position;
+    }
+
 }

@@ -1,3 +1,4 @@
+using HongQuan;
 using UnityEngine;
 using UnityEngine.Events;
 using UniversalInventorySystem;
@@ -5,7 +6,6 @@ using UniversalInventorySystem;
 public class InventoryItem : MonoBehaviour
 {
     public int amount;
-
     [SerializeField] protected Item inventoryItemData;
 
     [HideInInspector] public Rigidbody rb;
@@ -20,6 +20,15 @@ public class InventoryItem : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+
+        if (inventoryItemData.onUse == null)
+        {
+            inventoryItemData.onUse = OnUseItem;
+        }
+        if (inventoryItemData.onDrop == null)
+        {
+            inventoryItemData.onDrop = OnDropItem;
+        }
     }
 
     private void OnEnable()
@@ -69,5 +78,22 @@ public class InventoryItem : MonoBehaviour
     public void OnBeingTaken(PreviewItems preview)
     {
         onBeingTaken?.Invoke(this, preview);
+    }
+
+    protected void OnUseItem(InventoryHandler.UseItemEventArgs dea)
+    {
+        dea.inv.RemoveItemInSlot(dea.slot, 1);
+    }
+
+    protected void OnDropItem(InventoryHandler.DropItemEventArgs dea)
+    {
+        dea.inv.RemoveItemInSlot(dea.slot, dea.amount);
+        if (dea.inv.parent == null) return;
+        InventoryItem invItem = SimplePool.Spawn(InventoryHandler.current.itemPrefabs[dea.item]);
+        invItem.transform.position = dea.inv.parent.transform.position + Vector3.up + dea.inv.parent.transform.forward;
+        invItem.Init((Item)dea.item, (int)dea.amount);
+        invItem.SpawnItemOnFloor(rot: Quaternion.Euler(0, (float)dea.inv.parent.transform.eulerAngles.y, 0));
+        invItem.inventory = dea.inv;
+        dea.inv.parent.DelayFunction(1, () => invItem.inventory = null);
     }
 }

@@ -23,6 +23,8 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] UIAnimation endGameBoard;
     [SerializeField] TMP_Text scoreEndGameTMP;
 
+    [SerializeField] Transform spawnPosCenter;
+
     public PlayerController playerController;
 
     public List<DemoEnemy> enemyList = new List<DemoEnemy>();
@@ -47,7 +49,7 @@ public class MainMapManager : MonoBehaviour
             if(enemyCount <= 0) yield break;
             enemyCount--;
 
-            if (!Utilities.GetRandomSpawnPoint(playerController.transform.position, spawnRadious, groundLayerMask, out Vector3 spawnPoint)) continue;
+            if (!Utilities.GetRandomSpawnPoint(spawnPosCenter.position, spawnRadious, groundLayerMask, out Vector3 spawnPoint)) continue;
             var obj = SimplePool.Spawn(enemyPrefab);
             //obj.rb.velocity = Vector3.zero;
             obj.transform.position = spawnPoint;

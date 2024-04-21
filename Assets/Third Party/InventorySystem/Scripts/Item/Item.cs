@@ -75,14 +75,6 @@ namespace UniversalInventorySystem
             _durabilityImages = SortDurabilityImages(_durabilityImages);
         }
 
-        [System.Serializable]
-        public struct UseItemData
-        {
-            public Inventory inventory;
-            public Item item;
-            public int slot;
-        }
-
         public void OnUse(Inventory inv, int slot)
         {
             //if (onUseFunc == null) return;
@@ -112,8 +104,10 @@ namespace UniversalInventorySystem
 
             //    MethodInfo monoMethod = optionalOnDropBehaviour.GetClass().GetMethod("OnDropItem", flags);
 
-            //    if (monoMethod == null) Debug.LogError($"The script provided ({optionalOnDropBehaviour.name}) on item {itemName} does not contain, or its not accesible, the expected function OnDropItem.\n Check if this function exists and if the provided script derives from DropBehaviour");
-            //    else monoMethod.Invoke(Activator.CreateInstance(optionalOnDropBehaviour.GetClass()), tmp);
+            //    if (monoMethod == null)
+            //    Debug.LogError($"The script provided ({optionalOnDropBehaviour.name}) on item {itemName} does not contain, or its not accesible, the expected function OnDropItem.\n Check if this function exists and if the provided script derives from DropBehaviour");
+            //    else
+            //    monoMethod.Invoke(Activator.CreateInstance(optionalOnDropBehaviour.GetClass()), tmp);
             //}
         }
 
