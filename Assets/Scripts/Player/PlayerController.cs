@@ -177,7 +177,6 @@ public class PlayerController : Game.CharacterController
 
         InitCameraView();
 
-        MainMapManager.instance.playerController = this;
 #if ENABLE_INPUT_SYSTEM
         _playerInput = GetComponent<PlayerInput>();
 #else
