@@ -34,6 +34,8 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         GameManager.instance.transition.FullScreen(
-            () => SceneManager.LoadScene("MainMap"), null);
+            () => SceneManager.LoadScene("Map 1"), null);
+        GameManager.instance.level = 1;
+        GameManager.instance.score = 0;
     }
 }

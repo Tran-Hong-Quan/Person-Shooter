@@ -4,11 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.EventSystems;
 using UniversalInventorySystem;
 
 namespace Game
 {
-    public class CharacterController : MonoBehaviour, IHeath
+    public class CharacterController : Game.Entity, IHealth
     {
         [Header("Rig")]
         [SerializeField] protected Rig aimRig;
@@ -29,28 +30,33 @@ namespace Game
 
         [Header("Bone")]
         [SerializeField] protected Transform rightHand;
+        [SerializeField] protected bool isUseRagdoll;
 
         [Header("Inputs")]
         [SerializeField] protected CharacterInputs inputs;
+        [SerializeField] protected EquipController equipController;
 
         [Header("Fields")]
         public float maxHealth = 100f;
         public float currentHealth;
+        public HealthTeamSide heathteamSide;
 
         public Transform RightHand => rightHand;
         public Animator Animator => _animator;
         public CharacterInputs Inputs => inputs;
 
         protected Animator _animator;
-        protected Rigidbody rigidbody;
+        protected new Rigidbody rigidbody;
         protected Inventory inventory;
         public Transform AimObj => aimObj;
 
         public Inventory Inventory => inventory;
-
         public float MaxHealth => maxHealth;
-
         public float CurrentHealth => currentHealth;
+        public EquipController EquipController => equipController;
+        public GameObject GameObject => gameObject;
+
+        public HealthTeamSide HealthTeamSide => heathteamSide;
 
         protected virtual void Awake()
         {
@@ -201,8 +207,8 @@ namespace Game
 
         public virtual void StopHoldRifleAnimation()
         {
-            if (isAiming) StopRifleFireAnimation();
-            if (isFiring) StopRifleAimAnimation();
+            StopRifleFireAnimation();
+            StopRifleAimAnimation();
             reloadTween?.Kill();
             if (reloadCorotine != null)
             {
@@ -217,7 +223,7 @@ namespace Game
             aimRifleRig.SmoothRig(0);
             equipRifle = false;
             ResetGunState();
-            
+
         }
 
         #endregion Rifle
@@ -331,23 +337,64 @@ namespace Game
             //}
         }
 
-        public virtual void TakeDamge(float damge)
+        public virtual void TakeDamge(float damge, HealthEventHandler caller)
         {
             currentHealth -= damge;
+            if (currentHealth < 0)
+                Die();
         }
 
-        public virtual void Regeneration(float regeneration)
+        public virtual void Regeneration(float regeneration, HealthEventHandler caller)
         {
             currentHealth += regeneration;
+        }
+
+        protected virtual void Die()
+        {
+            onDie?.Invoke(this);
+            Destroy(gameObject);
         }
     }
 
 }
 
-public interface IHeath
+public interface IHealth
 {
+    public GameObject GameObject { get; }
+    public HealthTeamSide HealthTeamSide { get; }
     public float MaxHealth { get; }
     public float CurrentHealth { get; }
-    public void TakeDamge(float damge);
-    public void Regeneration(float regeneration);
+    public void TakeDamge(float damage, HealthEventHandler evt);
+    public void Regeneration(float regeneration, HealthEventHandler evt);
+}
+
+public class HealthEventHandler
+{
+    public GameObject caller;
+    public HealthTeamSide teamSide;
+
+    public string callerData;
+
+    public HealthEventHandler(GameObject caller, string callerData)
+    {
+        this.caller = caller;
+        this.callerData = callerData;
+    }
+
+    public HealthEventHandler(GameObject caller, HealthTeamSide teamSide)
+    {
+        this.caller = caller;
+        this.teamSide = teamSide;
+    }
+
+    public HealthEventHandler() { }
+}
+
+[System.Serializable]
+public enum HealthTeamSide
+{
+    None,
+    A,
+    B,
+    C
 }

@@ -1856,6 +1856,10 @@ MonoBehaviour:
   notificationBoard: {fileID: 1887549626320753416}
   achivementManager: {fileID: 9059373848983915052}
   addressableHelper: {fileID: 1948291590915507940}
+  level: 0
+  score: 0
+  levelScenes:
+  - Map1
 --- !u!114 &416943184194888076
 MonoBehaviour:
   m_ObjectHideFlags: 0

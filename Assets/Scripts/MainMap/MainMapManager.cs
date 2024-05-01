@@ -10,20 +10,14 @@ public class MainMapManager : MonoBehaviour
     public static MainMapManager instance { get; private set; }
 
     public int score;
-    public int time = 60;
-
-    [SerializeField] DemoEnemy enemyPrefab;
-    [SerializeField] LayerMask groundLayerMask;
-    [SerializeField] float spawnRate = 2;
-    [SerializeField] float spawnRadious = 20;
-    [SerializeField] public int enemyCount;
+    public int time = 0;
 
     [SerializeField] TMP_Text scoreTMP;
     [SerializeField] TMP_Text timeTMP;
     [SerializeField] UIAnimation endGameBoard;
     [SerializeField] TMP_Text scoreEndGameTMP;
-
-    [SerializeField] Transform spawnPosCenter;
+    [SerializeField] Game.Entity zombiePrefab;
+    [SerializeField] EnemyPortal[] enemyPortals;
 
     public PlayerController playerController;
 
@@ -37,28 +31,9 @@ public class MainMapManager : MonoBehaviour
     private void Start()
     {
         InvokeRepeating(nameof(UpdateTime), 0, 1);
-        StartCoroutine(SpawnLoop());
-
+        InitEnemyPortal();
     }
-    private IEnumerator SpawnLoop()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(spawnRate);
-            if (enemyList.Count >= 20) continue;
-            if(enemyCount <= 0) yield break;
-            enemyCount--;
 
-            if (!Utilities.GetRandomSpawnPoint(spawnPosCenter.position, spawnRadious, groundLayerMask, out Vector3 spawnPoint)) continue;
-            var obj = SimplePool.Spawn(enemyPrefab);
-            //obj.rb.velocity = Vector3.zero;
-            obj.transform.position = spawnPoint;
-            obj.transform.rotation = Quaternion.Euler(0, Random.Range(0, 359), 0);
-            obj.target = playerController.transform;
-            obj.onDie.AddListener(RemoveEnemyFromList); 
-            enemyList.Add(obj);
-        }
-    }
 
     private void RemoveEnemyFromList(DemoEnemy enemy)
     {
@@ -84,16 +59,32 @@ public class MainMapManager : MonoBehaviour
         StopAllCoroutines();
         Time.timeScale = 0;
         endGameBoard.Show();
-        scoreEndGameTMP.text = score.ToString();
-        GameManager.instance.achivementManager.AddScore(score);
+        scoreEndGameTMP.text = GameManager.instance.score.ToString();
+        GameManager.instance.achivementManager.AddScore(GameManager.instance.score);
     }
 
-    public void PlayAgain()
+    public void NextLevel()
     {
-        GameManager.instance.transition.FullScreen(() => 
+        GameManager.instance.NextLevel();
+    }
+
+    public void InitEnemyPortal()
+    {
+        foreach(var p in enemyPortals)
         {
-            Time.timeScale = 1;
-            SceneManager.LoadScene("MainMap");
-        }, null);
+            p.SetEnemy(zombiePrefab);
+            p.onDie.AddListener(DestroyPortal);
+        }
+    }
+
+    private void DestroyPortal(Game.Entity entity)
+    {
+        entity.onDie.RemoveListener(DestroyPortal);
+        GetScore();
+        GameManager.instance.score++;
+        if(score == enemyPortals.Length)
+        {
+            EndGame();
+        }
     }
 }

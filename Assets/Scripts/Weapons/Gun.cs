@@ -129,10 +129,11 @@ public class Gun : MonoBehaviour, IEquiptableItem
             hitEff.transform.rotation = Quaternion.LookRotation(hit.normal);
             hitEff.Play();
             this.DelayFunction(hitEff.main.duration, () => SimplePool.Despawn(hitEff.gameObject));
-            if(hit.transform.TryGetComponent(out IHeath entity))
+            if (hit.transform.TryGetComponent(out IHealth entity))
             {
-                entity.TakeDamge(damge);
+                entity.TakeDamge(damge, new HealthEventHandler(gameObject, characterController.heathteamSide));
             }
+            //print("Gun fire to " + hit.collider.name);
         }
 
         var eff = SimplePool.Spawn(fireEffect);

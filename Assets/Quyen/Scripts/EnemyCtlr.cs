@@ -6,12 +6,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class EnemyCtlr : MonoBehaviour
+public class EnemyCtlr : Game.Entity
 {
     private EnemyInfo enemyInfo;
     private Animator animator;
     private NavMeshAgent agent;
-    [SerializeField] private Transform player;
+    [SerializeField] private Transform target;
 
     private readonly int speedRotation = 5;
     private bool dead = false;
@@ -43,6 +43,10 @@ public class EnemyCtlr : MonoBehaviour
 
     private void Start()
     {
+        float lv = GameManager.instance.level;
+        disChase*=lv;
+        disRun*=lv;
+
         RandomPosition();
     }
 
@@ -57,21 +61,21 @@ public class EnemyCtlr : MonoBehaviour
 
     private void Move()
     {
-        if (player == null) return;
+        if (target == null) return;
         if (chase)
         {
-            Vector3 direction = (player.position - transform.position).normalized;
+            Vector3 direction = (target.position - transform.position).normalized;
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speedRotation * Time.deltaTime);
             }
-            agent.destination = player.position;
+            agent.destination = target.position;
             agent.speed = enemyInfo.SpeedChase;
         }
         else if (run)
         {
-            agent.destination = player.position;
+            agent.destination = target.position;
             agent.speed = enemyInfo.SpeedRun;
         }
         else if (walk)
@@ -83,7 +87,10 @@ public class EnemyCtlr : MonoBehaviour
 
     private void UpdateValue()
     {
-        distance = Vector3.Distance(transform.position, player.position);
+        if (target != null)
+        {
+            distance = Vector3.Distance(transform.position, target.position);
+        }
 
         dead = enemyInfo.IsDead;
         chase = (distance <= disChase);
@@ -116,15 +123,13 @@ public class EnemyCtlr : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speedRotation * Time.deltaTime);
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime);
-        
         if (Vector3.Distance(transform.position, targetPosition) < 0.1f && walk)
         {
             RandomPosition();
             walk = false;
             idle = true;
         }
-    }    
+    }
 
     private void RandomPosition()
     {
@@ -148,7 +153,7 @@ public class EnemyCtlr : MonoBehaviour
         if (offHealthUI != null) StopCoroutine(offHealthUI);
         offHealthUI = this.DelayFunction(2, () => healthUI.SetActive(false));
         healthUI.SetActive(true);
-        healthBar.DOFillAmount(Mathf.Abs(enemyInfo.CurrentHP / enemyInfo.MaxHP), .2f);
+        healthBar.DOFillAmount(Mathf.Abs(enemyInfo.CurrentHealth / enemyInfo.MaxHealth), .2f);
     }
 
     private void OnEnable()
@@ -156,5 +161,15 @@ public class EnemyCtlr : MonoBehaviour
         enemyInfo.Reset();
         UpdateHealthUI();
         healthUI.SetActive(false);
+    }
+
+    public void RemveChaseTarget()
+    {
+        target = null;
+    }
+
+    public void SetChaseTarget(Transform target)
+    {
+        this.target = target;
     }
 }

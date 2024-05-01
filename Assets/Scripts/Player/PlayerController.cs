@@ -581,15 +581,15 @@ public class PlayerController : Game.CharacterController
         tpAimCam.Follow = tpCamTarget;
     }
 
-    public override void TakeDamge(float damge)
+    public override void TakeDamge(float damage, HealthEventHandler caller)
     {
-        base.TakeDamge(damge);
+        base.TakeDamge(damage, caller);
         UpdateHealthBarUI();
     }
 
-    public override void Regeneration(float regeneration)
+    public override void Regeneration(float regeneration, HealthEventHandler caller)
     {
-        base.Regeneration(regeneration);
+        base.Regeneration(regeneration, caller);
         UpdateHealthBarUI();
     }
 
