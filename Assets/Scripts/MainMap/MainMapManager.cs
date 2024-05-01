@@ -15,6 +15,7 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] TMP_Text scoreTMP;
     [SerializeField] TMP_Text timeTMP;
     [SerializeField] UIAnimation endGameBoard;
+    [SerializeField] TMP_Text endGameTMP;
     [SerializeField] TMP_Text scoreEndGameTMP;
     [SerializeField] Game.Entity zombiePrefab;
     [SerializeField] EnemyPortal[] enemyPortals;
@@ -32,6 +33,7 @@ public class MainMapManager : MonoBehaviour
     {
         InvokeRepeating(nameof(UpdateTime), 0, 1);
         InitEnemyPortal();
+        playerController.onDie.AddListener(_ => EndGame());
     }
 
 
@@ -60,11 +62,25 @@ public class MainMapManager : MonoBehaviour
         Time.timeScale = 0;
         endGameBoard.Show();
         scoreEndGameTMP.text = GameManager.instance.score.ToString();
-        GameManager.instance.achivementManager.AddScore(GameManager.instance.score);
+
+        if(isWin)
+        {
+            endGameTMP.text = "WIN LEVEL";
+        }
+        else
+        {
+            endGameTMP.text = "YOU LOSE";
+            GameManager.instance.achivementManager.AddScore(GameManager.instance.score);    
+        }
     }
 
     public void NextLevel()
     {
+        if (!isWin)
+        {
+            GameManager.instance.score = 0;
+            GameManager.instance.level = 0;
+        }
         GameManager.instance.NextLevel();
     }
 
@@ -77,6 +93,7 @@ public class MainMapManager : MonoBehaviour
         }
     }
 
+    bool isWin;
     private void DestroyPortal(Game.Entity entity)
     {
         entity.onDie.RemoveListener(DestroyPortal);
@@ -84,6 +101,7 @@ public class MainMapManager : MonoBehaviour
         GameManager.instance.score++;
         if(score == enemyPortals.Length)
         {
+            isWin = true;
             EndGame();
         }
     }

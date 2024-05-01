@@ -2359,6 +2359,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   heathteamSide: 1
+  freeFireSkill: {fileID: 0}
   MoveSpeed: 3
   SprintSpeed: 5.335
   RotateSpeed: 10
@@ -3362,19 +3363,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  time: 60
-  enemyPrefab: {fileID: 1949484158}
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  spawnRate: 2
-  spawnRadious: 20
-  enemyCount: 0
+  time: 0
   scoreTMP: {fileID: 1610008522}
   timeTMP: {fileID: 1088881188}
   endGameBoard: {fileID: 444138912}
+  endGameTMP: {fileID: 1660417531}
   scoreEndGameTMP: {fileID: 650570114}
-  spawnPosCenter: {fileID: 0}
   zombiePrefab: {fileID: 223911767}
   enemyPortals:
   - {fileID: 1133084424}
@@ -17850,6 +17844,7 @@ MonoBehaviour:
   maxHealth: 0
   currentHealth: 0
   heathteamSide: 0
+  freeFireSkill: {fileID: 0}
   MoveSpeed: 3
   SprintSpeed: 5.335
   RotateSpeed: 10
