@@ -9,7 +9,6 @@ public class Rifle : Gun
     protected override void Awake()
     {
         mainCam = Camera.main;
-        recoil = GetComponent<ProceduralRecoil>();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
     }

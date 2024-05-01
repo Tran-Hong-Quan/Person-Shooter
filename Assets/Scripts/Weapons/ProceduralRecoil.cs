@@ -5,50 +5,20 @@ using UnityEngine;
 public class ProceduralRecoil : MonoBehaviour
 {
     public Vector3 recoilForce = Vector3.one;
-    public float recoverySpeed = 2f;
-    public float snappiness = 2f;
+    public Game.CharacterController character;
 
-    public Vector3 maxRecoil = new Vector3(12, 9, 9);
-
-    public List<Transform> targets;
-
-    private Vector3 targetRotation;
-    private Vector3 currentRotation;
-
-    public void Init(List<Transform> targets)
+    private void Awake()
     {
-        this.targets = targets;
+        recoilForce.z = 0;
     }
 
-    public void ClearTargets()
+    public void Init(Game.CharacterController character)
     {
-        targets.Clear();
+        this.character = character;
     }
 
-    void Update()
+    public void FireRecoil()
     {
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, recoverySpeed * Time.deltaTime);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, recoverySpeed * Time.deltaTime);
-        currentRotation = new Vector3(
-            Mathf.Clamp(currentRotation.x, -maxRecoil.x, 0),
-            Mathf.Clamp(currentRotation.y, -maxRecoil.y, maxRecoil.y),
-            Mathf.Clamp(currentRotation.z, -maxRecoil.z, maxRecoil.z));
-
-        foreach (Transform t in targets)
-        {
-            t.localRotation = Quaternion.Euler(currentRotation);
-        }
-    }
-
-    public void Aim()
-    {
-        targetRotation += GetRecoilValue();
-    }
-
-    private Vector3 GetRecoilValue()
-    {
-        return new Vector3(-recoilForce.x,
-            Random.Range(-recoilForce.y, recoilForce.y),
-            Random.Range(-recoilForce.z, recoilForce.z)) * Time.deltaTime;
+        //character.Recoil(recoilForce*Time.deltaTime);
     }
 }

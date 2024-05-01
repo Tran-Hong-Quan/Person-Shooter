@@ -164,7 +164,7 @@ public class PlayerController : Game.CharacterController
         _input = GetComponent<PlayerInputs>();
         _controller = GetComponent<CharacterController>();
         _hasAnimator = TryGetComponent(out _animator);
-        cineCamTarget = cameraRoot.GetChild(0);
+        cineCamTarget = cameraRoot;
         inventoryUI.SetInventory(inventory);
         inventory.parent = this;
     }
@@ -259,6 +259,11 @@ public class PlayerController : Game.CharacterController
             _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
         }
 
+        targetRecoil.x = Mathf.Lerp(targetRecoil.x, 0, targetRecoil.z * 2);
+        targetRecoil.y = Mathf.Lerp(targetRecoil.y, 0, targetRecoil.z);
+        _cinemachineTargetPitch -= targetRecoil.y;
+        _cinemachineTargetYaw += targetRecoil.x;
+
         // clamp our rotations so our values are limited 360 degrees
         _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -268,6 +273,14 @@ public class PlayerController : Game.CharacterController
         cameraRoot.rotation = Quaternion.Euler(targetRotation);
         AimObjectSetup();
         foreach (var c in camerasRootFollow) c.rotation = Quaternion.Euler(targetRotation);
+    }
+
+    Vector3 targetRecoil;
+    public override void Recoil(Vector3 force)
+    {
+        targetRecoil.x += force.x * Time.deltaTime;
+        targetRecoil.y += force.y * Time.deltaTime;
+        targetRecoil.z = force.z;
     }
 
     private void Move()

@@ -14,6 +14,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
     [SerializeField] protected float muzzleVelocity = 0.1f;
     [SerializeField] protected int bulletsCount = 120;
     [SerializeField] protected int magazineBullet = 30;
+    [SerializeField] protected Vector3 recoil = new Vector3(100, 100, 200);
     [SerializeField] protected EquipType equipType;
     [SerializeField] protected Sprite iconSprite;
 
@@ -29,7 +30,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
     protected CharacterInputs inputs;
     protected Camera mainCam;
     protected Animator animator;
-    protected ProceduralRecoil recoil;
     protected EquipController equipController;
     [SerializeField]
     protected EquipStatus equipStatus;
@@ -54,7 +54,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
     protected virtual void Awake()
     {
         mainCam = Camera.main;
-        recoil = GetComponent<ProceduralRecoil>();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
     }
@@ -144,11 +143,13 @@ public class Gun : MonoBehaviour, IEquiptableItem
 
         audioSource.PlayOneShot(fireAudioClip);
 
-        recoil.Aim();
+        characterController.Recoil(
+            new Vector3(Random.Range(-recoil.x, recoil.x), Random.Range(0, recoil.y),recoil.z));
 
         clk = fireRate;
 
-        currentBullet--;
+        if (!characterController.freeFireSkill.isFreeFire)
+            currentBullet--;
 
         onChangeBulletCount?.Invoke(currentBullet);
     }
@@ -198,15 +199,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
         inputs = characterController.Inputs;
         AddListeners();
         firePoint.forward = equipController.rightHand.up;
-        if (equipController is PlayerEquipController)
-        {
-            var recoilTargets = new List<Transform>();
-            recoilTargets.Add(((PlayerController)characterController).cameraRoot.GetChild(0));
-            foreach (var recoilTarget in ((PlayerController)characterController).camerasRootFollow)
-                if (recoilTarget.childCount > 0)
-                    recoilTargets.Add(recoilTarget.GetChild(0));
-            recoil.Init(recoilTargets);
-        }
     }
 
     protected virtual void SetParentEquipTo(Transform to)
@@ -223,7 +215,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
         col.enabled = true;
         transform.SetParent(null, true);
         rb.AddForce((characterController.transform.forward + characterController.transform.up).normalized * 500);
-        recoil.ClearTargets();
         equipStatus = EquipStatus.None;
         equipType = EquipType.None;
         isAiming = false;
@@ -240,7 +231,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
             return;
         }
         equipStatus = EquipStatus.Stored;
-        recoil.ClearTargets();
         RemoveListeners();
         characterController.StopHoldRifleAnimation();
         isReloading = false;

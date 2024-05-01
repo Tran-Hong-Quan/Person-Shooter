@@ -27,6 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3859546278950880626}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -35,7 +36,6 @@ Transform:
   - {fileID: 3964462216002155528}
   - {fileID: 1790196920007522243}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7634162607279894768
 MonoBehaviour:
@@ -52,9 +52,11 @@ MonoBehaviour:
   characterController: {fileID: 0}
   firePoint: {fileID: 7166383609198578462}
   fireRate: 0.1
+  damge: 24
   muzzleVelocity: 700
   bulletsCount: 120
   magazineBullet: 30
+  recoil: {x: 100, y: 100, z: 0.25}
   equipType: 0
   iconSprite: {fileID: 21300000, guid: 5a034a898299f8645802fad539929cfb, type: 3}
   fireEffect: {fileID: 6756977361486156386}
@@ -65,7 +67,7 @@ MonoBehaviour:
   attachMagAudioClip: {fileID: 8300000, guid: 28cc864a7b5ec3442ab2c0c545f204f9, type: 3}
   reloadAudioClip: {fileID: 8300000, guid: ee3ca23f4db539742b7b952571fe841d, type: 3}
   equipStatus: 0
-  onFire:
+  onChangeBulletCount:
     m_PersistentCalls:
       m_Calls: []
 --- !u!65 &4441677915573163182
@@ -76,9 +78,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3859546278950880626}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.2665047, y: 0.898664, z: 0.058817968}
   m_Center: {x: 0.0020101964, y: 0.24824439, z: 0.026458092}
 --- !u!54 &8982696827109419255
@@ -88,10 +98,21 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3859546278950880626}
-  serializedVersion: 2
+  serializedVersion: 4
   m_Mass: 4
   m_Drag: 0
   m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -109,11 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29861a8d9d7a07429c3ff4528c6afab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoilForce: {x: 500, y: 500, z: 0}
-  recoverySpeed: 2
-  snappiness: 2
-  maxRecoil: {x: 200, y: 200, z: 0}
-  targets: []
+  recoilForce: {x: 20, y: 20, z: 0}
+  character: {fileID: 0}
 --- !u!1 &4973396320088573687
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,13 +156,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4973396320088573687}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: -1.5928609, y: 0, z: 0.19250028}
   m_LocalScale: {x: 2.4999998, y: 2.4999998, z: 2.4999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1790196920007522243}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!82 &291290870864282796
 AudioSource:
@@ -247,6 +265,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2080881775648497250}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: dfe9182dcf7e38a40b80f7733142d9fc, type: 3}
@@ -314,6 +333,15 @@ PrefabInstance:
       value: Model
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: dfe9182dcf7e38a40b80f7733142d9fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7166383609198578462}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: dfe9182dcf7e38a40b80f7733142d9fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6756977361500313378}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfe9182dcf7e38a40b80f7733142d9fc, type: 3}
 --- !u!4 &1790196920007522243 stripped
 Transform:
@@ -325,6 +353,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 2080881775648497250}
     m_Modifications:
     - target: {fileID: 100002, guid: 99c73c92ac40473459640b165473206f, type: 3}
@@ -405,6 +434,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400000, guid: 99c73c92ac40473459640b165473206f, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99c73c92ac40473459640b165473206f, type: 3}
 --- !u!4 &3964462216002155528 stripped
 Transform:
@@ -421,6 +453,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 1790196920007522243}
     m_Modifications:
     - target: {fileID: 100006, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
@@ -625,6 +658,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400000, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100012, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9142206301187077263}
   m_SourcePrefab: {fileID: 100100000, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
 --- !u!198 &6756977361486156386 stripped
 ParticleSystem:
@@ -648,11 +687,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 1
+  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
   m_LightLayerMask: 1
+  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
   m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 1
+--- !u!4 &6756977361500313378 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400006, guid: f47cb9d88f4bc6c4bb7441e962c2c1a5, type: 3}
+  m_PrefabInstance: {fileID: 6756977361500179876}
+  m_PrefabAsset: {fileID: 0}

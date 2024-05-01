@@ -41,6 +41,9 @@ namespace Game
         public float currentHealth;
         public HealthTeamSide heathteamSide;
 
+        [Header("Skill")]
+        public FreeFireSkill freeFireSkill;
+
         public Transform RightHand => rightHand;
         public Animator Animator => _animator;
         public CharacterInputs Inputs => inputs;
@@ -228,6 +231,7 @@ namespace Game
 
         #endregion Rifle
 
+        #region Pistol
         public virtual void PlayHoldingPistolAnimation()
         {
             equipPistol = true;
@@ -319,6 +323,13 @@ namespace Game
             isReloading = false;
             isFiring = false;
             isAiming = false;
+        }
+
+        #endregion
+
+        public virtual void Recoil(Vector3 force)
+        {
+
         }
 
         protected void OnCollisionEnter(Collision collision)
