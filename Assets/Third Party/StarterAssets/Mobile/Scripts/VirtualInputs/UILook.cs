@@ -63,4 +63,9 @@ public class UILook : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     {
         return -value;
     }
+
+    private void Update()
+    {
+        
+    }
 }
