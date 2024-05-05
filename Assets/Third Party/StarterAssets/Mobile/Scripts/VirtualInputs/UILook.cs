@@ -21,17 +21,20 @@ public class UILook : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        lastPost = eventData.position;
+        OnDrag(eventData);
     }
 
-    Vector2 lastPost;
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 delta = eventData.position - lastPost;
-        lastPost = eventData.position;
-        Vector2 outputPosition = ApplyInversionFilter(delta);
+        Vector2 delta = eventData.delta / canvasScaler.scaleFactor;
+        if (delta.sqrMagnitude < 1)
+        {
+            OutputPointerEventValue(Vector2.zero);
+            return;
+        }
+        Vector2 outputPosition = ApplyInversionFilter(delta) * GameSetting.sensitivity;
 
-        OutputPointerEventValue(outputPosition * GameSetting.sensitivity);
+        OutputPointerEventValue(outputPosition);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -62,10 +65,5 @@ public class UILook : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     float InvertValue(float value)
     {
         return -value;
-    }
-
-    private void Update()
-    {
-        
     }
 }
