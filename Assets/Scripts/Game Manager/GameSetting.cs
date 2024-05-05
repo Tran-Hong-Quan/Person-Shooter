@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class GameSetting : MonoBehaviour
 {
+    public static float sensitivity = 2;
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] Slider musicSlider;
     [SerializeField] Slider sfxSlider;
@@ -52,8 +53,7 @@ public class GameSetting : MonoBehaviour
 
     public void SetSentivity(float value)
     {
-        PlayerPrefs.SetFloat("Sensitivity", value);
-        UILook.magnitudeMultiplier = value;
+        sensitivity = value;
         value *= 100;
         value = (int)value;
         value /= 100;

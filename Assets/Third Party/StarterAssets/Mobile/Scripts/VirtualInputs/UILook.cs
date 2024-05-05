@@ -13,7 +13,6 @@ public class UILook : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     public CanvasScaler canvasScaler;
 
     [Header("Settings")]
-    public static float magnitudeMultiplier = 1f;
     public bool invertXOutputValue;
     public bool invertYOutputValue;
 
@@ -22,16 +21,17 @@ public class UILook : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        OnDrag(eventData);
+        lastPost = eventData.position;
     }
 
+    Vector2 lastPost;
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 delta = eventData.delta / canvasScaler.scaleFactor;
-
+        Vector2 delta = eventData.position - lastPost;
+        lastPost = eventData.position;
         Vector2 outputPosition = ApplyInversionFilter(delta);
 
-        OutputPointerEventValue(outputPosition * magnitudeMultiplier);
+        OutputPointerEventValue(outputPosition * GameSetting.sensitivity);
     }
 
     public void OnPointerUp(PointerEventData eventData)

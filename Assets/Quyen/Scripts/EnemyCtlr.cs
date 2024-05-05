@@ -44,6 +44,7 @@ public class EnemyCtlr : Game.Entity
     private void Start()
     {
         float lv = GameManager.instance.level;
+        if (lv <= 0) lv = 1;
         disChase*=lv;
         disRun*=lv;
 

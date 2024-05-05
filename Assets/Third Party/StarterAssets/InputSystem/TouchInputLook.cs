@@ -1,3 +1,4 @@
+using HongQuan;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class TouchInputLook : MonoBehaviour
 {
-    public float sensitivity = 2;
     public Vector2 touchInput;
     public Vector2Int invertInput = Vector2Int.one;
     public PlayerController playerController;
@@ -21,7 +21,7 @@ public class TouchInputLook : MonoBehaviour
         if (Touchscreen.current.touches.Count > 0 && Touchscreen.current.touches[0].isInProgress)
         {
             touchInput = Touchscreen.current.touches[0].delta.ReadValue();
-            touchInput *= sensitivity;
+            touchInput *= GameSetting.sensitivity;
             touchInput *= invertInput;
         }
         else

@@ -48,6 +48,7 @@ public class EnemyInfo : MonoBehaviour, IHealth
     private void Start()
     {
         int lv = GameManager.instance.level;
+        if (lv <= 0) lv = 1;
         maxHP *= lv;
         speedRun *= lv;
         speedChase*=lv;
