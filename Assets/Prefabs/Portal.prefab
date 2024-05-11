@@ -534,7 +534,7 @@ MonoBehaviour:
   healthUI: {fileID: 9078750756586967463}
   enemyPrefab: {fileID: 0}
   spawnRate: 5
-  maxEnemyToSpawn: 15
+  maxEnemyToSpawn: 10
   heathTeamSide: 2
   dieEffect: {fileID: 19800002, guid: 4bf22a1d8d9e7724b9af67921436851d, type: 3}
   audioSource: {fileID: 7676146090796000649}
