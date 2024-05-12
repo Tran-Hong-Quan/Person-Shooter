@@ -262,7 +262,7 @@ public interface IEquiptableItem
 {
     public EquipStatus EquipStatus { get; }
     public EquipType EquipType { get; }
-    public Sprite InconSprite { get; }
+    public Sprite IconSprite { get; }
     public Transform parent {  get; }
     public void Equip(EquipController equipController);
     public void Unequip(EquipController equipController);

@@ -14,7 +14,9 @@ public class Gun : MonoBehaviour, IEquiptableItem
     [SerializeField] protected float muzzleVelocity = 0.1f;
     [SerializeField] protected int bulletsCount = 120;
     [SerializeField] protected int magazineBullet = 30;
-    [SerializeField] protected Vector3 recoil = new Vector3(100, 100, 200);
+    [SerializeField] protected Vector3 recoilAxis = new Vector3(0, 1, 1);
+    [SerializeField] protected float recoilFallBack = 30;
+    [SerializeField] protected float recoilForce = 10;
     [SerializeField] protected EquipType equipType;
     [SerializeField] protected Sprite iconSprite;
 
@@ -44,7 +46,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
 
     public EquipType EquipType => equipType;
 
-    public Sprite InconSprite => iconSprite;
+    public Sprite IconSprite => iconSprite;
     public int CurrentBullet => currentBullet;
 
     public Transform parent => transform;
@@ -80,6 +82,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
     protected virtual void Update()
     {
         if (clk > 0) clk -= Time.deltaTime;
+        recoilValue = Mathf.Lerp(recoilValue, 0, Time.deltaTime * recoilFallBack);
     }
 
     protected bool isFire = false;
@@ -100,6 +103,8 @@ public class Gun : MonoBehaviour, IEquiptableItem
     }
 
     protected bool isFireSuccess = false;
+    float recoilValue = 0;
+    Vector3 hitPos;
     protected virtual void Fire()
     {
         isFireSuccess = false;
@@ -120,6 +125,15 @@ public class Gun : MonoBehaviour, IEquiptableItem
         else
             ray = practicalRay;
 
+        ray.direction = Quaternion.AngleAxis(recoilValue,
+            new Vector3(recoilAxis.x, Random.Range(-recoilAxis.y, recoilAxis.y), recoilAxis.z)) * ray.direction;
+        recoilValue += recoilForce;
+        if (recoilValue > 60) recoilValue = 60;
+        if (characterController is PlayerController)
+        {
+            var player = characterController as PlayerController;
+        }
+
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             var hitEff = SimplePool.Spawn(bulletHitEff);
@@ -133,6 +147,11 @@ public class Gun : MonoBehaviour, IEquiptableItem
                 entity.TakeDamge(damge, new HealthEventHandler(gameObject, characterController.heathteamSide));
             }
             //print("Gun fire to " + hit.collider.name);
+            hitPos = hit.point;
+        }
+        else
+        {
+            hitPos = ray.origin + ray.direction * 10;
         }
 
         var eff = SimplePool.Spawn(fireEffect);
@@ -142,9 +161,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
         this.DelayFunction(eff.main.duration, () => SimplePool.Despawn(eff.gameObject));
 
         audioSource.PlayOneShot(fireAudioClip);
-
-        characterController.Recoil(
-            new Vector3(Random.Range(-recoil.x, recoil.x), Random.Range(0, recoil.y),recoil.z));
 
         clk = fireRate;
 
@@ -195,6 +211,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
 
     public virtual void Hold()
     {
+        equipStatus = EquipStatus.BeingHeld;
         SetParentEquipTo(equipController.rightHand);
         inputs = characterController.Inputs;
         AddListeners();

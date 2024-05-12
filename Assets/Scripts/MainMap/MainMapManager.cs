@@ -27,6 +27,7 @@ public class MainMapManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        Application.targetFrameRate = 30;
     }
 
     private void Start()

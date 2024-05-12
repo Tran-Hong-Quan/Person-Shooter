@@ -199,6 +199,7 @@ public class PlayerInputs : CharacterInputs
 
     public void SetCursorState(bool newState)
     {
+        cursorLocked = newState;
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 

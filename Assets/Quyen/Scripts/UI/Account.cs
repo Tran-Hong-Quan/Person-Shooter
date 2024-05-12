@@ -37,6 +37,11 @@ public class Account : MonoBehaviour
         StartCoroutine(ShowInformation(userName));
     }
 
+    public void SignOut()
+    {
+        PlayerPrefs.SetString("UserName", "");
+    }
+
     IEnumerator ShowInformation(string userName)
     {
         WWWForm form = new();
@@ -68,6 +73,13 @@ public class Account : MonoBehaviour
 
         userNameTMP.text = userNameText;
         inforTMP.text = inforText;
+
+        PlayerPrefs.SetString("UserName", userNameText);
+    }
+
+    private void OnDestroy()
+    {
+        instance = null;
     }
 
 }
