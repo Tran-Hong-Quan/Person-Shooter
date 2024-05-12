@@ -58,6 +58,7 @@ public class MainMapManager : MonoBehaviour
 
     public void EndGame()
     {
+        playerController.Inputs.SetCursorState(false);
         CancelInvoke();
         StopAllCoroutines();
         Time.timeScale = 0;
@@ -100,7 +101,8 @@ public class MainMapManager : MonoBehaviour
         entity.onDie.RemoveListener(DestroyPortal);
         GetScore();
         GameManager.instance.score++;
-        if(score == enemyPortals.Length)
+        enemyPortals.Remove(entity as EnemyPortal);
+        if(score == enemyPortals.Count)
         {
             isWin = true;
             EndGame();
