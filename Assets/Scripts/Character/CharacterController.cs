@@ -327,11 +327,6 @@ namespace Game
 
         #endregion
 
-        public virtual void Recoil(Vector3 force)
-        {
-
-        }
-
         protected void OnCollisionEnter(Collision collision)
         {
 

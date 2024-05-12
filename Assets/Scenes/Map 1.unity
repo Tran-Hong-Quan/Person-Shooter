@@ -2533,6 +2533,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1109539395}
   - {fileID: 1376789113}
   - {fileID: 2003284241}
   - {fileID: 696757102}
@@ -5368,6 +5369,7 @@ MonoBehaviour:
   inventoryBoard: {fileID: 1966691584}
   mainUI: {fileID: 1376789115}
   healthBar: {fileID: 1557071341}
+  crosshair: {fileID: 1109539395}
 --- !u!95 &688714877
 Animator:
   serializedVersion: 5
@@ -8984,7 +8986,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1376789113}
+  m_Father: {fileID: 367488166}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -11503,7 +11505,6 @@ RectTransform:
   - {fileID: 830687111}
   - {fileID: 1278851483}
   - {fileID: 1790865869}
-  - {fileID: 1109539395}
   - {fileID: 134735204}
   - {fileID: 1477580409}
   m_Father: {fileID: 367488166}
