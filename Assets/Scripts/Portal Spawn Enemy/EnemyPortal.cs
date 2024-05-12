@@ -93,10 +93,13 @@ public class EnemyPortal : Game.Entity, IHealth
             if (enemyPrefab != null && enemies.Count <= maxEnemyToSpawn)
             {
                 var e = SimplePool.Spawn(enemyPrefab);
+                e.gameObject.SetActive(true);
+                yield return null;
                 e.transform.position = transform.position + Vector3.up;
                 enemies.Add(e);
                 e.onDie.AddListener(RemoveEnemy);
                 onSpawnEnemy?.Invoke(e);
+                e.transform.name = " Zombie " + transform.name;
             }
             yield return new WaitForSeconds(spawnRate);
         }
