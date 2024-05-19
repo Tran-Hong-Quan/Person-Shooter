@@ -123,106 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &8375716
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 20042368324939203, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 20042368324939203, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_VertexColorAlwaysGammaSpace
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269260664956998826, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_Name
-      value: Zombie
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269260664956998826, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3686444560247835373, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: attackDamge
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3839265027594647869, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
-      value: 0.03556133
-      objectReference: {fileID: 0}
-    - target: {fileID: 3839265027594647869, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LODs.Array.data[2].screenRelativeHeight
-      value: 0.021359874
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.97
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695947170039756261, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129367329564618427, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129367329564618427, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 6761904967764252276}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2e249343066957d489b52f6b2151de97, type: 3}
---- !u!114 &8375717 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7129367329564618427, guid: 2e249343066957d489b52f6b2151de97, type: 3}
-  m_PrefabInstance: {fileID: 8375716}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52cfaf72e4073114396ce0fcffe33437, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &13728619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4536,7 +4436,7 @@ PrefabInstance:
     - target: {fileID: 4217995096691681321, guid: 81ec06b4174e25043a015d35d453a8c6, type: 3}
       propertyPath: enemyPrefab
       value: 
-      objectReference: {fileID: 8375717}
+      objectReference: {fileID: 0}
     - target: {fileID: 8847881419545524122, guid: 81ec06b4174e25043a015d35d453a8c6, type: 3}
       propertyPath: m_Name
       value: Portal (6)
@@ -26610,7 +26510,11 @@ MonoBehaviour:
   endGameBoard: {fileID: 950749941324633245}
   endGameTMP: {fileID: 950749941324633244}
   scoreEndGameTMP: {fileID: 1500671452}
-  zombiePrefab: {fileID: 8375717}
+  zombiePrefab:
+  - {fileID: 8167761985024226455, guid: f618f5c38dfaf6f4b8280de199377822, type: 3}
+  - {fileID: 6663149596595334884, guid: 559f65341f828264cad1d54738306403, type: 3}
+  - {fileID: 6683685059724595368, guid: a9b8ef17265327c45ab88aede8cba58e, type: 3}
+  - {fileID: 7129367329564618427, guid: 2e249343066957d489b52f6b2151de97, type: 3}
   enemyPortals:
   - {fileID: 1736724640}
   - {fileID: 1376588211}
@@ -26618,6 +26522,9 @@ MonoBehaviour:
   - {fileID: 1371572072}
   - {fileID: 555192675}
   - {fileID: 1670803760}
+  medkitPrefab: {fileID: 0}
+  spawnMedKitPoses: []
+  spawnMedkitRate: 5
   playerController: {fileID: 6761904967764252275}
   enemyList: []
 --- !u!4 &1411101157
@@ -37370,7 +37277,7 @@ PrefabInstance:
     - target: {fileID: 4217995096691681321, guid: 81ec06b4174e25043a015d35d453a8c6, type: 3}
       propertyPath: enemyPrefab
       value: 
-      objectReference: {fileID: 8375717}
+      objectReference: {fileID: 0}
     - target: {fileID: 8847881419545524122, guid: 81ec06b4174e25043a015d35d453a8c6, type: 3}
       propertyPath: m_Name
       value: Portal (7)
@@ -40573,11 +40480,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6761904967764252276 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3875014092201632101, guid: 984fb9eb077310b458319e5af2cad260, type: 3}
-  m_PrefabInstance: {fileID: 950749941324633240}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -40591,6 +40493,5 @@ SceneRoots:
   - {fileID: 1371572071}
   - {fileID: 206679627}
   - {fileID: 1996926793}
-  - {fileID: 8375716}
   - {fileID: 693434821}
   - {fileID: 1562938368}

@@ -20,8 +20,11 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] Game.Entity[] zombiePrefab;
     [SerializeField] List<EnemyPortal> enemyPortals;
 
+    [SerializeField] MedKitItem medkitPrefab;
+    [SerializeField] Transform[] spawnMedKitPoses;
+    [SerializeField] float spawnMedkitRate = 5;
+ 
     public PlayerController playerController;
-
     public List<DemoEnemy> enemyList = new List<DemoEnemy>();
 
     private void Awake()
@@ -33,6 +36,7 @@ public class MainMapManager : MonoBehaviour
     private void Start()
     {
         InvokeRepeating(nameof(UpdateTime), 0, 1);
+        InvokeRepeating(nameof(SpawnMedkit), spawnMedkitRate, spawnMedkitRate);
         InitEnemyPortal();
         playerController.onDie.AddListener(_ => EndGame());
     }
@@ -54,6 +58,17 @@ public class MainMapManager : MonoBehaviour
     {
         time++;
         timeTMP.text = time.ToString();
+    }
+
+    private void SpawnMedkit()
+    {
+        foreach(var p in spawnMedKitPoses)
+        {
+            if (p.childCount != 0) continue;
+            var m = SimplePool.Spawn(medkitPrefab, p.position + Vector3.up, Quaternion.identity);
+            m.transform.SetParent(p, true);
+            break;
+        }
     }
 
     public void EndGame()

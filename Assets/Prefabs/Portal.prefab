@@ -532,14 +532,22 @@ MonoBehaviour:
   maxHealt: 1000
   healthBar: {fileID: 6592588901300438746}
   healthUI: {fileID: 9078750756586967463}
-  enemyPrefab: {fileID: 0}
+  enemyPrefab:
+  - {fileID: 6683685059724595368, guid: a9b8ef17265327c45ab88aede8cba58e, type: 3}
+  - {fileID: 7129367329564618427, guid: 2e249343066957d489b52f6b2151de97, type: 3}
+  - {fileID: 8167761985024226455, guid: f618f5c38dfaf6f4b8280de199377822, type: 3}
+  - {fileID: 6663149596595334884, guid: 559f65341f828264cad1d54738306403, type: 3}
   spawnRate: 5
   maxEnemyToSpawn: 10
   heathTeamSide: 2
   dieEffect: {fileID: 19800002, guid: 4bf22a1d8d9e7724b9af67921436851d, type: 3}
   audioSource: {fileID: 7676146090796000649}
   exploseClip: {fileID: 8300000, guid: 22c79c95bf00f894abc0be0d8204c258, type: 3}
-  enemies: []
+  enemies:
+  - {fileID: 6683685059724595368, guid: a9b8ef17265327c45ab88aede8cba58e, type: 3}
+  - {fileID: 7129367329564618427, guid: 2e249343066957d489b52f6b2151de97, type: 3}
+  - {fileID: 8167761985024226455, guid: f618f5c38dfaf6f4b8280de199377822, type: 3}
+  - {fileID: 6663149596595334884, guid: 559f65341f828264cad1d54738306403, type: 3}
   currentHealt: 0
 --- !u!82 &7676146090796000649
 AudioSource:

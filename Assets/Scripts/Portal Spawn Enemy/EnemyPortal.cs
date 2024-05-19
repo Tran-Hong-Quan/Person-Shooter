@@ -92,7 +92,8 @@ public class EnemyPortal : Game.Entity, IHealth
         {
             if (enemyPrefab != null && enemies.Count <= maxEnemyToSpawn)
             {
-                var e = SimplePool.Spawn(enemyPrefab, transform.position + Vector3.up,Quaternion.identity);
+                var e = SimplePool.Spawn(enemyPrefab.RandomElement(), transform.position + Vector3.up,Quaternion.identity);
+                e.GetComponent<EnemyCtlr>().SetChaseTarget(MainMapManager.instance.playerController.transform);
                 enemies.Add(e);
                 e.onDie.AddListener(RemoveEnemy);
                 onSpawnEnemy?.Invoke(e);

@@ -49,7 +49,7 @@ public class InventoryItem : MonoBehaviour
             transform.localScale = Vector3.one;
             transform.rotation = rot.Value;
 
-            Debug.Log(hit.transform.name);
+            //Debug.Log(hit.transform.name);
 
             rb.isKinematic = true;
             col.isTrigger = true;

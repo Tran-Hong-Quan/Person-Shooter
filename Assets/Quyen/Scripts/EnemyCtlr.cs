@@ -62,7 +62,11 @@ public class EnemyCtlr : Game.Entity
 
     private void Move()
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            idle = true;
+            return;
+        }
         if (chase)
         {
             Vector3 direction = (target.position - transform.position).normalized;
