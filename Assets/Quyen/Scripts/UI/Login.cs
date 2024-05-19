@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -6,23 +6,17 @@ using TMPro;
 
 public class Login : MonoBehaviour
 {
-    private static Login instance;
-    public static Login Instance => instance;
-
     private readonly string ULI = "https://tempquan.000webhostapp.com/LogIn.php";
-
 
     [SerializeField] private TMP_InputField username;
     [SerializeField] private TMP_InputField password;
+    public TMP_Text message;
 
     private UIAnimation UIAnimation;
     [SerializeField] LoadingUI loadingUI;
 
-    public TMP_InputField Username => username;
-
     private void Awake()
     {
-        instance = this;
         UIAnimation = GetComponent<UIAnimation>();
     }
 
@@ -30,6 +24,7 @@ public class Login : MonoBehaviour
     {
         MainMenu.instance.loadingUI.gameObject.SetActive(true);
         StartCoroutine(LoginUser());
+        Invoke(nameof(DisableLoading), 0.8f);
     }
 
     IEnumerator LoginUser()
@@ -40,7 +35,6 @@ public class Login : MonoBehaviour
 
         using UnityWebRequest www = UnityWebRequest.Post(ULI, form);
         yield return www.SendWebRequest();
-        MainMenu.instance.loadingUI.gameObject.SetActive(false);
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError(www.error);
@@ -50,10 +44,21 @@ public class Login : MonoBehaviour
             string mess = www.downloadHandler.text;
             if (mess.Equals("Success"))
             {
+                MainMenu.instance.loadingUI.gameObject.SetActive(true);
                 UIAnimation.Hide();
                 Account.Instance.Information(username.text);
             }
+            else
+            {
+                message.SetText("Tài khoản hoặc mật khẩu không đúng");
+                message.enabled = true;
+            }
         }
         www.Dispose();
+    }
+
+    private void DisableLoading()
+    {
+        MainMenu.instance.loadingUI.gameObject.SetActive(false);
     }
 }

@@ -1,6 +1,11 @@
 fileFormatVersion: 2
-guid: 53e2fe1165389a84c8c415eed555029d
+<<<<<<<< Updated upstream:Assets/PlayerPrefsEditor/CHANGELOG.md.meta
+guid: 344f080e67cc16f42886bdfd8a11614e
 TextScriptImporter:
+========
+guid: 790cbaa43a4b19c4a964617119f8d796
+PrefabImporter:
+>>>>>>>> Stashed changes:Assets/Quyen/Ske/Prefabs/skeleton.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

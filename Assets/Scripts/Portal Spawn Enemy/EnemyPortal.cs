@@ -13,7 +13,7 @@ public class EnemyPortal : Game.Entity, IHealth
     [SerializeField] float maxHealt = 1000;
     [SerializeField] Image healthBar;
     [SerializeField] GameObject healthUI;
-    [SerializeField] Game.Entity enemyPrefab;
+    [SerializeField] Game.Entity[] enemyPrefab;
     [SerializeField] float spawnRate = 5;
     [SerializeField] int maxEnemyToSpawn = 15;
     [SerializeField] HealthTeamSide heathTeamSide;
@@ -92,7 +92,7 @@ public class EnemyPortal : Game.Entity, IHealth
         {
             if (enemyPrefab != null && enemies.Count <= maxEnemyToSpawn)
             {
-                var e = SimplePool.Spawn(enemyPrefab);
+                var e = SimplePool.Spawn(enemyPrefab[Random.Range(0, enemyPrefab.Length)]);
                 e.gameObject.SetActive(true);
                 yield return null;
                 e.transform.position = transform.position + Vector3.up;
@@ -111,7 +111,7 @@ public class EnemyPortal : Game.Entity, IHealth
         enemies.Remove(e);
     }
 
-    public void SetEnemy(Game.Entity go)
+    public void SetEnemy(Game.Entity[] go)
     {
         enemyPrefab = go;
         StopAllCoroutines();

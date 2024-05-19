@@ -17,7 +17,7 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] UIAnimation endGameBoard;
     [SerializeField] TMP_Text endGameTMP;
     [SerializeField] TMP_Text scoreEndGameTMP;
-    [SerializeField] Game.Entity zombiePrefab;
+    [SerializeField] Game.Entity[] zombiePrefab;
     [SerializeField] List<EnemyPortal> enemyPortals;
 
     public PlayerController playerController;

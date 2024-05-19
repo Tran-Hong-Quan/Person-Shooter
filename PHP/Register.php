@@ -56,7 +56,7 @@ if ($result->num_rows > 0) {
 
   if ($result->num_rows > 0) {
 
-    echo "Nickname already exists";
+    echo "Email already exists";
 
   } else {
 
