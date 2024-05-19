@@ -102,7 +102,7 @@ public class MainMapManager : MonoBehaviour
         GetScore();
         GameManager.instance.score++;
         enemyPortals.Remove(entity as EnemyPortal);
-        if(score == enemyPortals.Count)
+        if(enemyPortals.Count == 0)
         {
             isWin = true;
             EndGame();

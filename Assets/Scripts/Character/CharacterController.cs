@@ -393,6 +393,11 @@ public class HealthEventHandler
         this.teamSide = teamSide;
     }
 
+    public HealthEventHandler(GameObject caller)
+    {
+        this.caller = caller;
+    }
+
     public HealthEventHandler() { }
 }
 
