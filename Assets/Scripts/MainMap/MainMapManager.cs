@@ -33,6 +33,11 @@ public class MainMapManager : MonoBehaviour
         Application.targetFrameRate = 30;
     }
 
+    private void OnDestroy()
+    {
+        instance = null;
+    }
+
     private void Start()
     {
         InvokeRepeating(nameof(UpdateTime), 0, 1);

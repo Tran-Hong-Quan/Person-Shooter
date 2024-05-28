@@ -125,8 +125,9 @@ public class Gun : MonoBehaviour, IEquiptableItem
         else
             ray = practicalRay;
 
-        ray.direction = Quaternion.AngleAxis(recoilValue,
-            new Vector3(recoilAxis.x, Random.Range(-recoilAxis.y, recoilAxis.y), recoilAxis.z)) * ray.direction;
+        ray.direction = Quaternion.AngleAxis(Random.Range(-recoilValue,recoilValue),
+            new Vector3(Random.Range(-recoilAxis.x, recoilAxis.x), Random.Range(-recoilAxis.y, recoilAxis.y), Random.Range(-recoilAxis.z, recoilAxis.z))) 
+            * ray.direction;
         recoilValue += recoilForce;
         if (recoilValue > 60) recoilValue = 60;
         if (characterController is PlayerController)
