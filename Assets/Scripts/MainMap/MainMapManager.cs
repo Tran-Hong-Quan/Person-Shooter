@@ -56,7 +56,7 @@ public class MainMapManager : MonoBehaviour
     public void GetScore()
     {
         score++;
-        scoreTMP.text = score.ToString();
+        scoreTMP.text = score.ToString() + "/6";
     }
 
     private void UpdateTime()
@@ -72,6 +72,7 @@ public class MainMapManager : MonoBehaviour
             if (p.childCount != 0) continue;
             var m = SimplePool.Spawn(medkitPrefab, p.position + Vector3.up, Quaternion.identity);
             m.transform.SetParent(p, true);
+            m.SpawnItemOnFloor();
             break;
         }
     }
