@@ -60,7 +60,7 @@ public class Notification : MonoBehaviour
         notification.LargeIcon = "large_icon";
         notification.SmallIcon = "small_icon";
         notification.FireTime= System.DateTime.Now;
-        notification.RepeatInterval = System.TimeSpan.FromMinutes(1);
+        notification.RepeatInterval = System.TimeSpan.FromMinutes(60);
 
         AndroidNotificationCenter.SendNotification(notification, channel.Id);
     }

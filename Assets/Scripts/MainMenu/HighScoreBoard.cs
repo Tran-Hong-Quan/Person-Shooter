@@ -28,6 +28,18 @@ public class HighScoreBoard : MonoBehaviour
             go.rank_TMP.text = "#" + (i + 1).ToString();
             go.score_TMP.text = score.ToString();
         }
+        StartCoroutine(GetText((result) =>
+        {
+            Debug.Log(result);
+            worldHighScore = JsonHelper.FromJsonArray<HighScoreData>(result);
+            UpdateHighWorldHighScoreBoard();
+        }));
+        
+    }
+
+    private void OnEnable()
+    {
+        GameManager.instance.achivementManager.UpdateHighScore();
     }
 
     IEnumerator GetText(Action<string> onDone)
@@ -45,16 +57,6 @@ public class HighScoreBoard : MonoBehaviour
             onDone?.Invoke(www.downloadHandler.text);
         }
         www.Dispose();
-    }
-
-    private void OnEnable()
-    {
-        StartCoroutine(GetText((result) =>
-        {
-            Debug.Log(result);
-            worldHighScore = JsonHelper.FromJsonArray<HighScoreData>(result);
-            UpdateHighWorldHighScoreBoard();
-        }));
     }
 
     private void UpdateHighWorldHighScoreBoard()

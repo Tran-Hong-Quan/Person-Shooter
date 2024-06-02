@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class UpdateUserData : MonoBehaviour
 {
-    private readonly string ULI = "http://localhost/unitydata/UpdateUserData.php";
+    private readonly string ULI = "https://tempquan.000webhostapp.com/UpdateUserData.php";
 
     //Call to update new data to user
     public void UpdateUser(string userName, string newData)

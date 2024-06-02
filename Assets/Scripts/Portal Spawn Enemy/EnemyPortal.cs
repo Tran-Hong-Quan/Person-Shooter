@@ -42,11 +42,6 @@ public class EnemyPortal : Game.Entity, IHealth
         currentHealt = maxHealt;
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnEnemy());
-    }
-
     private void OnEnable()
     {
         UpdateHealthUI();
@@ -92,12 +87,12 @@ public class EnemyPortal : Game.Entity, IHealth
         {
             if (enemyPrefab != null && enemies.Count <= maxEnemyToSpawn)
             {
+                if(MainMapManager.instance.playerController == null) yield break;
                 var e = SimplePool.Spawn(enemyPrefab.RandomElement(), transform.position + Vector3.up,Quaternion.identity);
                 e.GetComponent<EnemyCtlr>().SetChaseTarget(MainMapManager.instance.playerController.transform);
                 enemies.Add(e);
                 e.onDie.AddListener(RemoveEnemy);
                 onSpawnEnemy?.Invoke(e);
-                e.transform.name = " Zombie " + transform.name;
             }
             yield return new WaitForSeconds(spawnRate);
         }

@@ -70,7 +70,7 @@ public class Account : MonoBehaviour
             "Highest Score: " + accountInformation[0].high_score + "<br><br>" +
             "Email: " + accountInformation[0].email;
         string userNameText = accountInformation[0].user_name;
-
+        PlayerPrefs.SetString("Username", accountInformation[0].user_name);
         userNameTMP.text = userNameText;
         inforTMP.text = inforText;
 

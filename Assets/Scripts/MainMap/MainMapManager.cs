@@ -89,16 +89,8 @@ public class MainMapManager : MonoBehaviour
         Time.timeScale = 0;
         endGameBoard.Show();
         scoreEndGameTMP.text = GameManager.instance.score.ToString();
-
-        if (isWin)
-        {
-            endGameTMP.text = "WIN LEVEL";
-        }
-        else
-        {
-            endGameTMP.text = "YOU LOSE";
-            GameManager.instance.achivementManager.AddScore(GameManager.instance.score);
-        }
+        endGameTMP.text = "END GAME";
+        GameManager.instance.achivementManager.AddScore(GameManager.instance.score);
     }
 
     public void NextLevel()

@@ -6,16 +6,16 @@ using UnityEngine.Networking;
 
 public class GetUserData : MonoBehaviour
 {
-    private readonly string ULI = "http://localhost/unitydata/GetUserData.php";
+    private readonly string ULI = "https://tempquan.000webhostapp.com/GetUserData.php";
     private string data;
     public string Data => data;//Hold data from user
 
-    public void GetData(string userName)
+    public void GetData(string userName,System.Action<string> onSuccess)
     {
-        StartCoroutine(JSonData(userName));
+        StartCoroutine(JSonData(userName,onSuccess));
     }
 
-    IEnumerator JSonData(string userName)
+    IEnumerator JSonData(string userName, System.Action<string> onSucces)
     {
         WWWForm form = new();
         form.AddField("userName", userName);
@@ -31,6 +31,7 @@ public class GetUserData : MonoBehaviour
             //If success
             string mess = www.downloadHandler.text;
             data = mess;
+            onSucces?.Invoke(data);
             Debug.Log(data);
         }
         www.Dispose();
