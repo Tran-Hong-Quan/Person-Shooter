@@ -80,7 +80,7 @@ public class CharacterInputs : MonoBehaviour
         StartCoroutine(loopFireCorotine);
     }
 
-    IEnumerator loopFireCorotine;
+    IEnumerator loopFireCorotine = null;
 
     private IEnumerator LoopFireCorotine()
     {

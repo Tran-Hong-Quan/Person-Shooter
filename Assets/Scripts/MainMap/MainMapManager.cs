@@ -23,9 +23,11 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] MedKitItem medkitPrefab;
     [SerializeField] Transform[] spawnMedKitPoses;
     [SerializeField] float spawnMedkitRate = 5;
- 
+
     public PlayerController playerController;
     public List<DemoEnemy> enemyList = new List<DemoEnemy>();
+
+    int portalToDestroy;
 
     private void Awake()
     {
@@ -40,6 +42,8 @@ public class MainMapManager : MonoBehaviour
 
     private void Start()
     {
+        portalToDestroy = enemyPortals.Count;
+        scoreTMP.text = "0/0";
         InvokeRepeating(nameof(UpdateTime), 0, 1);
         InvokeRepeating(nameof(SpawnMedkit), spawnMedkitRate, spawnMedkitRate);
         InitEnemyPortal();
@@ -56,7 +60,7 @@ public class MainMapManager : MonoBehaviour
     public void GetScore()
     {
         score++;
-        scoreTMP.text = score.ToString() + "/6";
+        scoreTMP.text = score.ToString() + "/" + portalToDestroy;
     }
 
     private void UpdateTime()
@@ -67,7 +71,7 @@ public class MainMapManager : MonoBehaviour
 
     private void SpawnMedkit()
     {
-        foreach(var p in spawnMedKitPoses)
+        foreach (var p in spawnMedKitPoses)
         {
             if (p.childCount != 0) continue;
             var m = SimplePool.Spawn(medkitPrefab, p.position + Vector3.up, Quaternion.identity);
@@ -86,14 +90,14 @@ public class MainMapManager : MonoBehaviour
         endGameBoard.Show();
         scoreEndGameTMP.text = GameManager.instance.score.ToString();
 
-        if(isWin)
+        if (isWin)
         {
             endGameTMP.text = "WIN LEVEL";
         }
         else
         {
             endGameTMP.text = "YOU LOSE";
-            GameManager.instance.achivementManager.AddScore(GameManager.instance.score);    
+            GameManager.instance.achivementManager.AddScore(GameManager.instance.score);
         }
     }
 
@@ -109,7 +113,7 @@ public class MainMapManager : MonoBehaviour
 
     public void InitEnemyPortal()
     {
-        foreach(var p in enemyPortals)
+        foreach (var p in enemyPortals)
         {
             p.SetEnemy(zombiePrefab);
             p.onDie.AddListener(DestroyPortal);
@@ -123,7 +127,7 @@ public class MainMapManager : MonoBehaviour
         GetScore();
         GameManager.instance.score++;
         enemyPortals.Remove(entity as EnemyPortal);
-        if(enemyPortals.Count == 0)
+        if (enemyPortals.Count == 0)
         {
             isWin = true;
             EndGame();
