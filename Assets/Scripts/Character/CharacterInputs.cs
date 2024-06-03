@@ -93,7 +93,8 @@ public class CharacterInputs : MonoBehaviour
 
     public void StopFireInput()
     {
-        StopCoroutine(loopFireCorotine);
+        if (loopFireCorotine != null)
+            StopCoroutine(loopFireCorotine);
 
         isFire = false;
         onStopFire?.Invoke();
