@@ -17,21 +17,35 @@ public class MainMapManager : MonoBehaviour
     [SerializeField] UIAnimation endGameBoard;
     [SerializeField] TMP_Text endGameTMP;
     [SerializeField] TMP_Text scoreEndGameTMP;
-    [SerializeField] Game.Entity zombiePrefab;
-    [SerializeField] EnemyPortal[] enemyPortals;
+    [SerializeField] Game.Entity[] zombiePrefab;
+    [SerializeField] List<EnemyPortal> enemyPortals;
+
+    [SerializeField] MedKitItem medkitPrefab;
+    [SerializeField] Transform[] spawnMedKitPoses;
+    [SerializeField] float spawnMedkitRate = 5;
 
     public PlayerController playerController;
-
     public List<DemoEnemy> enemyList = new List<DemoEnemy>();
+
+    int portalToDestroy;
 
     private void Awake()
     {
         instance = this;
+        Application.targetFrameRate = 30;
+    }
+
+    private void OnDestroy()
+    {
+        instance = null;
     }
 
     private void Start()
     {
+        portalToDestroy = enemyPortals.Count;
+        scoreTMP.text = "0/0";
         InvokeRepeating(nameof(UpdateTime), 0, 1);
+        InvokeRepeating(nameof(SpawnMedkit), spawnMedkitRate, spawnMedkitRate);
         InitEnemyPortal();
         playerController.onDie.AddListener(_ => EndGame());
     }
@@ -46,7 +60,7 @@ public class MainMapManager : MonoBehaviour
     public void GetScore()
     {
         score++;
-        scoreTMP.text = score.ToString();
+        scoreTMP.text = score.ToString() + "/" + portalToDestroy;
     }
 
     private void UpdateTime()
@@ -55,23 +69,28 @@ public class MainMapManager : MonoBehaviour
         timeTMP.text = time.ToString();
     }
 
+    private void SpawnMedkit()
+    {
+        foreach (var p in spawnMedKitPoses)
+        {
+            if (p.childCount != 0) continue;
+            var m = SimplePool.Spawn(medkitPrefab, p.position + Vector3.up, Quaternion.identity);
+            m.transform.SetParent(p, true);
+            m.SpawnItemOnFloor();
+            break;
+        }
+    }
+
     public void EndGame()
     {
+        playerController.Inputs.SetCursorState(false);
         CancelInvoke();
         StopAllCoroutines();
         Time.timeScale = 0;
         endGameBoard.Show();
         scoreEndGameTMP.text = GameManager.instance.score.ToString();
-
-        if(isWin)
-        {
-            endGameTMP.text = "WIN LEVEL";
-        }
-        else
-        {
-            endGameTMP.text = "YOU LOSE";
-            GameManager.instance.achivementManager.AddScore(GameManager.instance.score);    
-        }
+        endGameTMP.text = "END GAME";
+        GameManager.instance.achivementManager.AddScore(GameManager.instance.score);
     }
 
     public void NextLevel()
@@ -86,7 +105,7 @@ public class MainMapManager : MonoBehaviour
 
     public void InitEnemyPortal()
     {
-        foreach(var p in enemyPortals)
+        foreach (var p in enemyPortals)
         {
             p.SetEnemy(zombiePrefab);
             p.onDie.AddListener(DestroyPortal);
@@ -99,7 +118,8 @@ public class MainMapManager : MonoBehaviour
         entity.onDie.RemoveListener(DestroyPortal);
         GetScore();
         GameManager.instance.score++;
-        if(score == enemyPortals.Length)
+        enemyPortals.Remove(entity as EnemyPortal);
+        if (enemyPortals.Count == 0)
         {
             isWin = true;
             EndGame();

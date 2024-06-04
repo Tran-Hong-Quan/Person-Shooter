@@ -46,6 +46,17 @@ public class PlayerInputs : CharacterInputs
         fireAction.canceled += OnStopFire;
     }
 
+    private void OnDestroy()
+    {
+        var moveAction = inputs.actions.FindAction("Move");
+        moveAction.started -= OnStartMove;
+        moveAction.canceled -= OnEndMove;
+
+        var fireAction = inputs.actions.FindAction("Fire");
+        fireAction.started -= OnStartFire;
+        fireAction.canceled -= OnStopFire;
+    }
+
     #region Receive Messages
 
     private void OnMove(InputValue value)
@@ -199,6 +210,7 @@ public class PlayerInputs : CharacterInputs
 
     public void SetCursorState(bool newState)
     {
+        cursorLocked = newState;
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 

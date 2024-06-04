@@ -49,7 +49,7 @@ public class InventoryItem : MonoBehaviour
             transform.localScale = Vector3.one;
             transform.rotation = rot.Value;
 
-            Debug.Log(hit.transform.name);
+            //Debug.Log(hit.transform.name);
 
             rb.isKinematic = true;
             col.isTrigger = true;
@@ -80,7 +80,12 @@ public class InventoryItem : MonoBehaviour
         onBeingTaken?.Invoke(this, preview);
     }
 
-    protected void OnUseItem(InventoryHandler.UseItemEventArgs dea)
+    protected virtual void OnUseItem(InventoryHandler.UseItemEventArgs dea)
+    {
+        DeleteItem(dea);
+    }
+
+    public void DeleteItem(InventoryHandler.UseItemEventArgs dea)
     {
         dea.inv.RemoveItemInSlot(dea.slot, 1);
     }

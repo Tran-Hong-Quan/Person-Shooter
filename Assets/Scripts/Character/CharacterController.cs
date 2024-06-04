@@ -327,11 +327,6 @@ namespace Game
 
         #endregion
 
-        public virtual void Recoil(Vector3 force)
-        {
-
-        }
-
         protected void OnCollisionEnter(Collision collision)
         {
 
@@ -396,6 +391,11 @@ public class HealthEventHandler
     {
         this.caller = caller;
         this.teamSide = teamSide;
+    }
+
+    public HealthEventHandler(GameObject caller)
+    {
+        this.caller = caller;
     }
 
     public HealthEventHandler() { }

@@ -13,7 +13,7 @@ public class EnemyPortal : Game.Entity, IHealth
     [SerializeField] float maxHealt = 1000;
     [SerializeField] Image healthBar;
     [SerializeField] GameObject healthUI;
-    [SerializeField] Game.Entity enemyPrefab;
+    [SerializeField] Game.Entity[] enemyPrefab;
     [SerializeField] float spawnRate = 5;
     [SerializeField] int maxEnemyToSpawn = 15;
     [SerializeField] HealthTeamSide heathTeamSide;
@@ -40,11 +40,6 @@ public class EnemyPortal : Game.Entity, IHealth
     private void Awake()
     {
         currentHealt = maxHealt;
-    }
-
-    private void Start()
-    {
-        StartCoroutine(SpawnEnemy());
     }
 
     private void OnEnable()
@@ -92,8 +87,9 @@ public class EnemyPortal : Game.Entity, IHealth
         {
             if (enemyPrefab != null && enemies.Count <= maxEnemyToSpawn)
             {
-                var e = SimplePool.Spawn(enemyPrefab);
-                e.transform.position = transform.position + Vector3.up;
+                if(MainMapManager.instance.playerController == null) yield break;
+                var e = SimplePool.Spawn(enemyPrefab.RandomElement(), transform.position + Vector3.up,Quaternion.identity);
+                e.GetComponent<EnemyCtlr>().SetChaseTarget(MainMapManager.instance.playerController.transform);
                 enemies.Add(e);
                 e.onDie.AddListener(RemoveEnemy);
                 onSpawnEnemy?.Invoke(e);
@@ -108,7 +104,7 @@ public class EnemyPortal : Game.Entity, IHealth
         enemies.Remove(e);
     }
 
-    public void SetEnemy(Game.Entity go)
+    public void SetEnemy(Game.Entity[] go)
     {
         enemyPrefab = go;
         StopAllCoroutines();

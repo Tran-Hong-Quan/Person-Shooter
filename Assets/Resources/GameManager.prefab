@@ -1860,6 +1860,7 @@ MonoBehaviour:
   score: 0
   levelScenes:
   - Map 1
+  - Map 2
 --- !u!114 &416943184194888076
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class PlayerEquipController : EquipController
 
     void EquipUISetup(WeaponUI ui, IEquiptableItem equipment, EquipStatus equipStatus)
     {
-        ui.SetIcon(equipment.InconSprite);
+        ui.SetIcon(equipment.IconSprite);
         var gun = equipment.parent.GetComponent<Gun>();
         ui.SetBulletText(gun.CurrentBullet, 999);
         gun.onChangeBulletCount.AddListener(currentBullet=>UpdateBulletText(currentBullet,ui));

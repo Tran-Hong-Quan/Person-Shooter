@@ -80,7 +80,7 @@ public class CharacterInputs : MonoBehaviour
         StartCoroutine(loopFireCorotine);
     }
 
-    IEnumerator loopFireCorotine;
+    IEnumerator loopFireCorotine = null;
 
     private IEnumerator LoopFireCorotine()
     {
@@ -93,7 +93,8 @@ public class CharacterInputs : MonoBehaviour
 
     public void StopFireInput()
     {
-        StopCoroutine(loopFireCorotine);
+        if (loopFireCorotine != null)
+            StopCoroutine(loopFireCorotine);
 
         isFire = false;
         onStopFire?.Invoke();
