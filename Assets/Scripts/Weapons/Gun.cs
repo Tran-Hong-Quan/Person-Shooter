@@ -40,6 +40,9 @@ public class Gun : MonoBehaviour, IEquiptableItem
     protected Rigidbody rb;
     protected Collider col;
 
+    public System.Action onStartFire;
+    public System.Action onStopFire;
+
     protected int currentBullet;
 
     public EquipStatus EquipStatus => equipStatus;
@@ -94,12 +97,15 @@ public class Gun : MonoBehaviour, IEquiptableItem
         {
             Reload();
             isFire = false;
+            return;
         }
+        onStartFire?.Invoke();
     }
 
     protected virtual void StopFire()
     {
         isFire = false;
+        onStopFire?.Invoke();
     }
 
     protected bool isFireSuccess = false;
@@ -129,11 +135,6 @@ public class Gun : MonoBehaviour, IEquiptableItem
             new Vector3(Random.Range(-recoilAxis.x, recoilAxis.x), Random.Range(-recoilAxis.y, recoilAxis.y), Random.Range(-recoilAxis.z, recoilAxis.z))) 
             * ray.direction;
         recoilValue += recoilForce;
-        if (recoilValue > 60) recoilValue = 60;
-        if (characterController is PlayerController)
-        {
-            var player = characterController as PlayerController;
-        }
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
