@@ -10,17 +10,26 @@ public class PlayerEquipController : EquipController
     public WeaponUI secondRifleUI;
     public WeaponUI pistolIUI;
 
+    private PlayerVCamRecoilShake camShakeRecoil;
+
+    private void Awake()
+    {
+        camShakeRecoil = GetComponent<PlayerVCamRecoilShake>();
+    }
+
     public override void InitEquipRifle(IEquiptableItem rifle, ref EquipStatus equipStatus, ref EquipType equipType)
     {
         base.InitEquipRifle(rifle, ref equipStatus, ref equipType);
 
         if (equipType == EquipType.LeftBack)
         {
-            EquipUISetup(firstRifleUI, rifle, equipStatus);
+            EquipWeaponUISetup(firstRifleUI, rifle, equipStatus);
+            InitRecoilEvent(rifle.parent);
         }
         else if (equipType == EquipType.RightBack)
         {
-            EquipUISetup(secondRifleUI, rifle, equipStatus);
+            EquipWeaponUISetup(secondRifleUI, rifle, equipStatus);
+            InitRecoilEvent(rifle.parent);
         }
     }
 
@@ -30,11 +39,12 @@ public class PlayerEquipController : EquipController
 
         if (equipType == EquipType.PistolWaist)
         {
-            EquipUISetup(pistolIUI, pistol, equipStatus);
+            EquipWeaponUISetup(pistolIUI, pistol, equipStatus);
+            InitRecoilEvent(pistol.parent);
         }
     }
 
-    void EquipUISetup(WeaponUI ui, IEquiptableItem equipment, EquipStatus equipStatus)
+    void EquipWeaponUISetup(WeaponUI ui, IEquiptableItem equipment, EquipStatus equipStatus)
     {
         ui.SetIcon(equipment.IconSprite);
         var gun = equipment.parent.GetComponent<Gun>();
@@ -101,43 +111,57 @@ public class PlayerEquipController : EquipController
 
     public override void InitUnequipRifle(IEquiptableItem rifle)
     {
-        base.InitUnequipRifle(rifle);
-
-        //Second bit equal 0, it's first weapon 
-        if ((unequipData & 1 << 1) == 0)
+        if (rifle.EquipType == EquipType.LeftBack)
         {
             firstRifleUI.SetIcon(transparentIcon);
             firstRifleUI.ClearBulletText();
-            //First bit equal 1, holding rifle
-            if ((unequipData & 1) != 0)
+            if (rifle == holdingEquipment)
             {
                 firstRifleUI.Unselect();
             }
             firstRifleUI.ClearBulletText();
         }
-        else //Second bit equip 1, it's second weapon
+        else if (rifle.EquipType == EquipType.RightBack)
         {
             secondRifleUI.SetIcon(transparentIcon);
             secondRifleUI.ClearBulletText();
-            //First bit equal 1, holding rifle
-            if ((unequipData & 1) != 0)
+            if (rifle == holdingEquipment)
             {
                 secondRifleUI.Unselect();
             }
             secondRifleUI.ClearBulletText();
         }
+
+        DeinitRecoilEvent(rifle.parent);
+
+        base.InitUnequipRifle(rifle);
     }
 
     public override void InitUnequipPistol(IEquiptableItem pistol)
     {
-        base.InitUnequipPistol(pistol);
-
         pistolIUI.SetIcon(transparentIcon);
         pistolIUI.ClearBulletText();
-        if (unequipData == 1)
+        //if grabing pistol
+        if (pistol == holdingEquipment)
         {
             pistolIUI.Unselect();
         }
         pistolIUI.ClearBulletText();
+        DeinitRecoilEvent(pistol.parent);
+        base.InitUnequipPistol(pistol);
+    }
+
+    private void InitRecoilEvent(Transform gunParent)
+    {
+        if (!gunParent.TryGetComponent(out Gun gun)) return;
+
+        gun.onFire += camShakeRecoil.Shake;
+    }
+
+    private void DeinitRecoilEvent(Transform gunParent)
+    {
+        if (!gunParent.TryGetComponent(out Gun gun)) return;
+
+        gun.onFire -= camShakeRecoil.Shake;
     }
 }

@@ -41,6 +41,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
     protected Collider col;
 
     public System.Action onStartFire;
+    public System.Action onFire;
     public System.Action onStopFire;
 
     protected int currentBullet;
@@ -170,6 +171,7 @@ public class Gun : MonoBehaviour, IEquiptableItem
             currentBullet--;
 
         onChangeBulletCount?.Invoke(currentBullet);
+        onFire?.Invoke();
     }
 
     protected virtual void OnDrawGizmos()
