@@ -3745,7 +3745,7 @@ Transform:
   m_GameObject: {fileID: 2778709599659658298}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000001863735, y: -0.00000024822464, z: -0.00004390481, w: 1}
-  m_LocalPosition: {x: -20.099997, y: 1.6837534, z: -2.2399235}
+  m_LocalPosition: {x: -20.099997, y: 1.6837534, z: -4.062}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5630,7 +5630,7 @@ Transform:
   m_GameObject: {fileID: 4378222058711924523}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000001863735, y: -0.00000024822464, z: -0.00004390481, w: 1}
-  m_LocalPosition: {x: -20.099997, y: 1.6837534, z: -2.2399235}
+  m_LocalPosition: {x: -20.099997, y: 1.6837534, z: -4.062}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5933,6 +5933,7 @@ GameObject:
   - component: {fileID: 2833683941812188489}
   - component: {fileID: 1527445954517257750}
   - component: {fileID: 95044025351048343}
+  - component: {fileID: 463612741331061439}
   m_Layer: 2
   m_Name: Swat
   m_TagString: Player
@@ -6051,6 +6052,7 @@ MonoBehaviour:
   tpAimCam: {fileID: 5107824159181904401}
   fpCamTarget: {fileID: 120687614208792315}
   tpCamTarget: {fileID: 4059093888519414658}
+  vcamShake: {fileID: 0}
   TopClamp: 70
   BottomClamp: -30
   CameraAngleOverride: 0
@@ -6501,6 +6503,25 @@ MonoBehaviour:
   countDown: 30
   activeTime: 20
   countDownUIImage: {fileID: 3031230920508318458}
+--- !u!114 &463612741331061439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4684726007794582693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f7b9bb48a28a5d4984476bc0530525e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vcams:
+  - {fileID: 6583234284544851988}
+  - {fileID: 3532324219846272919}
+  - {fileID: 5107824159181904401}
+  fallBackSpeed: 10
+  frequency: 20
+  amplitude: 1
 --- !u!1 &4709561116908597301
 GameObject:
   m_ObjectHideFlags: 0
@@ -6904,10 +6925,10 @@ Transform:
   m_Children:
   - {fileID: 3855769315248214942}
   - {fileID: 7268339883024248227}
+  - {fileID: 1328711089971997629}
   - {fileID: 6171445839158591216}
   - {fileID: 9107155036246530794}
   - {fileID: 3265554740103545485}
-  - {fileID: 1328711089971997629}
   - {fileID: 3875014092201632101}
   - {fileID: 5402050965529288574}
   - {fileID: 7635021115342752225}

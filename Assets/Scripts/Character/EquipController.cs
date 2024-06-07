@@ -105,6 +105,7 @@ public class EquipController : MonoBehaviour
         }
     }
 
+    //Use this variable to communicate with child class
     protected int unequipData;
     public virtual void InitUnequipRifle(IEquiptableItem rifle)
     {

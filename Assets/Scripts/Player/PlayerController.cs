@@ -78,6 +78,7 @@ public class PlayerController : Game.CharacterController
     public CinemachineVirtualCamera tpAimCam;
     public Transform fpCamTarget;
     public Transform tpCamTarget;
+    public PlayerVCamShake vcamShake;
 
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
@@ -171,6 +172,7 @@ public class PlayerController : Game.CharacterController
         cineCamTarget = cameraRoot;
         inventoryUI.SetInventory(inventory);
         inventory.parent = this;
+        vcamShake = GetComponent<PlayerVCamShake>();
     }
 
     protected override void Start()
